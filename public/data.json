@@ -8,6 +8,7 @@
       "type": "dinosaur",
       "animal": "allosaurus",
       "name": "Ally",
+      "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "baseStats":{
         "size": 100,
         "health": 20000,
@@ -29,6 +30,7 @@
       "type": "rodent",
       "animal": "beaver",
       "name": "Billy",
+      "imageUrl": "pets/rodent-beaver.jpg",
       "baseStats":{
         "size": 20,
         "health": 20000,
@@ -50,6 +52,7 @@
       "type": "rodent",
       "animal": "capybara",
       "name": "Cathy",
+      "imageUrl": "pets/rodent-capybara.jpg",
       "baseStats":{
         "size": 30,
         "health": 20000,
@@ -71,6 +74,7 @@
       "type": "rodent",
       "animal": "degu",
       "name": "Denny",
+      "imageUrl": "pets/rodent-degu.jpg",
       "baseStats":{
         "size": 5,
         "health": 20000,

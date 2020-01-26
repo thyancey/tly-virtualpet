@@ -54,7 +54,7 @@ class Cage extends Component {
     }else{
       return(
         <$Cage>
-          <Pet petData={activePet} level={activePetStats.level} />
+          <Pet petData={activePet} level={activePetStats.level} imageUrl={activePet.imageUrl} />
           <$PetStatsContainer>
             <PetStats petData={activePet} statsObj={activePetStats} />
           </$PetStatsContainer>
