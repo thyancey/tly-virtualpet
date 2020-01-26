@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components';
 import { themeGet } from 'themes/';
 
 const $Button = styled.button`
-  padding: 1rem 2rem;
-  margin: 1rem;
   cursor:pointer;
   outline:0;
   
@@ -29,18 +27,35 @@ const $Button = styled.button`
       background-color: ${themeGet('color', 'purple')};
     }
   `}
-
-  font-size:2rem;
-  font-weight: 500;
-
 `;
 
-const Button = ({ text, isActive, onClick }) => {
+const $BigButton = styled($Button)`
+  padding: 1rem 2rem;
+  margin: 1rem;
+  font-size:2rem;
+  font-weight: 600;
+`;
+
+
+const $LilButton = styled($Button)`
+  padding: .5rem 1.5rem;
+  margin: .5rem;
+  font-size: 2rem;
+  font-weight: 600;
+`;
+
+export const Button = ({ text, isActive, onClick }) => {
   return (
-    <$Button isActive={isActive} onClick={(e) => onClick(e)}>
+    <$BigButton isActive={isActive} onClick={(e) => onClick && onClick(e)} >
       <span>{ text }</span>
-    </$Button>
+    </$BigButton>
   );
 }
 
-export default Button;
+export const LilButton = ({ text, isActive, onClick }) => {
+  return (
+    <$LilButton isActive={isActive} onClick={(e) => onClick && onClick(e)} >
+      <span>{ text }</span>
+    </$LilButton>
+  );
+}

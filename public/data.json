@@ -34,7 +34,8 @@
       "baseStats":{
         "size": 20,
         "health": 20000,
-        "stomach": 10000,
+        "xp": 1000,
+        "stomach": 3000,
         "bladder": 20000,
         "happyness": 10000,
         "intelligence": 1000
@@ -42,7 +43,7 @@
       "stats":{
         "level": 5,
         "xp": 300,
-        "stomach": 300,
+        "stomach": 2500,
         "bladder": 5000,
         "happyness": 400
       }
@@ -56,6 +57,7 @@
       "baseStats":{
         "size": 30,
         "health": 20000,
+        "xp": 1000,
         "stomach": 10000,
         "bladder": 20000,
         "happyness": 10000,
@@ -78,6 +80,7 @@
       "baseStats":{
         "size": 5,
         "health": 20000,
+        "xp": 1000,
         "stomach": 500,
         "bladder": 500,
         "happyness": 10000,

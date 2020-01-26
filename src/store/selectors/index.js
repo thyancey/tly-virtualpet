@@ -57,8 +57,7 @@ export const selectActivePet = createSelector(
 );
 
 const getStatObj = (label, stats, baseStats, fillType) => {
-  if(stats[label] && baseStats[label]){
-    const percent = Math.round((stats[label] / baseStats[label]) * 100);
+  if(stats[label] !== undefined && baseStats[label] !== undefined){
 
     return {
       cur: stats[label],

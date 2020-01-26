@@ -16,9 +16,9 @@ import {
   selectActivePets
 } from 'store/selectors';
 
-import Button from 'components/button';
+import { Button } from 'components/button';
 
-import { setActivePetType, setActivePetId, incrementCounter, decrementCounter } from 'store/actions';
+import { setActivePetType, setActivePetId } from 'store/actions';
 
 
 require('themes/app.scss');
@@ -134,7 +134,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { setActivePetType, setActivePetId, incrementCounter, decrementCounter },
+    { setActivePetType, setActivePetId },
     dispatch
   )
 

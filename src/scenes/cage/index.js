@@ -13,9 +13,13 @@ import {
   selectActivePetStats
 } from 'store/selectors';
 
-import Button from 'components/button';
 
-import { } from 'store/actions';
+import {
+  incrementXp,
+  incrementFood,
+  incrementHappy,
+  incrementPee
+} from 'store/actions/pet';
 
 const $Cage = styled.div`
   position:relative;
@@ -46,7 +50,11 @@ class Cage extends Component {
   render(){
     const { 
       activePet,
-      activePetStats
+      activePetStats,
+      incrementXp,
+      incrementFood,
+      incrementHappy,
+      incrementPee 
     } = this.props;
 
     if(!activePet){
@@ -56,7 +64,14 @@ class Cage extends Component {
         <$Cage>
           <Pet petData={activePet} level={activePetStats.level} imageUrl={activePet.imageUrl} />
           <$PetStatsContainer>
-            <PetStats petData={activePet} statsObj={activePetStats} />
+            <PetStats 
+              petData={activePet} 
+              statsObj={activePetStats}
+              incrementXp={incrementXp}
+              incrementFood={incrementFood}
+              incrementHappy={incrementHappy}
+              incrementPee={incrementPee}
+               />
           </$PetStatsContainer>
         </$Cage>
       );
@@ -72,7 +87,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    {  },
+    { 
+      incrementXp,
+      incrementFood,
+      incrementHappy,
+      incrementPee 
+    },
     dispatch
   )
 

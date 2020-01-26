@@ -1,10 +1,11 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { themeGet } from 'themes/';
+import { LilButton } from 'components/button';
 
 const $ProgressBar = styled.div`
   margin: 1rem;
-`;
+`
 
 const $Bar = styled.div`
   position:relative;
@@ -12,7 +13,7 @@ const $Bar = styled.div`
   border-radius: 1rem;
   overflow:hidden;
   padding:.25rem .5rem;
-`;
+`
 
 const $Value = styled.span`
   position: relative;
@@ -22,6 +23,26 @@ const $Value = styled.span`
   color: black;
 `
 
+const $Label = styled.div`
+  position:relative;
+
+  >*{
+    display:inline-block;
+    vertical-align:middle;
+  }
+
+  h4{
+    width:60%;
+    font-size:2rem;
+  }
+  div{
+    width:40%;
+  }
+`
+
+const $Buttons = styled.div`
+text-align:right;
+`
 
 const $Bg = styled.div`
   position:absolute;
@@ -33,8 +54,8 @@ const $Bg = styled.div`
     background-color: ${getAlertColor(p.alertType)};
   `}
  
-  transition: width .3s ease-in-out;
-`;
+  transition: width .3s ease-in-out, background-color .5s ease-in-out;
+`
 
 const getAlertColor = alertType => {
   switch(alertType){
@@ -47,15 +68,15 @@ const getAlertColor = alertType => {
 
 const getAlertType = (fillType, percent) => {
   if(fillType === 'empty'){
-    if(percent < 30){
+    if(percent < 20){
       return 'great';
-    } else if (percent > 70){
+    } else if (percent > 80){
       return 'critical';
     }
   }else if(fillType === 'fill'){
-    if(percent < 30){
+    if(percent < 20){
       return 'critical';
-    } else if (percent > 70){
+    } else if (percent > 80){
       return 'great';
     }
   }
@@ -63,11 +84,18 @@ const getAlertType = (fillType, percent) => {
   return 'normal';
 }
 
-const ProgressBar = ({ statObj, label, isActive }) => {
+const ProgressBar = ({ statObj, label, isActive, incrementAction }) => {
   const alertType = getAlertType(statObj.fillType, statObj.percent);
   return (
     <$ProgressBar>
-      <h4>{label}</h4>
+      <$Label>
+        <h4>{label}</h4>
+
+        <$Buttons>
+          <LilButton text={'-'} onClick={e => incrementAction && incrementAction(-300)} />
+          <LilButton text={'+'} onClick={e => incrementAction && incrementAction(300)} />
+        </$Buttons>
+      </$Label>
       <$Bar isActive={isActive} >
         <$Value>{ `${statObj.cur} / ${statObj.max} (${statObj.percent}%)` }</$Value>
         <$Bg progress={statObj.percent} alertType={alertType} />

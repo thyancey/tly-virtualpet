@@ -1,10 +1,14 @@
 import { 
   setCustomData,
   setActivePetType,
-  setActivePetId,
-  incrementCounter,
-  decrementCounter
+  setActivePetId
 } from '../actions';
+import { 
+  incrementXp,
+  incrementFood,
+  incrementPee,
+  incrementHappy
+} from '../actions/pet';
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
@@ -64,18 +68,55 @@ export default handleActions({
     }
   },
 
-  [incrementCounter.toString()]: (state, action) => {
-    console.log('ICREMEMRM')
-    return {
-      ...state,
-      counter: state.counter + 1
-    }
+
+  [incrementXp.toString()]: (state, action) => {
+    return augmentStat(state, 'xp', action.payload);
   },
 
-  [decrementCounter.toString()]: (state, action) => {
-    return {
-      ...state,
-      counter: state.counter - 1
-    }
+  [incrementFood.toString()]: (state, action) => {
+    return augmentStat(state, 'stomach', action.payload);
+  },
+
+  [incrementPee.toString()]: (state, action) => {
+    return augmentStat(state, 'bladder', action.payload);
+  },
+
+  [incrementHappy.toString()]: (state, action) => {
+    return augmentStat(state, 'happyness', action.payload);
   }
 }, initialState);
+
+const clamp = (val, min, max) => {
+  return Math.min(Math.max(val, min), max);
+}
+
+const augmentStat = (state, stat, value) => {
+  const { pet, idx } = getActivePet(state);
+  const newVal = pet.stats[stat] + value;
+  let newStat = clamp(newVal, 0, pet.baseStats[stat])
+
+  const updatedPet = {
+    ...pet,
+    stats:{
+      ...pet.stats,
+      [stat]: newStat
+    }
+  }
+  
+  return {
+    ...state,
+    customData:{
+      ...state.customData,
+      pets: Object.assign([], state.customData.pets, { [ idx ]: updatedPet })
+    }
+  }
+}
+
+const getActivePet = state => {
+  const petIdx = state.customData.pets.findIndex(p => p.id === state.activePetId);
+
+  return {
+    pet: state.customData.pets[petIdx],
+    idx: petIdx
+  }
+}

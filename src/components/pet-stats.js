@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { themeGet } from 'themes/';
 
 import ProgressBar from './progress-bar';
+import { incrementXp } from '../store/actions/pet';
 
 const $PetStats = styled.div`
   background-color:  ${themeGet('color', 'purple')};
@@ -23,16 +24,16 @@ const $Label = styled.div`
   text-align:center;
 `
 
-const PetStats = ({ petData, statsObj }) => {
+const PetStats = ({ petData, statsObj, incrementXp, incrementFood, incrementPee, incrementHappy }) => {
   return (
     <$PetStats>
       <$Label>{`${petData.name} the ${petData.animal}`}</$Label>
       <p>{statsObj.level}</p>
       <p>{petData.id}</p>
-      <ProgressBar statObj={statsObj.xp} label={'XP'} />
-      <ProgressBar statObj={statsObj.stomach} label={'Hunger'} />
-      <ProgressBar statObj={statsObj.bladder} label={'Gotta go'} />
-      <ProgressBar statObj={statsObj.happyness} label={'Heppy'} />
+      <ProgressBar statObj={statsObj.xp} label={'XP'} incrementAction={(val) => incrementXp(val)} />
+      <ProgressBar statObj={statsObj.stomach} label={'Food'} incrementAction={(val) => incrementFood(val)}/>
+      <ProgressBar statObj={statsObj.bladder} label={'Gotta pee'} incrementAction={(val) => incrementPee(val)}/>
+      <ProgressBar statObj={statsObj.happyness} label={'Heppy'} incrementAction={(val) => incrementHappy(val)}/>
     </$PetStats>
   );
 }
