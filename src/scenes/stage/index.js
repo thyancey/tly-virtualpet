@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
 
+import Cage from 'scenes/cage';
+
 import { 
   getActivePetType,
   getActivePetId,
@@ -18,12 +20,11 @@ import Button from 'components/button';
 
 import { setActivePetType, setActivePetId, incrementCounter, decrementCounter } from 'store/actions';
 
-import TestImage from './assets/loading.gif';
 
 require('themes/app.scss');
 
 
-const $Example = styled.section`
+const $Stage = styled.section`
   position:relative;
 
   background-color:  ${themeGet('color', 'black')};
@@ -35,45 +36,25 @@ const $Example = styled.section`
   margin: 2rem;
   box-shadow: 0rem 0rem 2rem ${themeGet('color', 'blue')};
 
+  height: calc(100% - ${themeGet('value', 'headerHeight')});
+
   h2{
     color: ${themeGet('color', 'white')};
   }
 `
 
-const $ImageExamples = styled.div`
-`
-
-const $CounterExample = styled.div`
-  position:absolute;
-  top:1rem;
-  right:2rem;
-
-  text-align:center;
-  padding: 1rem;
-  max-width:50rem;
-  
-  >div>*{
-    display:inline-block;
-    vertical-align:middle;
-    min-width:5rem;
-  }
-`
-
-const $CustomLabels = styled.div`
-  margin:1rem;
-
-  h4{
-    float:left;
-    margin-right:.5rem;
-  }
-
-  p{
-    color: ${themeGet('color', 'green')}
-  }
+const $SelectionContainer = styled.div`
+  width:30%;
+  height:100%;
+  vertical-align:top;
+  display:inline-block;
 `;
 
-const $TypeSelection = styled.div`
-  margin:1rem;
+const $CageContainer = styled.div`
+  width:70%;
+  height:100%;
+  vertical-align:top;
+  display:inline-block;
 `;
 
 const $TypeList = styled.ul`
@@ -101,51 +82,22 @@ const $ObjectsList = styled.ul`
 `
 
 
-class Example extends Component {
+class Stage extends Component {
 
   render(){
     const { 
-      customTitle, 
-      customLabels, 
       customArray, 
       activePetType, 
       activePetId,
       activeObjects, 
-      counter, 
       setActivePetType, 
       setActivePetId,
-      incrementCounter, 
-      decrementCounter 
     } = this.props;
 
     return(
-      <$Example>
-        <h1>{'Examples'}</h1>
-        <$ImageExamples>
-          <img src={TestImage} alt="loading"/>
-        </$ImageExamples>
-
-        <$CounterExample>
-          <h3>{'Change this number'}</h3>
-          <div>
-            <Button text={'-'} onClick={() => decrementCounter()}/>
-            <span>{counter}</span>
-            <Button text={'+'} onClick={() => incrementCounter()}/>
-          </div>
-        </$CounterExample>
-
-        <hr/>
-        <p style={{textAlign:'center',fontStyle:'italic'}}>{ `(This is sourced from custom data at './public/data.json')` }</p>
-        <$CustomLabels>
-          <h2>{'Custom Labels'}</h2>
-          <h4>{'customTitle:'}</h4>
-          <p>{customTitle}</p>
-          <h4>{'selector-driven label:'}</h4>
-          <p>{ `${customLabels.title}~~~~"${customLabels.subTitle}"` }</p>
-        </$CustomLabels>
-        <br/>
-        <$TypeSelection>
-          <h2>{' Pick a type '}</h2>
+      <$Stage>
+        <$SelectionContainer>
+          <h2>{'Select a pet'}</h2>
 
           <$TypeList>
             { customArray.map((c, i) => (
@@ -161,8 +113,11 @@ class Example extends Component {
               </li>
             ))}
           </$ObjectsList>
-        </$TypeSelection>
-      </$Example>
+        </$SelectionContainer>
+        <$CageContainer>
+          <Cage/>
+        </$CageContainer>
+      </$Stage>
     );
   }
 }
@@ -186,5 +141,5 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Example)
+)(Stage)
 

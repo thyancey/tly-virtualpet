@@ -2,26 +2,90 @@
   "customTitle": "Animals",
   "customValue": 300,
   "customArray": [ "rodent", "bug", "dinosaur" ],
-  "customObjects": [
+  "pets": [
     {
+      "id": "ally-allosaurus",
       "type": "dinosaur",
       "animal": "allosaurus",
-      "name": "Ally"
+      "name": "Ally",
+      "baseStats":{
+        "size": 100,
+        "health": 20000,
+        "stomach": 100000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 50
+      },
+      "stats":{
+        "level": 2,
+        "xp": 300,
+        "stomach": 300,
+        "bladder": 10000,
+        "happyness": 400
+      }
     },
     {
+      "id": "billy-beaver",
       "type": "rodent",
       "animal": "beaver",
-      "name": "Billy"
+      "name": "Billy",
+      "baseStats":{
+        "size": 20,
+        "health": 20000,
+        "stomach": 10000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 1000
+      },
+      "stats":{
+        "level": 5,
+        "xp": 300,
+        "stomach": 300,
+        "bladder": 5000,
+        "happyness": 400
+      }
     },
     {
+      "id": "cathy-capybara",
       "type": "rodent",
       "animal": "capybara",
-      "name": "Cathy"
+      "name": "Cathy",
+      "baseStats":{
+        "size": 30,
+        "health": 20000,
+        "stomach": 10000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 100
+      },
+      "stats":{
+        "level": 8,
+        "xp": 300,
+        "stomach": 300,
+        "bladder": 10000,
+        "happyness": 400
+      }
     },
     {
+      "id": "denny-degu",
       "type": "rodent",
       "animal": "degu",
-      "name": "Denny"
+      "name": "Denny",
+      "baseStats":{
+        "size": 5,
+        "health": 20000,
+        "stomach": 500,
+        "bladder": 500,
+        "happyness": 10000,
+        "intelligence": 1000
+      },
+      "stats":{
+        "level": 15,
+        "xp": 300,
+        "stomach": 480,
+        "bladder": 500,
+        "happyness": 10000
+      }
     }
   ]
 }

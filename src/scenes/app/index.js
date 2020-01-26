@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setCustomData } from 'store/actions/index.js';
 import { themeGet } from 'themes/';
 
-import Example from 'scenes/example';
+import Stage from 'scenes/stage';
 
 require('themes/app.scss');
 
@@ -61,8 +61,8 @@ class App extends Component {
   render(){
     return(
       <$App id="app" >
-        <h1>{ this.props.loaded ? 'Loaded' : 'Loading...' }</h1>
-        <Example />
+        <h1>{'Tom-a-got-yee'}</h1>
+        <Stage />
       </$App>
     );
   }

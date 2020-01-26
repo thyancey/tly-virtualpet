@@ -1,6 +1,7 @@
 import { 
   setCustomData,
-  setActiveType,
+  setActivePetType,
+  setActivePetId,
   incrementCounter,
   decrementCounter
 } from '../actions';
@@ -16,7 +17,9 @@ const initialState = {
   loaded: false,
   title: 'loading',
   customData: null,
-  counter: 0
+  counter: 0,
+  activePetType: null,
+  activePetId: null
 }
 
 export default handleActions({
@@ -47,10 +50,17 @@ export default handleActions({
     }
   },
 
-  [setActiveType.toString()]: (state, action) => {
+  [setActivePetType.toString()]: (state, action) => {
     return {
       ...state,
-      activeType: action.payload
+      activePetType: action.payload
+    }
+  },
+
+  [setActivePetId.toString()]: (state, action) => {
+    return {
+      ...state,
+      activePetId: action.payload
     }
   },
 

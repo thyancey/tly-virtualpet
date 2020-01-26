@@ -19,6 +19,7 @@ export default {
     blue: '#1fb9f3',
     green: '#51f249',
     grey: '#373737',
+    red: '#F55658',
     purple: '#6b1ff3'
   },
   shadow:{
