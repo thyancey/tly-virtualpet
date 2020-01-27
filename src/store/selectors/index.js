@@ -5,6 +5,7 @@ export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
 export const getActivePetId = state => state.data.activePetId || null;
 export const getCounter = state => state.data.counter;
+export const getSprites = state => state.data.customData && state.data.customData.sprites || {};
 
 
 export const selectCustomLabels = createSelector(
@@ -47,12 +48,24 @@ export const selectActivePets = createSelector(
   }
 );
 
-export const selectActivePet = createSelector(
-  [getActivePetId, selectPets],
-  (activePetId, allPets) => {
-    if(!activePetId || !allPets) return null;
 
-    return allPets.find(p => p.id === activePetId);
+export const selectActivePet = createSelector(
+  [getActivePetId, selectPets, getSprites],
+  (activePetId, allPets, sprites) => {
+    if(!activePetId || !allPets || !sprites) return null;
+
+    const found = allPets.find(p => p.id === activePetId);
+    if(found){
+      let animationLabel = found.animations.idle[0];
+      if(animationLabel && sprites[animationLabel]){
+        return { ...found, animation: { ...sprites[animationLabel], label: animationLabel } }
+      }else{
+        console.error('Error getting animation');
+        return null;
+      }
+    }else{
+      return null;
+    }
   }
 );
 
