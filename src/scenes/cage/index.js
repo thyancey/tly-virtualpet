@@ -32,7 +32,7 @@ const $Cage = styled.div`
   border: .5rem dashed ${themeGet('color', 'blue')};
 
   border-radius: 2rem;
-  padding: 2rem;
+  /* padding: 2rem; */
   box-shadow: 0rem 0rem 2rem ${themeGet('color', 'blue')};
 
   h2{

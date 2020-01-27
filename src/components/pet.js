@@ -1,61 +1,72 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import AnimationCanvas from './animation-canvas/';
 
 import { themeGet } from 'themes/';
 import ReactImageFallback from 'react-image-fallback';
 import Image_404Pet from './assets/unknown-pet.jpg';
 
-const $Pet = styled.div`
-  position:absolute;
-  width:30rem;
-  height:30rem;
+const $PetContainer = styled.div`
+  position:relative;
+  height: 100%;
+`;
 
-  bottom: 1rem;
-  left:1rem;
-
-  background-color:  ${themeGet('color', 'purple')};
-
-  border: 1rem solid ${themeGet('color', 'purple')};
-  border-radius: 2rem;
-
-  overflow:hidden;
-
-  img{
-    width:100%;
+class Pet extends Component {
+  constructor(props) {
+    super(props);
+    this.containerRef = React.createRef();
+    this.onResize = this.onResize.bind(this);
+    this.state = {
+      canvasWidth: 500,
+      canvasHeight:500
+    }
   }
-`
 
-const $Level = styled.p`
-  position:absolute;
-  right:-1rem;
-  top:-1rem;
+  componentDidMount() {
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+  }
 
-  width:6rem;
-  height:6rem;
-  border-radius: 0 2rem 0 50%;
-  background-color:white;
-  color:black;
-  text-align:center;
+  onResize(){
+    // console.log('onrsizes')
+    this.updateCanvasDims();
+  }
 
-  border: 1rem solid ${themeGet('color', 'purple')};
-  box-shadow: .2rem .2rem .2rem black;
+  updateCanvasDims(){
 
-  font-size:3rem;
-  font-weight:600;
-`
+    this.setState({
+      canvasWidth: this.containerRef.current.offsetWidth,
+      canvasHeight: this.containerRef.current.offsetHeight
+    })
+  }
 
+  render(){
+    const { canvasWidth, canvasHeight } = this.state;
+    const { level, imageUrl } = this.props;
 
-const Pet = ({ level, imageUrl }) => {
-  return (
-    <$Pet>
-      <$Level>{level}</$Level>
-      <ReactImageFallback
-          src={imageUrl}
-          fallbackImage={Image_404Pet}
-          alt={'pet'}
-          className={'card-image-div'} />
-    </$Pet>
-  );
+    return (
+      <$PetContainer ref={this.containerRef}>
+        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight}/>
+      </$PetContainer>
+    );
+  }
 }
 
-export default Pet;
+const mapStateToProps = (state) => ({
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators(
+    {},
+    dispatch
+  )
+);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Pet);
