@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Canvas from './canvas';
+import { getAnimation } from './_animations';
 
 /*
  based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
@@ -26,6 +27,10 @@ export default class AnimationCanvas extends Component {
   }
 
   render() {
-    return <Canvas angle={this.state.angle} canvasWidth={this.props.canvasWidth} canvasHeight={this.props.canvasHeight}/>;
+    return <Canvas 
+              angle={this.state.angle} 
+              canvasWidth={this.props.canvasWidth} 
+              canvasHeight={this.props.canvasHeight}
+              drawCommand={ getAnimation(this.props.animation) } />;
   }
 }

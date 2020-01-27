@@ -9,6 +9,11 @@
       "animal": "allosaurus",
       "name": "Ally",
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
+      "animations": {
+        "idle": [{
+          "label": "SpinSquare2"
+         }]
+      },
       "baseStats":{
         "size": 100,
         "health": 20000,
@@ -31,6 +36,11 @@
       "animal": "beaver",
       "name": "Billy",
       "imageUrl": "pets/rodent-beaver.jpg",
+      "animations": {
+        "idle": [{
+          "label": "SpinSquare"
+         }]
+      },
       "baseStats":{
         "size": 20,
         "health": 20000,
@@ -54,6 +64,11 @@
       "animal": "capybara",
       "name": "Cathy",
       "imageUrl": "pets/rodent-capybara.jpg",
+      "animations": {
+        "idle": [{
+          "label": "SpinSquare"
+         }]
+      },
       "baseStats":{
         "size": 30,
         "health": 20000,
@@ -77,6 +92,11 @@
       "animal": "degu",
       "name": "Denny",
       "imageUrl": "pets/rodent-degu.jpg",
+      "animations": {
+        "idle": [{
+          "label": "SpinSquare"
+         }]
+      },
       "baseStats":{
         "size": 5,
         "health": 20000,

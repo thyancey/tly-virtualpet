@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import AnimationCanvas from './animation-canvas/';
 
 import { themeGet } from 'themes/';
-import ReactImageFallback from 'react-image-fallback';
-import Image_404Pet from './assets/unknown-pet.jpg';
 
 const $PetContainer = styled.div`
   position:relative;
@@ -46,15 +44,16 @@ class Pet extends Component {
 
   render(){
     const { canvasWidth, canvasHeight } = this.state;
-    const { level, imageUrl } = this.props;
+    const { level, imageUrl, petData } = this.props;
 
     return (
       <$PetContainer ref={this.containerRef}>
-        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight}/>
+        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight} animation={petData.animation.label} />
       </$PetContainer>
     );
   }
 }
+
 
 const mapStateToProps = (state) => ({
 });

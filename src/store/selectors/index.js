@@ -52,7 +52,12 @@ export const selectActivePet = createSelector(
   (activePetId, allPets) => {
     if(!activePetId || !allPets) return null;
 
-    return allPets.find(p => p.id === activePetId);
+    const found = allPets.find(p => p.id === activePetId);
+    if(found){
+      return { ...found, animation: found.animations.idle[0] }
+    }else{
+      return null;
+    }
   }
 );
 

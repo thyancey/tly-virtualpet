@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PureCanvas from './pure-canvas';
 
+
 export default class Canvas extends Component {
   constructor(props) {
     super(props);
@@ -14,20 +15,8 @@ export default class Canvas extends Component {
   }
 
   componentDidUpdate() {
-    const { angle } = this.props;
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.clearRect(0, 0, this.width, this.height);
-    this.ctx.translate(this.width / 2, this.height / 2);
-    this.ctx.rotate((angle * Math.PI) / 180);
-    this.ctx.fillStyle = '#4397AC';
-    this.ctx.fillRect(
-      -this.width / 4,
-      -this.height / 4,
-      this.width / 2,
-      this.height / 2
-    );
-    this.ctx.restore();
+    this.props.drawCommand && this.props.drawCommand(this.ctx, this.width, this.height, { ...this.props });
+    
   }
 
   render() {
