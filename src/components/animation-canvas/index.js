@@ -45,6 +45,7 @@ export default class AnimationCanvas extends Component {
       let img = new Image();
       img.src = aObj.imageUrl;
       img.onload = () => {
+        console.log('new img')
         this.setState({
           img: img
         });
@@ -67,7 +68,7 @@ export default class AnimationCanvas extends Component {
               canvasWidth={this.props.canvasWidth} 
               canvasHeight={this.props.canvasHeight}
               sprite={this.state.img}
-              spriteSpeed={this.props.animation.speed}
-              drawCommand={ getAnimation(this.props.animation.label) } />;
+              spriteInfo={this.props.animation.spriteInfo}
+              drawCommand={ getAnimation(this.props.animation.type) } />;
   }
 }
