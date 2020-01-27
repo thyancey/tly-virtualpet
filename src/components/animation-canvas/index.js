@@ -57,7 +57,7 @@ export default class AnimationCanvas extends Component {
   }
 
   componentDidUpdate(prevProps){
-    if(this.props.animation.label && prevProps.animation.label !== this.props.animation.label){
+    if(this.props.animation.label && (prevProps.animation.label !== this.props.animation.label || !this.state.img)){
       this.updateImage(this.props.animation);
     }
   }

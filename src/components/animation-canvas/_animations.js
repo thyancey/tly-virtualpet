@@ -33,7 +33,32 @@ const A = {
     );
     ctx.restore();
   },
-  SpriteTest: (ctx, width, height, props) => {
+  Sprite_Still: (ctx, width, height, props) => {
+    if(!props.sprite) return;
+
+    const cCoords = getStillCellCoords(props.spriteInfo, props.spriteInfo.frame);
+
+    const s = props.spriteInfo.scale || 1;
+    const x = 0;
+    const y = 0;
+    const sW = cCoords.w * s;
+    const sH = cCoords.h * s;
+
+    ctx.save();
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(
+      props.sprite, 
+      cCoords.x, 
+      cCoords.y, 
+      cCoords.w, 
+      cCoords.h, 
+      x, 
+      y, 
+      sW, 
+      sH);
+    ctx.restore();
+  },
+  Sprite_Animated: (ctx, width, height, props) => {
     if(!props.sprite) return;
 
     const frames = props.spriteInfo.frames;
@@ -44,7 +69,7 @@ const A = {
 
     const cCoords = getCellCoords(props.spriteInfo, idx);
 
-    const s = 1;
+    const s = props.spriteInfo.scale || 1;
     const x = 0;
     const y = 0;
     const sW = cCoords.w * s;
@@ -66,6 +91,16 @@ const A = {
   }
 }
 
+const getStillCellCoords = (sheetData, i) => {
+  const c = sheetData.grid[0];
+  const r = sheetData.grid[1];
+  return {
+    x: (i % c) * sheetData.cells[0],
+    y: (Math.floor(i / r) % r) * sheetData.cells[1],
+    w: sheetData.cells[0],
+    h: sheetData.cells[1]
+  }
+}
 
 const getCellCoords = (sheetData, i) => {
   const frames = sheetData.frames;

@@ -1,7 +1,7 @@
 {
   "customTitle": "Animals",
   "customValue": 300,
-  "customArray": [ "rodent", "bug", "dinosaur" ],
+  "customArray": [ "rodent", "block", "dinosaur" ],
   "pets": [
     {
       "id": "ally-allosaurus",
@@ -10,18 +10,7 @@
       "name": "Ally",
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
-        "idle": [{
-          "label": "Raccoon",
-          "type": "SpriteTest",
-          "imageUrl": "pets/raccoon.png",
-          "spriteInfo":{
-            "speed": 10,
-            "dir": -1,
-            "grid": [ 2, 2 ],
-            "cells": [ 400, 500 ],
-            "frames": [0, 2]
-          }
-        }]
+        "idle": [ "Dino_Idle1" ]
       },
       "baseStats":{
         "size": 100,
@@ -46,10 +35,7 @@
       "name": "Billy",
       "imageUrl": "pets/rodent-beaver.jpg",
       "animations": {
-        "idle": [{
-          "label": "SpinSquare",
-          "type": "SpinSquare"
-         }]
+        "idle": [ "Beaver_Idle1" ]
       },
       "baseStats":{
         "size": 20,
@@ -69,23 +55,13 @@
       }
     },
     {
-      "id": "cathy-capybara",
-      "type": "rodent",
-      "animal": "capybara",
+      "id": "cathy-block",
+      "type": "block",
+      "animal": "cuber",
       "name": "Cathy",
-      "imageUrl": "pets/rodent-capybara.jpg",
+      "imageUrl": "pets/rodent-block.jpg",
       "animations": {
-        "idle": [{
-          "label": "Sprite1",
-          "type": "SpriteTest",
-          "imageUrl": "pets/sprite-1.jpg",
-          "spriteInfo":{
-            "speed": 1,
-            "grid": [ 2, 2 ],
-            "cells": [ 250, 250 ],
-            "frames": [0, 3]
-          }
-         }]
+        "idle": [ "Cube_Idle1" ]
       },
       "baseStats":{
         "size": 30,
@@ -111,10 +87,7 @@
       "name": "Denny",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
-        "idle": [{
-          "label": "SpinSquare",
-          "type": "SpinSquare"
-         }]
+        "idle": [ "SpinSquare" ]
       },
       "baseStats":{
         "size": 5,
@@ -140,18 +113,7 @@
       "name": "Rizzo",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
-        "idle": [{
-          "label": "Raccoon",
-          "type": "SpriteTest",
-          "imageUrl": "pets/raccoon.png",
-          "spriteInfo":{
-            "speed": 10,
-            "dir": -1,
-            "grid": [ 2, 2 ],
-            "cells": [ 400, 500 ],
-            "frames": [0, 2]
-          }
-        }]
+        "idle": [ "Raccoon_Idle1" ]
       },
       "baseStats":{
         "size": 5,
@@ -170,5 +132,60 @@
         "happyness": 10000
       }
     }
-  ]
+  ],
+  "sprites":{
+    "SpinSquare":{
+      "type": "SpinSquare"
+    },
+    "Dino_Idle1":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/dino.png",
+      "spriteInfo":{
+        "speed": 5,
+        "scale": 2,
+        "grid": [ 2, 2 ],
+        "cells": [ 134, 62 ],
+        "frames": [0, 3]
+      }
+    },
+    "Beaver_Idle1":{
+      "type": "Sprite_Still",
+      "imageUrl": "pets/rodent-beaver.jpg",
+      "spriteInfo":{
+        "grid": [ 1, 1 ],
+        "cells": [ 500, 500 ],
+        "frame": 0
+      }
+    },
+    "Beaver_Idle2":{
+      "type": "Sprite_Still",
+      "imageUrl": "pets/raccoon.png",
+      "spriteInfo":{
+        "grid": [ 2, 2 ],
+        "cells": [ 400, 500 ],
+        "frame": 0
+      }
+    },
+    "Raccoon_Idle1":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/raccoon.png",
+      "spriteInfo":{
+        "speed": 10,
+        "dir": 1,
+        "grid": [ 2, 2 ],
+        "cells": [ 400, 500 ],
+        "frames": [0, 3]
+      }
+    },
+    "Cube_Idle1":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/sprite-1.jpg",
+      "spriteInfo":{
+        "speed": 1,
+        "grid": [ 2, 2 ],
+        "cells": [ 250, 250 ],
+        "frames": [0, 3]
+      }
+    }
+  }
 }
