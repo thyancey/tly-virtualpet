@@ -6,10 +6,18 @@ import { getAnimation } from './_animations';
  based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
 */
 
+//- should be at least 1. Increase to reduce the number of cycles per animationLoop
+const FRAME_RATE = 1;
+
 export default class AnimationCanvas extends Component {
   constructor(props) {
     super(props);
-    this.state = { angle: 0 };
+    this.frames = 0;
+
+    this.state = { 
+      tick: 0,
+      img: null
+     };
     this.updateAnimationState = this.updateAnimationState.bind(this);
   }
 
@@ -18,7 +26,13 @@ export default class AnimationCanvas extends Component {
   }
 
   updateAnimationState() {
-    this.setState(prevState => ({ angle: prevState.angle + 1 }));
+    if(this.frames % FRAME_RATE === 0){
+      this.setState(prevState => ({ 
+        tick: this.frames 
+      }));
+    }
+
+    this.frames++;
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
@@ -26,11 +40,34 @@ export default class AnimationCanvas extends Component {
     cancelAnimationFrame(this.rAF);
   }
 
+  updateImage(aObj){
+    if(aObj.imageUrl){
+      let img = new Image();
+      img.src = aObj.imageUrl;
+      img.onload = () => {
+        this.setState({
+          img: img
+        });
+      };
+    }else{
+      return null;
+    }
+
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.animation.label && prevProps.animation.label !== this.props.animation.label){
+      this.updateImage(this.props.animation);
+    }
+  }
+
   render() {
     return <Canvas 
-              angle={this.state.angle} 
+              tick={this.state.tick} 
               canvasWidth={this.props.canvasWidth} 
               canvasHeight={this.props.canvasHeight}
-              drawCommand={ getAnimation(this.props.animation) } />;
+              sprite={this.state.img}
+              spriteSpeed={this.props.animation.speed}
+              drawCommand={ getAnimation(this.props.animation.label) } />;
   }
 }

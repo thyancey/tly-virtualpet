@@ -11,7 +11,9 @@
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
         "idle": [{
-          "label": "SpinSquare2"
+          "label": "SpriteTest",
+          "speed": 20,
+          "imageUrl": "pets/sprite-1.jpg"
          }]
       },
       "baseStats":{
@@ -66,7 +68,9 @@
       "imageUrl": "pets/rodent-capybara.jpg",
       "animations": {
         "idle": [{
-          "label": "SpinSquare"
+          "label": "SpriteTest",
+          "speed": 1,
+          "imageUrl": "pets/sprite-1.jpg"
          }]
       },
       "baseStats":{

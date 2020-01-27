@@ -48,7 +48,7 @@ class Pet extends Component {
 
     return (
       <$PetContainer ref={this.containerRef}>
-        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight} animation={petData.animation.label} />
+        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight} animation={petData.animation} />
       </$PetContainer>
     );
   }
