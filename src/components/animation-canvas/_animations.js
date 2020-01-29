@@ -112,7 +112,6 @@ const getCellCoords = (sheetData, i) => {
   }
 
   const c = sheetData.grid[0];
-  const r = sheetData.grid[1];
 
   return {
     x: (idx % c) * sheetData.cells[0],

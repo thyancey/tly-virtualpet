@@ -8,6 +8,10 @@ import AnimationCanvas from './animation-canvas/';
 
 import { themeGet } from 'themes/';
 
+import { 
+  selectActivePetAnimation,
+} from 'store/selectors';
+
 const $PetContainer = styled.div`
   position:relative;
   height: 100%;
@@ -44,11 +48,11 @@ class Pet extends Component {
 
   render(){
     const { canvasWidth, canvasHeight } = this.state;
-    const { level, imageUrl, petData } = this.props;
+    const { level, imageUrl, petData, animation } = this.props;
 
     return (
       <$PetContainer ref={this.containerRef}>
-        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight} animation={petData.animation} />
+        <AnimationCanvas canvasWidth={canvasWidth} canvasHeight={canvasHeight} animation={animation} />
       </$PetContainer>
     );
   }
@@ -56,6 +60,7 @@ class Pet extends Component {
 
 
 const mapStateToProps = (state) => ({
+  animation: selectActivePetAnimation(state)
 });
 
 const mapDispatchToProps = dispatch => (

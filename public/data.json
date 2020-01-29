@@ -10,7 +10,8 @@
       "name": "Bocado",
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
-        "idle": [ "Bocado_1" ]
+        "idle": [ "Bocado_Idle1", "Bocado_Eat" ],
+        "walk": [ "Bocado_Walk" ]
       },
       "baseStats":{
         "size": 100,
@@ -112,7 +113,7 @@
       "name": "Denny",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
-        "idle": [ "SpinSquare" ]
+        "idle": [ "SpinSquare1" ]
       },
       "baseStats":{
         "size": 5,
@@ -159,21 +160,25 @@
     }
   ],
   "sprites":{
-    "SpinSquare":{
-      "type": "SpinSquare"
-    },
-    "Dino_Idle1":{
+    "Dino":{
       "type": "Sprite_Animated",
       "imageUrl": "pets/dino.png",
       "spriteInfo":{
-        "speed": 5,
         "scale": 2,
         "grid": [ 2, 2 ],
-        "cells": [ 134, 62 ],
-        "frames": [0, 3]
+        "cells": [ 134, 62 ]
       }
     },
-    "Beaver_Idle1":{
+    "Bocado":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/bocado-1.png",
+      "spriteInfo":{
+        "scale": ".5",
+        "grid": [ 9, 5 ],
+        "cells": [ 418, 461 ]
+      }
+    },
+    "Beaver":{
       "type": "Sprite_Still",
       "imageUrl": "pets/rodent-beaver.jpg",
       "spriteInfo":{
@@ -182,27 +187,15 @@
         "frame": 0
       }
     },
-    "Beaver_Idle2":{
-      "type": "Sprite_Still",
-      "imageUrl": "pets/raccoon.png",
-      "spriteInfo":{
-        "grid": [ 2, 2 ],
-        "cells": [ 400, 500 ],
-        "frame": 0
-      }
-    },
-    "Raccoon_Idle1":{
+    "Raccoon":{
       "type": "Sprite_Animated",
       "imageUrl": "pets/raccoon.png",
       "spriteInfo":{
-        "speed": 10,
-        "dir": 1,
         "grid": [ 2, 2 ],
-        "cells": [ 400, 500 ],
-        "frames": [0, 3]
+        "cells": [ 400, 500 ]
       }
     },
-    "Cube_Idle1":{
+    "Cube":{
       "type": "Sprite_Animated",
       "imageUrl": "pets/sprite-1.jpg",
       "spriteInfo":{
@@ -212,15 +205,46 @@
         "frames": [0, 3]
       }
     },
-    "Bocado_1":{
-      "type": "Sprite_Animated",
-      "imageUrl": "pets/bocado-1.png",
-      "spriteInfo":{
-        "speed": 15,
-        "grid": [ 9, 5 ],
-        "cells": [ 418, 461 ],
-        "frames": [0, 39]
-      }
+    "SpinSquare":{
+      "type": "SpinSquare"
+    }
+  },
+  "graphics":{
+    "Dino_Idle1":{
+      "sprite": "Dino",
+      "speed": 5,
+      "frames": [0, 3]
+    },
+    "Bocado_Eat":{
+      "sprite": "Bocado",
+      "speed": "15",
+      "frames": [14, 15]
+    },
+    "Bocado_Walk":{
+      "sprite": "Bocado",
+      "speed": "15",
+      "frames": [15, 16]
+    },
+    "Bocado_Idle1":{
+      "sprite": "Bocado",
+      "speed": "15",
+      "frames": [0, 1]
+    },
+    "Beaver_Idle1":{
+      "sprite": "Beaver",
+      "frame": 0
+    },
+    "Raccoon_Idle1":{
+      "sprite": "Raccoon",
+      "speed": "10",
+      "dir": 1,
+      "frames": [0, 3]
+    },
+    "Cube_Idle1":{
+      "sprite": "Cube"
+    },
+    "SpinSquare1":{
+      "sprite": "SpinSquare"
     }
   }
 }
