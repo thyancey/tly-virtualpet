@@ -1,8 +1,33 @@
 {
   "customTitle": "Animals",
   "customValue": 300,
-  "customArray": [ "rodent", "block", "dinosaur" ],
+  "customArray": [ "rodent", "block", "megupet", "dinosaur" ],
   "pets": [
+    {
+      "id": "bocado",
+      "type": "megupet",
+      "animal": "bocado",
+      "name": "Bocado",
+      "imageUrl": "pets/dinosaur-allosaurus.jpg",
+      "animations": {
+        "idle": [ "Bocado_1" ]
+      },
+      "baseStats":{
+        "size": 100,
+        "health": 20000,
+        "stomach": 100000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 50
+      },
+      "stats":{
+        "level": 2,
+        "xp": 300,
+        "stomach": 300,
+        "bladder": 10000,
+        "happyness": 400
+      }
+    },
     {
       "id": "ally-allosaurus",
       "type": "dinosaur",
@@ -185,6 +210,16 @@
         "grid": [ 2, 2 ],
         "cells": [ 250, 250 ],
         "frames": [0, 3]
+      }
+    },
+    "Bocado_1":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/bocado-1.png",
+      "spriteInfo":{
+        "speed": 15,
+        "grid": [ 9, 5 ],
+        "cells": [ 418, 461 ],
+        "frames": [0, 39]
       }
     }
   }

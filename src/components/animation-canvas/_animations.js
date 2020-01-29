@@ -66,7 +66,6 @@ const A = {
 
     //- need to work on this, but try to control the nam
     const idx = Math.floor(props.tick / frameSkip)
-
     const cCoords = getCellCoords(props.spriteInfo, idx);
 
     const s = props.spriteInfo.scale || 1;
@@ -109,19 +108,15 @@ const getCellCoords = (sheetData, i) => {
   let idx = (i % fl) + frames[0]; 
 
   if(sheetData.dir === -1){
-    // console.log("old", idx)
     idx = (fl - 1) - idx;
-    // console.log("new", idx)
   }
 
   const c = sheetData.grid[0];
   const r = sheetData.grid[1];
 
-
-
   return {
     x: (idx % c) * sheetData.cells[0],
-    y: (Math.floor(idx / r) % r) * sheetData.cells[1],
+    y: Math.floor(idx / c) * sheetData.cells[1],
     w: sheetData.cells[0],
     h: sheetData.cells[1]
   }
