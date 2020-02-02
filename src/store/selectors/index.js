@@ -1,13 +1,12 @@
 
 import { createSelector } from 'reselect';
+import { getPets, getSprites, getGraphics, getSavedStats, getBaseStats } from 'util/pet-store';
 
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
-export const getActivePetId = state => state.data.activePetId || null;
 export const getCounter = state => state.data.counter;
-export const getSprites = state => state.data.customData && state.data.customData.sprites || {};
-export const getGraphics = state => state.data.customData && state.data.customData.graphics || {};
-
+export const getActivePetId = state => state.activePet.id || null;
+export const getActivePetStats = state => state.activePet.stats || null;
 
 export const selectCustomLabels = createSelector(
   [getCustomData],
@@ -33,15 +32,9 @@ export const selectCustomValue = createSelector(
   }
 );
 
-const selectPets = createSelector(
-  [getCustomData],
-  (data) => {
-    return data.pets || [];
-  }
-);
 
 export const selectActivePets = createSelector(
-  [getActivePetType, selectPets],
+  [getActivePetType, getPets],
   (activePetType, allPets) => {
     if(!activePetType || !allPets) return [];
 
@@ -49,28 +42,8 @@ export const selectActivePets = createSelector(
   }
 );
 
-// export const selectActivePet = createSelector(
-//   [getActivePetId, selectPets, getSprites],
-//   (activePetId, allPets, sprites) => {
-//     if(!activePetId || !allPets || !sprites) return null;
-
-//     const found = allPets.find(p => p.id === activePetId);
-//     if(found){
-//       let animationLabel = found.animations.idle[0];
-//       if(animationLabel && sprites[animationLabel]){
-//         return { ...found, animation: { ...sprites[animationLabel], label: animationLabel } }
-//       }else{
-//         console.error('Error getting animation');
-//         return null;
-//       }
-//     }else{
-//       return null;
-//     }
-//   }
-// );
-
 export const selectActivePet = createSelector(
-  [getActivePetId, selectPets],
+  [getActivePetId, getPets],
   (activePetId, allPets) => {
     if(!activePetId || !allPets) return null;
 
@@ -124,7 +97,7 @@ export const selectActivePetAnimation = createSelector(
   }
 );
 
-const getStatObj = (label, stats, baseStats, fillType) => {
+const getStatObj = (stats, baseStats, label, fillType) => {
   if(stats[label] !== undefined && baseStats[label] !== undefined){
 
     return {
@@ -138,22 +111,28 @@ const getStatObj = (label, stats, baseStats, fillType) => {
   }
 }
 
+const selectStats = createSelector(
+  [getActivePetId, selectActivePet],
+
+)
 export const selectActivePetStats = createSelector(
-  [selectActivePet],
-  (activePet) => {
+  [selectActivePet, getActivePetStats],
+  (activePet, currentStats) => {
     if(!activePet) return null;
 
+    const baseStats = getBaseStats(activePet.id);
+
     return {
-      level: activePet.stats.level,
+      level: currentStats.level,
       xp:{
-        cur: activePet.stats.xp,
+        cur: currentStats.xp,
         max: 1000,
-        percent: Math.round((activePet.stats.xp / 1000) * 100),
+        percent: Math.round((currentStats.xp / 1000) * 100),
         fillType: 'none'
       },
-      stomach: getStatObj('stomach', activePet.stats, activePet.baseStats, 'fill'),
-      bladder: getStatObj('bladder', activePet.stats, activePet.baseStats, 'empty'),
-      happyness: getStatObj('happyness', activePet.stats, activePet.baseStats, 'fill')
+      stomach: getStatObj(currentStats, baseStats, 'stomach', 'fill'),
+      bladder: getStatObj(currentStats, baseStats, 'bladder', 'empty'),
+      happyness: getStatObj(currentStats, baseStats, 'happyness', 'fill')
     }
   }
 );

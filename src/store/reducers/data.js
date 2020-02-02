@@ -1,17 +1,14 @@
 import { 
   setCustomData,
+  setOtherData,
   setActivePetType,
   setActivePetId
 } from '../actions';
-import { 
-  incrementXp,
-  incrementFood,
-  incrementPee,
-  incrementHappy
-} from '../actions/pet';
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
+import PetStore from 'util/pet-store';
+import { setPetDefinitions, setSpriteDefinitions, setGraphicDefinitions, setPetStoreData } from 'util/pet-store';
 
 //- customData in store is from an external json file at public/data.json
 const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects' ];
@@ -40,10 +37,30 @@ export default handleActions({
       }
     }
 
+    // setPetDefinitions(cleanObj.pets);
+    setPetStoreData('sprites', cleanObj.sprites);
+    setPetStoreData('graphics', cleanObj.graphics);
+
     return {
       ...state,
       customData: cleanObj,
       loaded: true
+    }
+  },
+
+  [setOtherData.toString()]: (state, action) => {
+    setPetDefinitions(action.payload.data.pets);
+    setSpriteDefinitions(action.payload.data.sprites);
+    setGraphicDefinitions(action.payload.data.graphics);
+    
+    if(action.payload.type === 'pets'){
+      
+      return {
+        ...state,
+        petsLoaded: true
+      }
+    }else{
+      return state
     }
   },
 
@@ -66,57 +83,5 @@ export default handleActions({
       ...state,
       activePetId: action.payload
     }
-  },
-
-
-  [incrementXp.toString()]: (state, action) => {
-    return augmentStat(state, 'xp', action.payload);
-  },
-
-  [incrementFood.toString()]: (state, action) => {
-    return augmentStat(state, 'stomach', action.payload);
-  },
-
-  [incrementPee.toString()]: (state, action) => {
-    return augmentStat(state, 'bladder', action.payload);
-  },
-
-  [incrementHappy.toString()]: (state, action) => {
-    return augmentStat(state, 'happyness', action.payload);
   }
 }, initialState);
-
-const clamp = (val, min, max) => {
-  return Math.min(Math.max(val, min), max);
-}
-
-const augmentStat = (state, stat, value) => {
-  const { pet, idx } = getActivePet(state);
-  const newVal = pet.stats[stat] + value;
-  let newStat = clamp(newVal, 0, pet.baseStats[stat])
-
-  const updatedPet = {
-    ...pet,
-    stats:{
-      ...pet.stats,
-      [stat]: newStat
-    }
-  }
-  
-  return {
-    ...state,
-    customData:{
-      ...state.customData,
-      pets: Object.assign([], state.customData.pets, { [ idx ]: updatedPet })
-    }
-  }
-}
-
-const getActivePet = state => {
-  const petIdx = state.customData.pets.findIndex(p => p.id === state.activePetId);
-
-  return {
-    pet: state.customData.pets[petIdx],
-    idx: petIdx
-  }
-}
