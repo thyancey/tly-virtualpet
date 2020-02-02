@@ -3,37 +3,37 @@ export const getAnimation = animationLabel => {
 }
 
 const A = {
-  SpinSquare: (ctx, width, height, props) => {
+  SpinSquare: (ctx, bounds, pos, props) => {
     ctx.save();
     ctx.beginPath();
-    ctx.clearRect(0, 0, width, height);
-    ctx.translate(width / 2, height / 2);
+    ctx.clearRect(0, 0, bounds[0], bounds[1]);
+    ctx.translate(bounds[0] / 2, bounds[1] / 2);
     ctx.rotate((props.tick * Math.PI) / 180);
     ctx.fillStyle = '#4397AC';
     ctx.fillRect(
-      -width / 4,
-      -height / 4,
-      width / 2,
-      height / 2
+      -bounds[0] / 4,
+      -bounds[1] / 4,
+      bounds[0] / 2,
+      bounds[1] / 2
     );
     ctx.restore();
   },
-  SpinSquare2: (ctx, width, height, props) => {
+  SpinSquare2: (ctx, bounds, pos, props) => {
     ctx.save();
     ctx.beginPath();
-    ctx.clearRect(0, 0, width, height);
-    ctx.translate(width / 2, height / 2);
+    ctx.clearRect(0, 0, bounds[0], bounds[1]);
+    ctx.translate(bounds[0] / 2, bounds[1] / 2);
     ctx.rotate((-props.tick * Math.PI) / 45);
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(
-      -width / 4,
-      -height / 4,
-      width / 2,
-      height / 2
+      -bounds[0] / 4,
+      -bounds[1] / 4,
+      bounds[0] / 2,
+      bounds[1] / 2
     );
     ctx.restore();
   },
-  Sprite_Still: (ctx, width, height, props) => {
+  Sprite_Still: (ctx, bounds, pos, props) => {
     if(!props.sprite) return;
 
     const cCoords = getStillCellCoords(props.spriteInfo, props.spriteInfo.frame);
@@ -45,7 +45,7 @@ const A = {
     const sH = cCoords.h * s;
 
     ctx.save();
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, bounds[0], bounds[1]);
     ctx.drawImage(
       props.sprite, 
       cCoords.x, 
@@ -58,7 +58,7 @@ const A = {
       sH);
     ctx.restore();
   },
-  Sprite_Animated: (ctx, width, height, props) => {
+  Sprite_Animated: (ctx, bounds, pos, props) => {
     if(!props.sprite) return;
 
     const frames = props.spriteInfo.frames;
@@ -68,14 +68,19 @@ const A = {
     const idx = Math.floor(props.tick / frameSkip)
     const cCoords = getCellCoords(props.spriteInfo, idx);
 
+    let coords = [0, 0];
+    if(pos && pos.length === 2){
+      coords = pos;
+    }
+
     const s = props.spriteInfo.scale || 1;
-    const x = 0;
-    const y = 0;
+    const x = coords[0];
+    const y = coords[1];
     const sW = cCoords.w * s;
     const sH = cCoords.h * s;
 
     ctx.save();
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, bounds[0], bounds[1]);
     ctx.drawImage(
       props.sprite, 
       cCoords.x, 

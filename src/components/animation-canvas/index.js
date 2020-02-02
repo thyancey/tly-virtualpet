@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Canvas from './canvas';
-import { getAnimation } from './_animations';
 
 /*
  based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
@@ -40,12 +39,11 @@ export default class AnimationCanvas extends Component {
     cancelAnimationFrame(this.rAF);
   }
 
-  updateImage(aObj){
-    if(aObj.imageUrl){
+  updateImage(imageUrl){
+    if(imageUrl){
       let img = new Image();
-      img.src = aObj.imageUrl;
+      img.src = imageUrl;
       img.onload = () => {
-        console.log('new img')
         this.setState({
           img: img
         });
@@ -57,18 +55,20 @@ export default class AnimationCanvas extends Component {
   }
 
   componentDidUpdate(prevProps){
-    if(this.props.animation.label && (prevProps.animation.label !== this.props.animation.label || !this.state.img)){
-      this.updateImage(this.props.animation);
+    const { imageUrl } = this.props.animation;
+    if(imageUrl && (prevProps.animation.imageUrl !== imageUrl || !this.state.img)){
+      this.updateImage(imageUrl);
     }
   }
 
   render() {
     return <Canvas 
               tick={this.state.tick} 
-              canvasWidth={this.props.canvasWidth} 
-              canvasHeight={this.props.canvasHeight}
+              canvasWidth={this.props.containerWidth} 
+              canvasHeight={this.props.containerHeight}
               sprite={this.state.img}
+              position={this.props.position}
               spriteInfo={this.props.animation.spriteInfo}
-              drawCommand={ getAnimation(this.props.animation.type) } />;
+              drawCommand={ this.props.drawCommand } />;
   }
 }

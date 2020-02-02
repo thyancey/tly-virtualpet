@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
 
 import Pet from 'components/pet';
-import PetStats from 'components/pet-stats';
+import PetStats from 'components/pet/pet-stats';
 
 import { 
   selectActivePet,
@@ -46,6 +46,40 @@ const $PetStatsContainer = styled.div`
 `
 
 class Cage extends Component {
+  constructor(props){
+    super(props);
+
+    this.containerRef = React.createRef();
+    this.onResize = this.onResize.bind(this);
+    this.state = {
+      containerWidth: 500,
+      containerHeight: 500
+    }
+  }
+
+  componentDidUpdate(prevProps){
+    //- when the first canavs is rendered, check the page bounds
+    if(!prevProps.activePet && this.props.activePet){
+      this.onResize();
+    }
+  }
+
+  componentDidMount() {
+    global.addEventListener('resize', this.onResize);
+  }
+
+  onResize(){
+    this.updateCanvasDims();
+  }
+
+  updateCanvasDims(){
+    if(this.containerRef.current){
+      this.setState({
+        containerWidth: this.containerRef.current.offsetWidth,
+        containerHeight: this.containerRef.current.offsetHeight
+      })
+    }
+  }
 
   render(){
     const { 
@@ -61,8 +95,12 @@ class Cage extends Component {
       return null;
     }else{
       return(
-        <$Cage>
-          <Pet petData={activePet} level={activePetStats.level} />
+        <$Cage ref={this.containerRef} >
+          <Pet 
+            petData={activePet} 
+            level={activePetStats.level}
+            containerWidth={this.state.containerWidth}
+            containerHeight={this.state.containerHeight} />
           <$PetStatsContainer>
             <PetStats 
               petData={activePet} 
@@ -70,8 +108,7 @@ class Cage extends Component {
               incrementXp={incrementXp}
               incrementFood={incrementFood}
               incrementHappy={incrementHappy}
-              incrementPee={incrementPee}
-               />
+              incrementPee={incrementPee} />
           </$PetStatsContainer>
         </$Cage>
       );

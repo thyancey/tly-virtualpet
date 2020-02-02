@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import { themeGet } from 'themes/';
 
-import ProgressBar from './progress-bar';
-import { incrementXp } from '../store/actions/pet';
+import ProgressBar from '../progress-bar';
+import { incrementXp } from '../../store/actions/pet';
 
 const $PetStats = styled.div`
   background-color:  ${themeGet('color', 'purple')};
