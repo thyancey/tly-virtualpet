@@ -9,6 +9,9 @@ import { getAnimation } from '../animation-canvas/_animations';
 
 import { themeGet } from 'themes/';
 
+import {
+  setActivity
+} from '../../store/actions/pet';
 import { 
   selectActivePetAnimation,
 } from '../../store/selectors';
@@ -18,16 +21,15 @@ const $PetContainer = styled.div`
   height: 100%;
 `;
 
-
-
 class Pet extends Component {
   constructor(props){
     super(props);
+    this.idleTimer = null;
     this.onKeyDown = this.onKeyDown.bind(this);
 
     this.state = {
-      posX: 50,
-      posY: 50
+      posX: 0,
+      posY: 0
     }
     global.document.addEventListener('keydown', this.onKeyDown);
   }
@@ -37,6 +39,33 @@ class Pet extends Component {
       posX: this.state.posX + x,
       posY: this.state.posY + y 
     });
+
+    this.startWalking();
+  }
+
+  stopWalking(){
+    this.props.setActivity('IDLE');
+  }
+
+  startWalking(){
+    this.props.setActivity('WALK');
+
+    //- TODO, use debounce, but not of the npm modules worked for some reason
+    this.startIdleTimer();
+  }
+
+  startIdleTimer(){
+    this.killIdleTimer();
+    this.idleTimer = global.setTimeout(() => {
+      this.stopWalking()
+    }, 200)
+  }
+
+  killIdleTimer(){
+    if(this.idleTimer){
+      global.clearTimeout(this.idleTimer);
+      this.idleTimer = null;
+    }
   }
 
   onKeyDown(e){
@@ -62,8 +91,7 @@ class Pet extends Component {
   }
 
   render(){
-    const { animation, containerWidth, containerHeight } = this.props;
-
+    const { petData, animation, containerWidth, containerHeight } = this.props;
     let drawCommand = null;
     if(animation.type){
       drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ]);
@@ -84,7 +112,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(
-    {},
+    { setActivity },
     dispatch
   )
 );

@@ -38,9 +38,14 @@ const A = {
 
     const cCoords = getStillCellCoords(props.spriteInfo, props.spriteInfo.frame);
 
+    let coords = [0, 0];
+    if(pos && pos.length === 2){
+      coords = pos;
+    }
+
     const s = props.spriteInfo.scale || 1;
-    const x = 0;
-    const y = 0;
+    const x = coords[0];
+    const y = coords[1];
     const sW = cCoords.w * s;
     const sH = cCoords.h * s;
 
@@ -60,12 +65,16 @@ const A = {
   },
   Sprite_Animated: (ctx, bounds, pos, props) => {
     if(!props.sprite) return;
-
+    
+    const frame = props.spriteInfo.frame;
     const frames = props.spriteInfo.frames;
-    const frameSkip = props.spriteInfo.speed || 20;
-
-    //- need to work on this, but try to control the nam
-    const idx = Math.floor(props.tick / frameSkip)
+    let idx;
+    if(frame !== undefined){
+      idx = frame;
+    }else{
+      const frameSkip = props.spriteInfo.speed || 20;
+      idx = Math.floor(props.tick / frameSkip)
+    }
     const cCoords = getCellCoords(props.spriteInfo, idx);
 
     let coords = [0, 0];
@@ -108,12 +117,18 @@ const getStillCellCoords = (sheetData, i) => {
 
 const getCellCoords = (sheetData, i) => {
   const frames = sheetData.frames;
+  const frame = sheetData.frame;
 
-  const fl = frames[1] - frames[0] + 1;
-  let idx = (i % fl) + frames[0]; 
-
-  if(sheetData.dir === -1){
-    idx = (fl - 1) - idx;
+  let idx;
+  if(frame !== undefined){
+    idx = frame;
+  }else{
+    const fl = frames[1] - frames[0] + 1;
+    idx = (i % fl) + frames[0]; 
+  
+    if(sheetData.dir === -1){
+      idx = (fl - 1) - idx;
+    }
   }
 
   const c = sheetData.grid[0];

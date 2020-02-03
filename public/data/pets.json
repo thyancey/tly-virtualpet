@@ -52,7 +52,8 @@
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
         "DEFAULT": [ "Dino_Idle1" ],
-        "IDLE": [ "Dino_Idle1" ]
+        "IDLE": [ "Dino_Idle1" ],
+        "WALK": [ "Dino_Walk1" ]
       },
       "baseStats":{
         "xp": 3000,
@@ -72,6 +73,10 @@
       },
       "graphics":{
         "Dino_Idle1":{
+          "sprite": "Dino",
+          "frame": 0
+        },
+        "Dino_Walk1":{
           "sprite": "Dino",
           "speed": 5,
           "frames": [0, 3]
@@ -151,7 +156,8 @@
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
         "DEFAULT": [ "Raccoon_Idle1" ],
-        "IDLE": [ "Raccoon_Idle1" ]
+        "IDLE": [ "Raccoon_Idle1" ],
+        "WALK": [ "Raccoon_Walk1" ]
       },
       "baseStats":{
         "xp": 1000,
@@ -175,6 +181,12 @@
           "speed": "10",
           "dir": 1,
           "frames": [0, 3]
+        },
+        "Raccoon_Walk1":{
+          "sprite": "Raccoon",
+          "speed": "20",
+          "dir": 1,
+          "frames": [4, 5]
         }
       }
     }
@@ -211,7 +223,8 @@
       "type": "Sprite_Animated",
       "imageUrl": "pets/raccoon.png",
       "spriteInfo":{
-        "grid": [ 2, 2 ],
+        "scale": ".8",
+        "grid": [ 3, 2 ],
         "cells": [ 400, 500 ]
       }
     },

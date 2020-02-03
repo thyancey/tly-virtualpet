@@ -69,6 +69,16 @@ export const selectActivePet = createSelector(
   }
 );
 
+const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
+  if(graphic !== undefined){
+    return graphic;
+  }else if(spriteInfo !== undefined){
+    return spriteInfo;
+  }else{
+    return defaultValue;
+  }
+}
+
 const createSpriteObj = (label, graphic, sprite) => {
   sprite.spriteInfo = sprite.spriteInfo || {};
 
@@ -79,9 +89,9 @@ const createSpriteObj = (label, graphic, sprite) => {
     spriteInfo:{
       speed: graphic.speed || sprite.spriteInfo.speed || 1,
       dir: graphic.dir || sprite.spriteInfo.dir || 1,
-      scale: graphic.scale || sprite.spriteInfo.scale || 1,
-      frames: graphic.frames || sprite.spriteInfo.frames,
-      frame: graphic.frame || sprite.spriteInfo.frame,
+      scale: getFallbackValue(graphic.scale, sprite.spriteInfo.scale, 1),
+      frames: getFallbackValue(graphic.frames, sprite.spriteInfo.frames),
+      frame: getFallbackValue(graphic.frame, sprite.spriteInfo.frame),
       grid: sprite.spriteInfo.grid,
       cells: sprite.spriteInfo.cells
     }
