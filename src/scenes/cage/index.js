@@ -5,20 +5,22 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
 
-import Pet from 'components/pet';
-import PetStats from 'components/pet/pet-stats';
+import Pet from '../../components/pet';
+import PetStats from './pet-stats';
 
 import { 
   selectActivePet,
   selectActivePetStats
-} from 'store/selectors';
+} from '../../store//selectors';
 
 
 import {
   incrementXp,
   incrementFood,
   incrementHappy,
-  incrementPee
+  incrementBladder,
+  setMood,
+  setActivity
 } from 'store/actions/pet';
 
 const $Cage = styled.div`
@@ -88,7 +90,9 @@ class Cage extends Component {
       incrementXp,
       incrementFood,
       incrementHappy,
-      incrementPee 
+      incrementBladder,
+      setMood,
+      setActivity
     } = this.props;
 
     if(!activePet){
@@ -103,12 +107,16 @@ class Cage extends Component {
             containerHeight={this.state.containerHeight} />
           <$PetStatsContainer>
             <PetStats 
-              petData={activePet} 
+              petData={activePet.data} 
+              activity={activePet.activity}
+              mood={activePet.mood}
               statsObj={activePetStats}
               incrementXp={incrementXp}
               incrementFood={incrementFood}
               incrementHappy={incrementHappy}
-              incrementPee={incrementPee} />
+              incrementBladder={incrementBladder} 
+              setMood={setMood}
+              setActivity={setActivity} />
           </$PetStatsContainer>
         </$Cage>
       );
@@ -128,7 +136,9 @@ const mapDispatchToProps = dispatch =>
       incrementXp,
       incrementFood,
       incrementHappy,
-      incrementPee 
+      incrementBladder,
+      setMood,
+      setActivity 
     },
     dispatch
   )

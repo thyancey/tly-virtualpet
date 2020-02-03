@@ -6,10 +6,12 @@
       "animal": "bocado",
       "name": "Bocado",
       "animations": {
-        "idle": [ "Bocado_Idle1", "Bocado_Eat" ],
-        "walk": [ "Bocado_Walk" ]
+        "DEFAULT": [ "Bocado_Walk" ],
+        "IDLE": [ "Bocado_Idle1", "Bocado_Eat" ],
+        "WALK": [ "Bocado_Walk" ]
       },
       "baseStats":{
+        "xp": 3000,
         "size": 100,
         "health": 20000,
         "stomach": 100000,
@@ -49,9 +51,11 @@
       "name": "Ally",
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
-        "idle": [ "Dino_Idle1" ]
+        "DEFAULT": [ "Dino_Idle1" ],
+        "IDLE": [ "Dino_Idle1" ]
       },
       "baseStats":{
+        "xp": 3000,
         "size": 100,
         "health": 20000,
         "stomach": 100000,
@@ -81,12 +85,13 @@
       "name": "Billy",
       "imageUrl": "pets/rodent-beaver.jpg",
       "animations": {
-        "idle": [ "Beaver_Idle1" ]
+        "DEFAULT": [ "Beaver_Idle1" ],
+        "IDLE": [ "Beaver_Idle1" ]
       },
       "baseStats":{
+        "xp": 1000,
         "size": 20,
         "health": 20000,
-        "xp": 1000,
         "stomach": 3000,
         "bladder": 20000,
         "happyness": 10000,
@@ -113,12 +118,13 @@
       "name": "Denny",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
-        "idle": [ "SpinSquare" ]
+        "DEFAULT": [ "SpinSquare" ],
+        "IDLE": [ "SpinSquare" ]
       },
       "baseStats":{
+        "xp": 1000,
         "size": 5,
         "health": 20000,
-        "xp": 1000,
         "stomach": 500,
         "bladder": 500,
         "happyness": 10000,
@@ -144,12 +150,13 @@
       "name": "Rizzo",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
-        "idle": [ "Raccoon_Idle1" ]
+        "DEFAULT": [ "Raccoon_Idle1" ],
+        "IDLE": [ "Raccoon_Idle1" ]
       },
       "baseStats":{
+        "xp": 1000,
         "size": 5,
         "health": 20000,
-        "xp": 1000,
         "stomach": 500,
         "bladder": 500,
         "happyness": 10000,

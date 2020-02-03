@@ -7,6 +7,7 @@ export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
 export const getActivePetId = state => state.activePet.id || null;
 export const getActivePetStats = state => state.activePet.stats || null;
+export const getActivePet = state => state.activePet || null;
 
 export const selectCustomLabels = createSelector(
   [getCustomData],
@@ -42,7 +43,7 @@ export const selectActivePets = createSelector(
   }
 );
 
-export const selectActivePet = createSelector(
+export const selectActivePetData = createSelector(
   [getActivePetId, getPets],
   (activePetId, allPets) => {
     if(!activePetId || !allPets) return null;
@@ -52,6 +53,18 @@ export const selectActivePet = createSelector(
       return found;
     }else{
       return null;
+    }
+  }
+);
+
+export const selectActivePet = createSelector(
+  [selectActivePetData, getActivePet],
+  (activePetData, activePet) => {
+    if(!activePetData) return null;
+
+    return {
+      ...activePet,
+      data: activePetData
     }
   }
 );
@@ -78,14 +91,16 @@ const createSpriteObj = (label, graphic, sprite) => {
 export const selectActivePetAnimation = createSelector(
   [selectActivePet, getSprites],
   (activePet, sprites) => {
-    if(!activePet || !sprites) return null;
+    if(!activePet|| !sprites) return null;
+    const aData = activePet.data;
 
-    const mood = 'idle';
-    const animationGroup = activePet.animations[mood] || activePet.animations.idle;
+
+    const activity = activePet.activity;
+    const animationGroup = aData.animations[activity] || aData.animations.DEFAULT;
     const animIdx = Math.floor(Math.random() * animationGroup.length)
     const animationLabel = animationGroup[animIdx];
 
-    const foundGraphic = activePet.graphics[animationLabel];
+    const foundGraphic = aData.graphics[animationLabel];
     if(foundGraphic){
       const sprite = sprites[foundGraphic.sprite];
 
@@ -130,12 +145,7 @@ export const selectActivePetStats = createSelector(
 
     return {
       level: currentStats.level,
-      xp:{
-        cur: currentStats.xp,
-        max: 1000,
-        percent: Math.round((currentStats.xp / 1000) * 100),
-        fillType: 'none'
-      },
+      xp: getStatObj(currentStats, baseStats, 'xp', 'fill'),
       stomach: getStatObj(currentStats, baseStats, 'stomach', 'fill'),
       bladder: getStatObj(currentStats, baseStats, 'bladder', 'empty'),
       happyness: getStatObj(currentStats, baseStats, 'happyness', 'fill')

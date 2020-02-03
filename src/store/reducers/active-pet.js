@@ -4,8 +4,10 @@ import {
 import { 
   incrementXp,
   incrementFood,
-  incrementPee,
-  incrementHappy
+  incrementBladder,
+  incrementHappy,
+  setMood,
+  setActivity
 } from '../actions/pet';
 import { setTransition } from '../actions/transition';
 
@@ -43,7 +45,7 @@ export default handleActions({
     return augmentStat(state, 'stomach', action.payload, baseStats);
   },
 
-  [incrementPee.toString()]: (state, action) => {
+  [incrementBladder.toString()]: (state, action) => {
     const baseStats = getBaseStats(state.id);
     return augmentStat(state, 'bladder', action.payload, baseStats);
   },
@@ -51,6 +53,20 @@ export default handleActions({
   [incrementHappy.toString()]: (state, action) => {
     const baseStats = getBaseStats(state.id);
     return augmentStat(state, 'happyness', action.payload, baseStats);
+  },
+
+  [setMood.toString()]: (state, action) => {
+    return {
+      ...state,
+      mood: action.payload
+    }
+  },
+
+  [setActivity.toString()]: (state, action) => {
+    return {
+      ...state,
+      activity: action.payload
+    }
   }
 }, initialState);
 

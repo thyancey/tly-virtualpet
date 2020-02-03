@@ -25,7 +25,24 @@ export const getPetDefinition = petId => {
   return store.pets.find(p => p.id === petId) || null;
 }
 export const setPetDefinitions = petList => {
-  store.pets = petList;
+  store.pets = petList.map(p => {
+    let defaultAnimation = p.animations.DEFAULT;
+    if(!defaultAnimation){
+      try{
+        defaultAnimation = p.animations[Object.keys(p.animations)[0]];
+      }catch(e){
+        console.error(`could not autodeclare default animation for pet "${p.id}"`);
+      }
+    }
+
+    return {
+      ...p,
+      animations:{
+        ...p.animations,
+        DEFAULT: defaultAnimation
+      }
+    }
+  });
 }
 
 export const setPetStoreData = (itemType, data) => {

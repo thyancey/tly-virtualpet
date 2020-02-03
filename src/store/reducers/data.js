@@ -37,9 +37,6 @@ export default handleActions({
       }
     }
 
-    // setPetDefinitions(cleanObj.pets);
-    setPetStoreData('sprites', cleanObj.sprites);
-
     return {
       ...state,
       customData: cleanObj,

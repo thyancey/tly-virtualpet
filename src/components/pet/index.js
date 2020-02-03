@@ -11,7 +11,7 @@ import { themeGet } from 'themes/';
 
 import { 
   selectActivePetAnimation,
-} from 'store/selectors';
+} from '../../store/selectors';
 
 const $PetContainer = styled.div`
   position:relative;
@@ -62,7 +62,7 @@ class Pet extends Component {
   }
 
   render(){
-    const { petData, animation, containerWidth, containerHeight } = this.props;
+    const { animation, containerWidth, containerHeight } = this.props;
 
     let drawCommand = null;
     if(animation.type){
