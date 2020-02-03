@@ -5,7 +5,6 @@
       "type": "megupet",
       "animal": "bocado",
       "name": "Bocado",
-      "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
         "idle": [ "Bocado_Idle1", "Bocado_Eat" ],
         "walk": [ "Bocado_Walk" ]
@@ -24,6 +23,23 @@
         "stomach": 300,
         "bladder": 10000,
         "happyness": 400
+      },
+      "graphics":{
+        "Bocado_Eat":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [14, 15]
+        },
+        "Bocado_Walk":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [15, 16]
+        },
+        "Bocado_Idle1":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [0, 1]
+        }
       }
     },
     {
@@ -49,6 +65,13 @@
         "stomach": 300,
         "bladder": 10000,
         "happyness": 400
+      },
+      "graphics":{
+        "Dino_Idle1":{
+          "sprite": "Dino",
+          "speed": 5,
+          "frames": [0, 3]
+        }
       }
     },
     {
@@ -75,32 +98,12 @@
         "stomach": 2500,
         "bladder": 5000,
         "happyness": 400
-      }
-    },
-    {
-      "id": "cathy-block",
-      "type": "block",
-      "animal": "cuber",
-      "name": "Cathy",
-      "imageUrl": "pets/rodent-block.jpg",
-      "animations": {
-        "idle": [ "Cube_Idle1" ]
       },
-      "baseStats":{
-        "size": 30,
-        "health": 20000,
-        "xp": 1000,
-        "stomach": 10000,
-        "bladder": 20000,
-        "happyness": 10000,
-        "intelligence": 100
-      },
-      "stats":{
-        "level": 8,
-        "xp": 300,
-        "stomach": 300,
-        "bladder": 10000,
-        "happyness": 400
+      "graphics":{
+        "Beaver_Idle1":{
+          "sprite": "Beaver",
+          "frame": 0
+        }
       }
     },
     {
@@ -110,7 +113,7 @@
       "name": "Denny",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
-        "idle": [ "SpinSquare1" ]
+        "idle": [ "SpinSquare" ]
       },
       "baseStats":{
         "size": 5,
@@ -127,6 +130,11 @@
         "stomach": 480,
         "bladder": 500,
         "happyness": 10000
+      },
+      "graphics":{
+        "SpinSquare":{
+          "sprite": "SpinSquare"
+        }
       }
     },
     {
@@ -153,6 +161,14 @@
         "stomach": 5,
         "bladder": 500,
         "happyness": 10000
+      },
+      "graphics":{
+        "Raccoon_Idle1":{
+          "sprite": "Raccoon",
+          "speed": "10",
+          "dir": 1,
+          "frames": [0, 3]
+        }
       }
     }
   ],
@@ -192,56 +208,8 @@
         "cells": [ 400, 500 ]
       }
     },
-    "Cube":{
-      "type": "Sprite_Animated",
-      "imageUrl": "pets/sprite-1.jpg",
-      "spriteInfo":{
-        "speed": 1,
-        "grid": [ 2, 2 ],
-        "cells": [ 250, 250 ],
-        "frames": [0, 3]
-      }
-    },
     "SpinSquare":{
       "type": "SpinSquare"
-    }
-  },
-  "graphics":{
-    "Dino_Idle1":{
-      "sprite": "Dino",
-      "speed": 5,
-      "frames": [0, 3]
-    },
-    "Bocado_Eat":{
-      "sprite": "Bocado",
-      "speed": "15",
-      "frames": [14, 15]
-    },
-    "Bocado_Walk":{
-      "sprite": "Bocado",
-      "speed": "15",
-      "frames": [15, 16]
-    },
-    "Bocado_Idle1":{
-      "sprite": "Bocado",
-      "speed": "15",
-      "frames": [0, 1]
-    },
-    "Beaver_Idle1":{
-      "sprite": "Beaver",
-      "frame": 0
-    },
-    "Raccoon_Idle1":{
-      "sprite": "Raccoon",
-      "speed": "10",
-      "dir": 1,
-      "frames": [0, 3]
-    },
-    "Cube_Idle1":{
-      "sprite": "Cube"
-    },
-    "SpinSquare1":{
-      "sprite": "SpinSquare"
     }
   }
 }

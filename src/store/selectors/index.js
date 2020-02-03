@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getGraphics, getSavedStats, getBaseStats } from 'util/pet-store';
+import { getPets, getSprites, getSavedStats, getBaseStats } from 'util/pet-store';
 
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
@@ -56,9 +56,7 @@ export const selectActivePet = createSelector(
   }
 );
 
-const createSpriteObj = (graphics, sprites, label) => {
-  const graphic = graphics[label];
-  const sprite = sprites[graphic.sprite];
+const createSpriteObj = (label, graphic, sprite) => {
   sprite.spriteInfo = sprite.spriteInfo || {};
 
   return {
@@ -78,20 +76,28 @@ const createSpriteObj = (graphics, sprites, label) => {
 }
 
 export const selectActivePetAnimation = createSelector(
-  [selectActivePet, getSprites, getGraphics],
-  (activePet, sprites, graphics) => {
-    if(!activePet || !sprites || !graphics) return null;
+  [selectActivePet, getSprites],
+  (activePet, sprites) => {
+    if(!activePet || !sprites) return null;
 
     const mood = 'idle';
     const animationGroup = activePet.animations[mood] || activePet.animations.idle;
     const animIdx = Math.floor(Math.random() * animationGroup.length)
     const animationLabel = animationGroup[animIdx];
 
-    if(animationLabel && graphics[animationLabel]){
-      const spriteObj = createSpriteObj(graphics, sprites, animationLabel);
-      return spriteObj;
+    const foundGraphic = activePet.graphics[animationLabel];
+    if(foundGraphic){
+      const sprite = sprites[foundGraphic.sprite];
+
+      if(animationLabel && foundGraphic && sprite){
+        const spriteObj = createSpriteObj(animationLabel, foundGraphic, sprite);
+        return spriteObj;
+      }else{
+        console.error(`Error getting spriteObj for ${animationLabel}`);
+        return null;
+      }
     }else{
-      console.error('Error getting animation');
+      console.error(`Error getting graphic for ${animationLabel}`);
       return null;
     }
   }

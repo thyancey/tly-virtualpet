@@ -3,7 +3,6 @@
 
 const store = {
   pets:[],
-  graphics:[],
   sprites:[]
 }
 
@@ -20,9 +19,6 @@ export const getSavedStats = (petId) => {
 }
 export const getSprites = () => {
   return store.sprites;
-}
-export const getGraphics = () => {
-  return store.graphics;
 }
 
 export const getPetDefinition = petId => {
@@ -41,9 +37,6 @@ export const getPetStoreData = (itemType) => {
 
 export const setSpriteDefinitions = spriteList => {
   store.sprites = spriteList;
-}
-export const setGraphicDefinitions = graphicList => {
-  store.graphics = graphicList;
 }
 
 global.petStore = {
