@@ -119,23 +119,22 @@ const getCellCoords = (sheetData, i) => {
   const frames = sheetData.frames;
   const frame = sheetData.frame;
 
-  let idx;
+  let fIdx;
   if(frame !== undefined){
-    idx = frame;
+    fIdx = frame;
   }else{
-    const fl = frames[1] - frames[0] + 1;
-    idx = (i % fl) + frames[0]; 
-  
+    fIdx = frames[i % frames.length]; 
     if(sheetData.dir === -1){
-      idx = (fl - 1) - idx;
+      //- TODO, is this right?
+      fIdx = (frames.length - 1) - fIdx;
     }
   }
 
   const c = sheetData.grid[0];
 
   return {
-    x: (idx % c) * sheetData.cells[0],
-    y: Math.floor(idx / c) * sheetData.cells[1],
+    x: (fIdx % c) * sheetData.cells[0],
+    y: Math.floor(fIdx / c) * sheetData.cells[1],
     w: sheetData.cells[0],
     h: sheetData.cells[1]
   }

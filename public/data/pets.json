@@ -79,7 +79,7 @@
         "Dino_Walk1":{
           "sprite": "Dino",
           "speed": 5,
-          "frames": [0, 3]
+          "frames": [0, 1, 2, 3]
         }
       }
     },
@@ -180,7 +180,7 @@
           "sprite": "Raccoon",
           "speed": "10",
           "dir": 1,
-          "frames": [0, 3]
+          "frames": [0, 1, 2, 3]
         },
         "Raccoon_Walk1":{
           "sprite": "Raccoon",
