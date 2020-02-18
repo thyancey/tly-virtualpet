@@ -128,7 +128,7 @@ export const selectActivePetAnimation = createSelector(
   }
 );
 
-const getDeltaStatsObj = (deltaStats, label, fillType) => {
+const getDeltaStat = (deltaStats, label, fillType) => {
   const stat = deltaStats.find(dS => dS.id === label);
 
   return {
@@ -153,6 +153,17 @@ const getStatObj = (stats, baseStats, label, fillType) => {
   }
 }
 
+const getDeltaStatsArray = (id) => {
+  const deltaStats = getDeltaStats(id, new Date().getTime());
+  return deltaStats.map(stat => ({
+    label: stat.id,
+    cur: stat.current,
+    max: stat.max,
+    percent: Math.round((stat.current / stat.max) * 100),
+    fillType: 'fill'
+  }))
+}
+
 const selectStats = createSelector(
   [getActivePetId, selectActivePet],
 
@@ -168,11 +179,7 @@ export const selectActivePetStats = createSelector(
     return {
       level: currentStats.level,
       xp: getStatObj(currentStats, baseStats, 'xp', 'fill'),
-      stomach: getStatObj(currentStats, baseStats, 'stomach', 'fill'),
-      bladder: getStatObj(currentStats, baseStats, 'bladder', 'empty'),
-      happyness: getStatObj(currentStats, baseStats, 'happyness', 'fill'),
-      hunger: getDeltaStatsObj(deltaStats, 'hunger', 'fill'),
-      boredom: getDeltaStatsObj(deltaStats, 'boredom', 'fill')
+      deltaStats: getDeltaStatsArray(activePet.id)
     }
   }
 );

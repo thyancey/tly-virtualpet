@@ -16,9 +16,6 @@ import {
 
 import {
   incrementXp,
-  incrementFood,
-  incrementHappy,
-  incrementBladder,
   setMood,
   setActivity
 } from 'store/actions/pet';
@@ -88,9 +85,6 @@ class Cage extends Component {
       activePet,
       activePetStats,
       incrementXp,
-      incrementFood,
-      incrementHappy,
-      incrementBladder,
       setMood,
       setActivity
     } = this.props;
@@ -111,10 +105,8 @@ class Cage extends Component {
               activity={activePet.activity}
               mood={activePet.mood}
               statsObj={activePetStats}
+              deltaStats={activePetStats && activePetStats.deltaStats || []}
               incrementXp={incrementXp}
-              incrementFood={incrementFood}
-              incrementHappy={incrementHappy}
-              incrementBladder={incrementBladder} 
               setMood={setMood}
               setActivity={setActivity} />
           </$PetStatsContainer>
@@ -134,9 +126,6 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     { 
       incrementXp,
-      incrementFood,
-      incrementHappy,
-      incrementBladder,
       setMood,
       setActivity 
     },

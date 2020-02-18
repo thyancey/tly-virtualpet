@@ -3,9 +3,6 @@ import {
 } from '../actions';
 import { 
   incrementXp,
-  incrementFood,
-  incrementBladder,
-  incrementHappy,
   setMood,
   setActivity
 } from '../actions/pet';
@@ -38,21 +35,6 @@ export default handleActions({
   [incrementXp.toString()]: (state, action) => {
     const baseStats = getBaseStats(state.id);
     return augmentStat(state, 'xp', action.payload, baseStats);
-  },
-
-  [incrementFood.toString()]: (state, action) => {
-    const baseStats = getBaseStats(state.id);
-    return augmentStat(state, 'stomach', action.payload, baseStats);
-  },
-
-  [incrementBladder.toString()]: (state, action) => {
-    const baseStats = getBaseStats(state.id);
-    return augmentStat(state, 'bladder', action.payload, baseStats);
-  },
-
-  [incrementHappy.toString()]: (state, action) => {
-    const baseStats = getBaseStats(state.id);
-    return augmentStat(state, 'happyness', action.payload, baseStats);
   },
 
   [setMood.toString()]: (state, action) => {

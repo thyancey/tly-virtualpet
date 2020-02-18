@@ -11,32 +11,29 @@
         "WALK": [ "Bocado_Walk" ]
       },
       "baseStats":{
-        "xp": 3000,
-        "size": 100,
-        "health": 20000,
-        "stomach": 100000,
-        "bladder": 20000,
-        "happyness": 10000,
-        "intelligence": 50
+        "xp": 3000
       },
       "stats":{
         "level": 2,
-        "xp": 300,
-        "stomach": 300,
-        "bladder": 10000,
-        "happyness": 400
+        "xp": 300
       },
       "vitals":[
         {
           "id": "hunger",
           "value": "0",
-          "perSecond": ".1",
+          "perSecond": "1",
           "max": "500"
         },
         { 
           "id":"boredom",
           "value": "0",
           "perSecond": ".1",
+          "max": "200"
+        },
+        { 
+          "id":"freshness",
+          "value": "199",
+          "perSecond": "-1",
           "max": "200"
         }
       ],
@@ -70,26 +67,17 @@
         "WALK": [ "Dino_Walk1" ]
       },
       "baseStats":{
-        "xp": 3000,
-        "size": 100,
-        "health": 20000,
-        "stomach": 100000,
-        "bladder": 20000,
-        "happyness": 10000,
-        "intelligence": 50
+        "xp": 3000
       },
       "stats":{
         "level": 2,
-        "xp": 300,
-        "stomach": 300,
-        "bladder": 10000,
-        "happyness": 400
+        "xp": 300
       },
       "vitals":[
         {
           "id": "hunger",
           "value": "0",
-          "perSecond": ".1",
+          "perSecond": "1",
           "max": "500"
         },
         { 
@@ -122,20 +110,11 @@
         "IDLE": [ "Beaver_Idle1" ]
       },
       "baseStats":{
-        "xp": 1000,
-        "size": 20,
-        "health": 20000,
-        "stomach": 3000,
-        "bladder": 20000,
-        "happyness": 10000,
-        "intelligence": 1000
+        "xp": 1000
       },
       "stats":{
         "level": 5,
-        "xp": 300,
-        "stomach": 2500,
-        "bladder": 5000,
-        "happyness": 400
+        "xp": 300
       },
       "vitals":[
         {
@@ -169,26 +148,17 @@
         "IDLE": [ "SpinSquare" ]
       },
       "baseStats":{
-        "xp": 1000,
-        "size": 5,
-        "health": 20000,
-        "stomach": 500,
-        "bladder": 500,
-        "happyness": 10000,
-        "intelligence": 1000
+        "xp": 1000
       },
       "stats":{
         "level": 15,
-        "xp": 300,
-        "stomach": 480,
-        "bladder": 500,
-        "happyness": 10000
+        "xp": 300
       },
       "vitals":[
         {
           "id": "hunger",
           "value": "0",
-          "perSecond": ".1",
+          "perSecond": "1",
           "max": "500"
         },
         { 
@@ -216,26 +186,17 @@
         "WALK": [ "Raccoon_Walk1" ]
       },
       "baseStats":{
-        "xp": 1000,
-        "size": 5,
-        "health": 20000,
-        "stomach": 500,
-        "bladder": 500,
-        "happyness": 10000,
-        "intelligence": 1000
+        "xp": 1000
       },
       "stats":{
         "level": 64,
-        "xp": 888,
-        "stomach": 5,
-        "bladder": 500,
-        "happyness": 10000
+        "xp": 888
       },
       "vitals":[
         {
           "id": "hunger",
           "value": "0",
-          "perSecond": ".1",
+          "perSecond": "1",
           "max": "500"
         },
         { 

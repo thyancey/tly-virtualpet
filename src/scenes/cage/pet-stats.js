@@ -30,10 +30,8 @@ const PetStats = ({
   activity,
   mood,
   statsObj, 
+  deltaStats,
   incrementXp, 
-  incrementFood, 
-  incrementBladder, 
-  incrementHappy, 
   setActivity, 
   setMood
 }) => {
@@ -48,11 +46,9 @@ const PetStats = ({
       <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
       <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
       <ProgressBar statObj={statsObj.xp} label={'XP'} incrementAction={(val) => incrementXp(val)} />
-      <ProgressBar statObj={statsObj.stomach} label={'Food'} incrementAction={(val) => incrementFood(val)}/>
-      <ProgressBar statObj={statsObj.bladder} label={'Bladder'} incrementAction={(val) => incrementBladder(val)}/>
-      <ProgressBar statObj={statsObj.happyness} label={'Heppy'} incrementAction={(val) => incrementHappy(val)}/>
-      <ProgressBar statObj={statsObj.hunger} label={'dHunger'} incrementAction={() => {}}/>
-      <ProgressBar statObj={statsObj.boredom} label={'dBoredom'} incrementAction={() => {}}/>
+      {deltaStats.map((s, i) => (
+        <ProgressBar key={i} statObj={s} label={s.label} incrementAction={() => {}}/>
+      ))}
     </$PetStats>
   );
 }

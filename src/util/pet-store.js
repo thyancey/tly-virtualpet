@@ -35,10 +35,19 @@ export const setPetDefinitions = petList => {
       }
     }
 
+    const parsedVitals = p.vitals.map(v => ({
+      ...v,
+      value: Number(v.value),
+      perSecond: Number(v.perSecond),
+      max: Number(v.max)
+    }))
+
     p.savedStats = {
       timestamp: new Date().getTime(),
-      stats: p.vitals
+      stats: parsedVitals
     }
+
+    console.log('savedStats', p.savedStats)
 
     return {
       ...p,
@@ -78,8 +87,8 @@ export const getDeltaStats = (petId, timestamp) => {
 
   return oldStats.map(s => ({
     ...s,
-    value: Number(s.value),
-    max: Number(s.max),
+    value: s.value,
+    max: s.max,
     current: clamp(s.value + (s.perSecond * timeDiff), 0, s.max)
   }));
 }
