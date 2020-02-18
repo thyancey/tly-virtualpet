@@ -51,6 +51,8 @@ const PetStats = ({
       <ProgressBar statObj={statsObj.stomach} label={'Food'} incrementAction={(val) => incrementFood(val)}/>
       <ProgressBar statObj={statsObj.bladder} label={'Bladder'} incrementAction={(val) => incrementBladder(val)}/>
       <ProgressBar statObj={statsObj.happyness} label={'Heppy'} incrementAction={(val) => incrementHappy(val)}/>
+      <ProgressBar statObj={statsObj.hunger} label={'dHunger'} incrementAction={() => {}}/>
+      <ProgressBar statObj={statsObj.boredom} label={'dBoredom'} incrementAction={() => {}}/>
     </$PetStats>
   );
 }

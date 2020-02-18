@@ -26,6 +26,20 @@
         "bladder": 10000,
         "happyness": 400
       },
+      "vitals":[
+        {
+          "id": "hunger",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "500"
+        },
+        { 
+          "id":"boredom",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "200"
+        }
+      ],
       "graphics":{
         "Bocado_Eat":{
           "sprite": "Bocado",
@@ -71,6 +85,20 @@
         "bladder": 10000,
         "happyness": 400
       },
+      "vitals":[
+        {
+          "id": "hunger",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "500"
+        },
+        { 
+          "id":"boredom",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "200"
+        }
+      ],
       "graphics":{
         "Dino_Idle1":{
           "sprite": "Dino",
@@ -109,6 +137,20 @@
         "bladder": 5000,
         "happyness": 400
       },
+      "vitals":[
+        {
+          "id": "hunger",
+          "value": "0",
+          "perSecond": "10",
+          "max": "500"
+        },
+        { 
+          "id":"boredom",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "200"
+        }
+      ],
       "graphics":{
         "Beaver_Idle1":{
           "sprite": "Beaver",
@@ -142,6 +184,20 @@
         "bladder": 500,
         "happyness": 10000
       },
+      "vitals":[
+        {
+          "id": "hunger",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "500"
+        },
+        { 
+          "id":"boredom",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "200"
+        }
+      ],
       "graphics":{
         "SpinSquare":{
           "sprite": "SpinSquare"
@@ -175,6 +231,20 @@
         "bladder": 500,
         "happyness": 10000
       },
+      "vitals":[
+        {
+          "id": "hunger",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "500"
+        },
+        { 
+          "id":"boredom",
+          "value": "0",
+          "perSecond": ".1",
+          "max": "200"
+        }
+      ],
       "graphics":{
         "Raccoon_Idle1":{
           "sprite": "Raccoon",

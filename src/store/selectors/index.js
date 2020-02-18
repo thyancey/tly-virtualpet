@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getSavedStats, getBaseStats } from 'util/pet-store';
+import { getPets, getSprites, getSavedStats, getBaseStats, getDeltaStats } from 'util/pet-store';
 
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
@@ -128,6 +128,17 @@ export const selectActivePetAnimation = createSelector(
   }
 );
 
+const getDeltaStatsObj = (deltaStats, label, fillType) => {
+  const stat = deltaStats.find(dS => dS.id === label);
+
+  return {
+    cur: stat.current,
+    max: stat.max,
+    percent: Math.round((stat.current / stat.max) * 100),
+    fillType: fillType
+  }
+}
+
 const getStatObj = (stats, baseStats, label, fillType) => {
   if(stats[label] !== undefined && baseStats[label] !== undefined){
 
@@ -152,13 +163,16 @@ export const selectActivePetStats = createSelector(
     if(!activePet) return null;
 
     const baseStats = getBaseStats(activePet.id);
+    const deltaStats = getDeltaStats(activePet.id, new Date().getTime());
 
     return {
       level: currentStats.level,
       xp: getStatObj(currentStats, baseStats, 'xp', 'fill'),
       stomach: getStatObj(currentStats, baseStats, 'stomach', 'fill'),
       bladder: getStatObj(currentStats, baseStats, 'bladder', 'empty'),
-      happyness: getStatObj(currentStats, baseStats, 'happyness', 'fill')
+      happyness: getStatObj(currentStats, baseStats, 'happyness', 'fill'),
+      hunger: getDeltaStatsObj(deltaStats, 'hunger', 'fill'),
+      boredom: getDeltaStatsObj(deltaStats, 'boredom', 'fill')
     }
   }
 );
