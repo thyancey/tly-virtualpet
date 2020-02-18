@@ -1,0 +1,235 @@
+{
+  "pets": [
+    {
+      "id": "bocado",
+      "type": "megupet",
+      "animal": "bocado",
+      "name": "Bocado",
+      "animations": {
+        "DEFAULT": [ "Bocado_Walk" ],
+        "IDLE": [ "Bocado_Idle1", "Bocado_Eat" ],
+        "WALK": [ "Bocado_Walk" ]
+      },
+      "baseStats":{
+        "xp": 3000,
+        "size": 100,
+        "health": 20000,
+        "stomach": 100000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 50
+      },
+      "stats":{
+        "level": 2,
+        "xp": 300,
+        "stomach": 300,
+        "bladder": 10000,
+        "happyness": 400
+      },
+      "graphics":{
+        "Bocado_Eat":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [14, 15]
+        },
+        "Bocado_Walk":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [15, 16]
+        },
+        "Bocado_Idle1":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [0, 1]
+        }
+      }
+    },
+    {
+      "id": "ally-allosaurus",
+      "type": "dinosaur",
+      "animal": "allosaurus",
+      "name": "Ally",
+      "imageUrl": "pets/dinosaur-allosaurus.jpg",
+      "animations": {
+        "DEFAULT": [ "Dino_Idle1" ],
+        "IDLE": [ "Dino_Idle1" ],
+        "WALK": [ "Dino_Walk1" ]
+      },
+      "baseStats":{
+        "xp": 3000,
+        "size": 100,
+        "health": 20000,
+        "stomach": 100000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 50
+      },
+      "stats":{
+        "level": 2,
+        "xp": 300,
+        "stomach": 300,
+        "bladder": 10000,
+        "happyness": 400
+      },
+      "graphics":{
+        "Dino_Idle1":{
+          "sprite": "Dino",
+          "frame": 0
+        },
+        "Dino_Walk1":{
+          "sprite": "Dino",
+          "speed": 5,
+          "frames": [0, 1, 2, 3]
+        }
+      }
+    },
+    {
+      "id": "billy-beaver",
+      "type": "rodent",
+      "animal": "beaver",
+      "name": "Billy",
+      "imageUrl": "pets/rodent-beaver.jpg",
+      "animations": {
+        "DEFAULT": [ "Beaver_Idle1" ],
+        "IDLE": [ "Beaver_Idle1" ]
+      },
+      "baseStats":{
+        "xp": 1000,
+        "size": 20,
+        "health": 20000,
+        "stomach": 3000,
+        "bladder": 20000,
+        "happyness": 10000,
+        "intelligence": 1000
+      },
+      "stats":{
+        "level": 5,
+        "xp": 300,
+        "stomach": 2500,
+        "bladder": 5000,
+        "happyness": 400
+      },
+      "graphics":{
+        "Beaver_Idle1":{
+          "sprite": "Beaver",
+          "frame": 0
+        }
+      }
+    },
+    {
+      "id": "denny-degu",
+      "type": "rodent",
+      "animal": "degu",
+      "name": "Denny",
+      "imageUrl": "pets/rodent-degu.jpg",
+      "animations": {
+        "DEFAULT": [ "SpinSquare" ],
+        "IDLE": [ "SpinSquare" ]
+      },
+      "baseStats":{
+        "xp": 1000,
+        "size": 5,
+        "health": 20000,
+        "stomach": 500,
+        "bladder": 500,
+        "happyness": 10000,
+        "intelligence": 1000
+      },
+      "stats":{
+        "level": 15,
+        "xp": 300,
+        "stomach": 480,
+        "bladder": 500,
+        "happyness": 10000
+      },
+      "graphics":{
+        "SpinSquare":{
+          "sprite": "SpinSquare"
+        }
+      }
+    },
+    {
+      "id": "rizzo-raccoon",
+      "type": "rodent",
+      "animal": "raccoon",
+      "name": "Rizzo",
+      "imageUrl": "pets/rodent-degu.jpg",
+      "animations": {
+        "DEFAULT": [ "Raccoon_Idle1" ],
+        "IDLE": [ "Raccoon_Idle1" ],
+        "WALK": [ "Raccoon_Walk1" ]
+      },
+      "baseStats":{
+        "xp": 1000,
+        "size": 5,
+        "health": 20000,
+        "stomach": 500,
+        "bladder": 500,
+        "happyness": 10000,
+        "intelligence": 1000
+      },
+      "stats":{
+        "level": 64,
+        "xp": 888,
+        "stomach": 5,
+        "bladder": 500,
+        "happyness": 10000
+      },
+      "graphics":{
+        "Raccoon_Idle1":{
+          "sprite": "Raccoon",
+          "speed": "10",
+          "dir": 1,
+          "frames": [0, 1, 2, 3]
+        },
+        "Raccoon_Walk1":{
+          "sprite": "Raccoon",
+          "speed": "20",
+          "dir": 1,
+          "frames": [4, 5]
+        }
+      }
+    }
+  ],
+  "sprites":{
+    "Dino":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/dino.png",
+      "spriteInfo":{
+        "scale": 2,
+        "grid": [ 2, 2 ],
+        "cells": [ 134, 62 ]
+      }
+    },
+    "Bocado":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/bocado-1.png",
+      "spriteInfo":{
+        "scale": ".5",
+        "grid": [ 9, 5 ],
+        "cells": [ 418, 461 ]
+      }
+    },
+    "Beaver":{
+      "type": "Sprite_Still",
+      "imageUrl": "pets/rodent-beaver.jpg",
+      "spriteInfo":{
+        "grid": [ 1, 1 ],
+        "cells": [ 500, 500 ],
+        "frame": 0
+      }
+    },
+    "Raccoon":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/raccoon.png",
+      "spriteInfo":{
+        "scale": ".8",
+        "grid": [ 3, 2 ],
+        "cells": [ 400, 500 ]
+      }
+    },
+    "SpinSquare":{
+      "type": "SpinSquare"
+    }
+  }
+}

@@ -5,8 +5,6 @@ import { ConnectedRouter } from 'connected-react-router'
 import store, { history } from './store'
 import App from './scenes/app'
 import { ThemeProvider } from 'styled-components'
-
-// import 'sanitize.css/sanitize.css'
 import theme from 'themes/'
 
 const target = document.querySelector('#root')

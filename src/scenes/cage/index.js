@@ -5,20 +5,22 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
 
-import Pet from 'components/pet';
-import PetStats from 'components/pet-stats';
+import Pet from '../../components/pet';
+import PetStats from './pet-stats';
 
 import { 
   selectActivePet,
   selectActivePetStats
-} from 'store/selectors';
+} from '../../store//selectors';
 
 
 import {
   incrementXp,
   incrementFood,
   incrementHappy,
-  incrementPee
+  incrementBladder,
+  setMood,
+  setActivity
 } from 'store/actions/pet';
 
 const $Cage = styled.div`
@@ -46,6 +48,40 @@ const $PetStatsContainer = styled.div`
 `
 
 class Cage extends Component {
+  constructor(props){
+    super(props);
+
+    this.containerRef = React.createRef();
+    this.onResize = this.onResize.bind(this);
+    this.state = {
+      containerWidth: 500,
+      containerHeight: 500
+    }
+  }
+
+  componentDidUpdate(prevProps){
+    //- when the first canavs is rendered, check the page bounds
+    if(!prevProps.activePet && this.props.activePet){
+      this.onResize();
+    }
+  }
+
+  componentDidMount() {
+    global.addEventListener('resize', this.onResize);
+  }
+
+  onResize(){
+    this.updateCanvasDims();
+  }
+
+  updateCanvasDims(){
+    if(this.containerRef.current){
+      this.setState({
+        containerWidth: this.containerRef.current.offsetWidth,
+        containerHeight: this.containerRef.current.offsetHeight
+      })
+    }
+  }
 
   render(){
     const { 
@@ -54,24 +90,33 @@ class Cage extends Component {
       incrementXp,
       incrementFood,
       incrementHappy,
-      incrementPee 
+      incrementBladder,
+      setMood,
+      setActivity
     } = this.props;
 
     if(!activePet){
       return null;
     }else{
       return(
-        <$Cage>
-          <Pet petData={activePet} level={activePetStats.level} />
+        <$Cage ref={this.containerRef} >
+          <Pet 
+            petData={activePet} 
+            level={activePetStats.level}
+            containerWidth={this.state.containerWidth}
+            containerHeight={this.state.containerHeight} />
           <$PetStatsContainer>
             <PetStats 
-              petData={activePet} 
+              petData={activePet.data} 
+              activity={activePet.activity}
+              mood={activePet.mood}
               statsObj={activePetStats}
               incrementXp={incrementXp}
               incrementFood={incrementFood}
               incrementHappy={incrementHappy}
-              incrementPee={incrementPee}
-               />
+              incrementBladder={incrementBladder} 
+              setMood={setMood}
+              setActivity={setActivity} />
           </$PetStatsContainer>
         </$Cage>
       );
@@ -91,7 +136,9 @@ const mapDispatchToProps = dispatch =>
       incrementXp,
       incrementFood,
       incrementHappy,
-      incrementPee 
+      incrementBladder,
+      setMood,
+      setActivity 
     },
     dispatch
   )

@@ -14,17 +14,18 @@ const $Button = styled.button`
   box-shadow: 2px 2px 2px ${themeGet('color', 'green')};
 
   &:hover{
-    background-color: ${themeGet('color', 'green')};
+    color: ${themeGet('color', 'white')};
+    background-color: ${themeGet('color', 'purple')};
     transition: background-color .1s ease-out;
   }
 
   ${p => p.isActive && css`
-    color: ${themeGet('color', 'white')};
-    background-color: ${themeGet('color', 'purple')};
+    color: ${themeGet('color', 'black')};
+    background-color: ${themeGet('color', 'green')};
     box-shadow: 2px 2px 2px ${themeGet('color', 'blue')};
 
     &:hover{
-      background-color: ${themeGet('color', 'purple')};
+      background-color: ${themeGet('color', 'green')};
     }
   `}
 `;
