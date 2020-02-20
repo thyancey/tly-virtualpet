@@ -18,22 +18,10 @@
         "xp": 300
       },
       "vitals":[
-        {
-          "id": "hunger",
-          "value": "0",
-          "perSecond": "1",
-          "max": "500"
-        },
-        { 
-          "id":"boredom",
-          "value": "0",
-          "perSecond": ".1",
-          "max": "200"
-        },
         { 
           "id":"freshness",
           "value": "199",
-          "perSecond": "-1",
+          "perSecond": "-2",
           "max": "200"
         }
       ],
@@ -81,7 +69,7 @@
           "max": "500"
         },
         { 
-          "id":"boredom",
+          "id":"bladder",
           "value": "0",
           "perSecond": ".1",
           "max": "200"
@@ -118,16 +106,25 @@
       },
       "vitals":[
         {
-          "id": "hunger",
+          "id": "woodLust",
+          "label": "WOOD LUST",
           "value": "0",
           "perSecond": "10",
           "max": "500"
         },
         { 
-          "id":"boredom",
+          "id":"toothLength",
+          "label":"Tooth Length",
           "value": "0",
           "perSecond": ".1",
-          "max": "200"
+          "max": "10"
+        },
+        { 
+          "id":"wetness",
+          "label":"Wetness",
+          "value": "100",
+          "perSecond": "-.5",
+          "max": "100"
         }
       ],
       "graphics":{
@@ -200,9 +197,10 @@
           "max": "500"
         },
         { 
-          "id":"boredom",
+          "id":"mana",
+          "label":"Banana Mana",
           "value": "0",
-          "perSecond": ".1",
+          "perSecond": "3",
           "max": "200"
         }
       ],

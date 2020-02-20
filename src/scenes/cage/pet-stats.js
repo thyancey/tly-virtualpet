@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { themeGet } from 'themes/';
 
 import ProgressBar from '../../components/progress-bar';
-import { incrementXp } from '../../store/actions/pet';
 import { LilButton } from '../../components/button';
 
 const $PetStats = styled.div`
@@ -32,6 +31,7 @@ const PetStats = ({
   statsObj, 
   deltaStats,
   incrementXp, 
+  augmentStat,
   setActivity, 
   setMood
 }) => {
@@ -45,9 +45,9 @@ const PetStats = ({
       <p>{'Mood'}</p>
       <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
       <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
-      <ProgressBar statObj={statsObj.xp} label={'XP'} incrementAction={(val) => incrementXp(val)} />
+      <ProgressBar statObj={statsObj.xp} label={'XP'} />
       {deltaStats.map((s, i) => (
-        <ProgressBar key={i} statObj={s} label={s.label} incrementAction={() => {}}/>
+        <ProgressBar key={i} statObj={s} label={s.label} augmentAction={(id, val) => augmentStat(id, val)}/>
       ))}
     </$PetStats>
   );

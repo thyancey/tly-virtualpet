@@ -47,8 +47,6 @@ export const setPetDefinitions = petList => {
       stats: parsedVitals
     }
 
-    console.log('savedStats', p.savedStats)
-
     return {
       ...p,
       animations:{
@@ -70,7 +68,15 @@ export const setSpriteDefinitions = spriteList => {
   store.sprites = spriteList;
 }
 
+export const getPetVitals = petId => {
+  const petDef = getPetDefinition(petId);
+  return petDef && petDef.vitals || [];
+}
 
+export const getPetVital = (petId, vitalId) => {
+  const vitals = getPetVitals(petId);
+  return vitals.find(v => v.id === vitalId) || null;
+}
 
 export const getBaseStats = (petId) => {
   const petDef = getPetDefinition(petId);
@@ -82,7 +88,7 @@ export const getSavedStats = (petId) => {
 }
 export const getDeltaStats = (petId, timestamp) => {
   const petDef = getPetDefinition(petId);
-  const oldStats = petDef.savedStats.stats;
+  const oldStats = petDef.savedStats.stats || [];
   const timeDiff = (timestamp - petDef.savedStats.timestamp) / 1000;
 
   return oldStats.map(s => ({
@@ -96,9 +102,21 @@ export const saveStats = (petId, stats, timestamp) => {
   const petDef = getPetDefinition(petId);
   petDef.savedStats = {
     timestamp: timestamp,
-    stats: stats
+    stats: stats.map(s => ({ ...s, value: s.current }))
   }
   setPetDefinition(petId, petDef);
+}
+export const augmentPetStat = (petId, statId, augmentValue) => {
+  const now = new Date().getTime();
+  const stats = getDeltaStats(petId, now).slice(0);
+  // console.log('deltaStats', stats[0].value)
+
+  const idx = stats.findIndex(s => s.id === statId);
+  const newValue = stats[idx].current + augmentValue;
+  stats[idx].current = clamp(newValue, 0, stats[idx].max);
+
+  // console.log('saving stats ', stats)
+  saveStats(petId, stats, now);
 }
 
 global.petStore = {

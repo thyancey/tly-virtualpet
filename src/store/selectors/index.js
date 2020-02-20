@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getSavedStats, getBaseStats, getDeltaStats } from 'util/pet-store';
+import { getPets, getSprites, getBaseStats, getDeltaStats } from 'util/pet-store';
 
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
@@ -174,12 +174,10 @@ export const selectActivePetStats = createSelector(
     if(!activePet) return null;
 
     const baseStats = getBaseStats(activePet.id);
-    const deltaStats = getDeltaStats(activePet.id, new Date().getTime());
 
     return {
       level: currentStats.level,
-      xp: getStatObj(currentStats, baseStats, 'xp', 'fill'),
-      deltaStats: getDeltaStatsArray(activePet.id)
+      xp: getStatObj(currentStats, baseStats, 'xp', 'fill')
     }
   }
 );

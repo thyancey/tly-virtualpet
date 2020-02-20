@@ -4,12 +4,13 @@ import {
 import { 
   incrementXp,
   setMood,
-  setActivity
+  setActivity,
+  augmentStat
 } from '../actions/pet';
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, getSavedStats, getBaseStats } from 'util/pet-store';
+import { getPetDefinition, getSavedStats, getBaseStats, augmentPetStat } from 'util/pet-store';
 
 const initialState = {
   id: null,
@@ -34,7 +35,12 @@ export default handleActions({
 
   [incrementXp.toString()]: (state, action) => {
     const baseStats = getBaseStats(state.id);
-    return augmentStat(state, 'xp', action.payload, baseStats);
+    return augmentThisStat(state, 'xp', action.payload, baseStats);
+  },
+
+  [augmentStat.toString()]: (state, action) => {
+    const baseStats = getBaseStats(state.id);
+    return augmentThisStat(state, action.payload.id, action.payload.value, baseStats);
   },
 
   [setMood.toString()]: (state, action) => {
@@ -52,27 +58,12 @@ export default handleActions({
   }
 }, initialState);
 
-const clamp = (val, min, max) => {
-  return Math.min(Math.max(val, min), max);
-}
-
-const augmentStat = (state, stat, value, baseStats) => {
+const augmentThisStat = (state, statId, statValue, baseStats) => {
   if(!state.stats){
     return state;
   }
-  const newVal = state.stats[stat] + value;
-  let newValue = clamp(newVal, 0, baseStats[stat]);
+  
+  augmentPetStat(state.id, statId, statValue)
 
-  return {
-    ...state,
-    stats:{
-      ...state.stats,
-      [stat]: newValue
-    }
-  }
-}
-
-const getPetStats = petObj => {
-  //- eventually, this uses time, base stats, etc to save current unique stats
-  return petObj.baseStats;
+  return state;
 }

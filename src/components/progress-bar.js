@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { themeGet } from 'themes/';
 import { LilButton } from 'components/button';
+import { round } from 'util/tools';
 
 const $ProgressBar = styled.div`
   margin: 1rem;
@@ -84,20 +85,22 @@ const getAlertType = (fillType, percent) => {
   return 'normal';
 }
 
-const ProgressBar = ({ statObj, label, isActive, incrementAction }) => {
+const ProgressBar = ({ statObj, label, isActive, augmentAction }) => {
   const alertType = getAlertType(statObj.fillType, statObj.percent);
   return (
     <$ProgressBar>
       <$Label>
         <h4>{label}</h4>
 
-        <$Buttons>
-          <LilButton text={'-'} onClick={e => incrementAction && incrementAction(-300)} />
-          <LilButton text={'+'} onClick={e => incrementAction && incrementAction(300)} />
-        </$Buttons>
+        {augmentAction && (
+          <$Buttons>
+            <LilButton text={'-'} onClick={e => augmentAction(statObj.id, -300)} />
+            <LilButton text={'+'} onClick={e => augmentAction(statObj.id, 300)} />
+          </$Buttons>
+        )}
       </$Label>
       <$Bar isActive={isActive} >
-        <$Value>{ `${statObj.cur} / ${statObj.max} (${statObj.percent}%)` }</$Value>
+        <$Value>{ `${round(statObj.cur)} / ${statObj.max} (${round(statObj.percent)}%)` }</$Value>
         <$Bg progress={statObj.percent} alertType={alertType} />
       </$Bar>
     </$ProgressBar>
