@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { themeGet } from 'themes/';
 
 import ProgressBar from '../../components/progress-bar';
+
 import { LilButton } from '../../components/button';
 
 const $PetStats = styled.div`
@@ -24,13 +25,36 @@ const $Label = styled.div`
   text-align:center;
 `
 
+
+const $StatDisplay = styled.div`
+  text-align:right;
+`
+
+const $StatDisplayLabel = styled.span`
+  color: ${themeGet('color', 'white')};
+  font-size:2rem;
+`
+const $StatDisplayValue = styled.span`
+  color: ${themeGet('color', 'green')};
+  margin-left:1rem;
+  font-size:3rem;
+`
+
+const StatDisplay = ({ statObj }) => {
+  return (
+    <$StatDisplay>
+      <$StatDisplayLabel>{statObj.label}</$StatDisplayLabel>
+      <$StatDisplayValue>{statObj.cur}</$StatDisplayValue>
+    </$StatDisplay>
+  );
+};
+
+
 const PetStats = ({ 
   petData, 
   activity,
   mood,
-  statsObj, 
   deltaStats,
-  incrementXp, 
   augmentStat,
   setActivity, 
   setMood
@@ -38,17 +62,24 @@ const PetStats = ({
   return (
     <$PetStats>
       <$Label>{`${petData.name} the ${petData.animal}`}</$Label>
-      <span>{`${petData.id} - ${statsObj.level}`}</span>
+      <span>{`${petData.id}`}</span>
       <p>{'Activity'}</p>
       <LilButton isActive={activity === 'IDLE'} text={'IDLE'} onClick={e => setActivity && setActivity('IDLE')} />
       <LilButton isActive={activity === 'WALK'} text={'WALK'} onClick={e => setActivity && setActivity('WALK')} />
       <p>{'Mood'}</p>
       <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
       <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
-      <ProgressBar statObj={statsObj.xp} label={'XP'} />
-      {deltaStats.map((s, i) => (
-        <ProgressBar key={i} statObj={s} label={s.label} augmentAction={(id, val) => augmentStat(id, val)}/>
-      ))}
+      {deltaStats.map((s, i) => {
+        if(s.type === 'number'){
+          return (
+            <StatDisplay key={i} statObj={s} />
+          );
+        }else{
+          return (
+            <ProgressBar key={i} statObj={s} label={s.label} augmentAction={(id, val) => augmentStat(id, val)}/>
+          );
+        }
+      })}
     </$PetStats>
   );
 }

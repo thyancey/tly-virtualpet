@@ -9,8 +9,7 @@ import Pet from '../../components/pet';
 import PetStats from './pet-stats';
 
 import { 
-  selectActivePet,
-  selectActivePetStats
+  selectActivePet
 } from '../../store/selectors';
 
 import { getDeltaStats } from 'util/pet-store';
@@ -47,7 +46,7 @@ const $PetStatsContainer = styled.div`
   right:1rem;
 `
 
-const STAT_PING_RATE = 500;
+const STAT_PING_RATE = 1500;
 
 class Cage extends Component {
   constructor(props){
@@ -113,6 +112,7 @@ class Cage extends Component {
     
     return deltaStats.map(stat => ({
       id: stat.id,
+      type: stat.type,
       label: stat.label || stat.id,
       cur: stat.current,
       max: stat.max,
@@ -124,7 +124,6 @@ class Cage extends Component {
   render(){
     const { 
       activePet,
-      activePetStats,
       incrementXp,
       augmentStat,
       setMood,
@@ -132,6 +131,12 @@ class Cage extends Component {
     } = this.props;
 
     const deltaStats = this.getDeltaStatsArray(activePet);
+    // console.log('activePet', activePet);
+    // console.log('deltaStats', deltaStats);
+
+    const level = deltaStats.find(ds => ds.id === 'level');
+    let levelStat = null;
+    if(level) levelStat = level.cur;
 
     if(!activePet){
       return null;
@@ -140,7 +145,7 @@ class Cage extends Component {
         <$Cage ref={this.containerRef} >
           <Pet 
             petData={activePet} 
-            level={activePetStats.level}
+            level={levelStat}
             containerWidth={this.state.containerWidth}
             containerHeight={this.state.containerHeight} />
           <$PetStatsContainer>
@@ -148,7 +153,6 @@ class Cage extends Component {
               petData={activePet.data} 
               activity={activePet.activity}
               mood={activePet.mood}
-              statsObj={activePetStats}
               deltaStats={deltaStats}
               incrementXp={incrementXp}
               augmentStat={augmentStat}
@@ -163,8 +167,7 @@ class Cage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activePet: selectActivePet(state),
-  activePetStats: selectActivePetStats(state)
+  activePet: selectActivePet(state)
 })
 
 const mapDispatchToProps = dispatch =>

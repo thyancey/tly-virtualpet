@@ -94,8 +94,8 @@ const ProgressBar = ({ statObj, label, isActive, augmentAction }) => {
 
         {augmentAction && (
           <$Buttons>
-            <LilButton text={'-'} onClick={e => augmentAction(statObj.id, -300)} />
-            <LilButton text={'+'} onClick={e => augmentAction(statObj.id, 300)} />
+            <LilButton text={'-'} onClick={e => augmentAction(statObj.id, -30)} />
+            <LilButton text={'+'} onClick={e => augmentAction(statObj.id, 30)} />
           </$Buttons>
         )}
       </$Label>

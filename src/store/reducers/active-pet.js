@@ -10,37 +10,30 @@ import {
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, getSavedStats, getBaseStats, augmentPetStat } from 'util/pet-store';
+import { getPetDefinition, augmentPetStat } from 'util/pet-store';
 
 const initialState = {
   id: null,
   mood: null,
-  activity:null,
-  stats: null
+  activity:null
 };
 
 export default handleActions({
   [setActivePetId.toString()]: (state, action) => {
     const petObj = getPetDefinition(action.payload);
     //- get stats, etc
-
-    const stats = getSavedStats(action.payload);
     
     return {
       ...state,
-      id: petObj.id,
-      stats: stats
+      id: petObj.id
     }
   },
 
-  [incrementXp.toString()]: (state, action) => {
-    const baseStats = getBaseStats(state.id);
-    return augmentThisStat(state, 'xp', action.payload, baseStats);
-  },
-
   [augmentStat.toString()]: (state, action) => {
-    const baseStats = getBaseStats(state.id);
-    return augmentThisStat(state, action.payload.id, action.payload.value, baseStats);
+    // console.log('augmentStat', action.payload);
+
+    augmentPetStat(state.id, action.payload.id, action.payload.value)
+    return state;
   },
 
   [setMood.toString()]: (state, action) => {
@@ -57,13 +50,3 @@ export default handleActions({
     }
   }
 }, initialState);
-
-const augmentThisStat = (state, statId, statValue, baseStats) => {
-  if(!state.stats){
-    return state;
-  }
-  
-  augmentPetStat(state.id, statId, statValue)
-
-  return state;
-}

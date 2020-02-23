@@ -1,5 +1,5 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
-
+import { getCookieObj, setObjToCookie } from './tools';
 
 const clamp = (val, min, max) => {
   return Math.min(Math.max(val, min), max);
@@ -24,7 +24,23 @@ export const setPetDefinition = (petId, petDef) => {
   store.pets[petId] = petDef;
 }
 
+export const formatStatObj = statObj => {
+  return {
+    ...statObj,
+    value: Number(statObj.value),
+    perSecond: Number(statObj.perSecond),
+    max: Number(statObj.max)
+  }
+}
+
 export const setPetDefinitions = petList => {
+  //- grab cookie, if cookie, get list of saved pet stats
+  const savedData = getCookieObj('tly_virtualpet') || { 
+    timestamp: null, 
+    pets: []
+  };
+
+  console.log('savedData', savedData)
   store.pets = petList.map(p => {
     let defaultAnimation = p.animations.DEFAULT;
     if(!defaultAnimation){
@@ -35,16 +51,20 @@ export const setPetDefinitions = petList => {
       }
     }
 
-    const parsedVitals = p.vitals.map(v => ({
-      ...v,
-      value: Number(v.value),
-      perSecond: Number(v.perSecond),
-      max: Number(v.max)
-    }))
+    const savedPet = savedData.pets.find(savedPet => savedPet.id === p.id);
+    const definedStats = p.stats_initial.stats.map(stat => formatStatObj(stat));
+    let initialStats = [];
 
-    p.savedStats = {
-      timestamp: new Date().getTime(),
-      stats: parsedVitals
+    /* if cookie stats, use them here instead */
+    if(savedPet){
+      initialStats = mergeStats(definedStats, savedPet.stats, true);
+    }else{
+      initialStats = definedStats;
+    }
+
+    p.stats_saved = {
+      timestamp: savedData.timestamp || new Date().getTime(),
+      stats: initialStats
     }
 
     return {
@@ -55,6 +75,25 @@ export const setPetDefinitions = petList => {
       }
     }
   });
+}
+
+const mergeStats = (origArray, newArray, overwrite) => {
+  const retArray = origArray.slice(0);
+  for(let i = 0; i < newArray.length; i++){
+    const newStat = newArray[i];
+    const matchingStatIdx = retArray.findIndex(oStat => oStat.id === newStat.id);
+    if(matchingStatIdx > -1){
+      if(overwrite){
+        retArray[matchingStatIdx] = newStat;
+      }else{
+        //- not unique, dont add it
+      }
+    }else{
+      retArray.push(newStat);
+    }
+  }
+
+  return retArray;
 }
 
 export const setPetStoreData = (itemType, data) => {
@@ -68,28 +107,22 @@ export const setSpriteDefinitions = spriteList => {
   store.sprites = spriteList;
 }
 
-export const getPetVitals = petId => {
+export const getStartStats = petId => {
   const petDef = getPetDefinition(petId);
-  return petDef && petDef.vitals || [];
+  return petDef && petDef.startStats || [];
 }
 
-export const getPetVital = (petId, vitalId) => {
-  const vitals = getPetVitals(petId);
-  return vitals.find(v => v.id === vitalId) || null;
+export const getStartStat = (petId, statId) => {
+  const startStats = getStartStats(petId);
+  return startStats.find(stat => stat.id === statId) || null;
 }
 
-export const getBaseStats = (petId) => {
-  const petDef = getPetDefinition(petId);
-  return petDef && petDef.baseStats || null;
-}
-export const getSavedStats = (petId) => {
-  const petDef = getPetDefinition(petId);
-  return petDef && petDef.stats || null;
-}
 export const getDeltaStats = (petId, timestamp) => {
+  // console.log('getDeltaStats', petId, timestamp)
   const petDef = getPetDefinition(petId);
-  const oldStats = petDef.savedStats.stats || [];
-  const timeDiff = (timestamp - petDef.savedStats.timestamp) / 1000;
+  // console.log('petDef', petDef)
+  const oldStats = petDef.stats_saved.stats || [];
+  const timeDiff = (timestamp - petDef.stats_saved.timestamp) / 1000;
 
   return oldStats.map(s => ({
     ...s,
@@ -100,24 +133,40 @@ export const getDeltaStats = (petId, timestamp) => {
 }
 export const saveStats = (petId, stats, timestamp) => {
   const petDef = getPetDefinition(petId);
-  petDef.savedStats = {
+  petDef.stats_saved = {
     timestamp: timestamp,
     stats: stats.map(s => ({ ...s, value: s.current }))
   }
   setPetDefinition(petId, petDef);
+  savePetAllStatsToCookie();
 }
 export const augmentPetStat = (petId, statId, augmentValue) => {
   const now = new Date().getTime();
   const stats = getDeltaStats(petId, now).slice(0);
-  // console.log('deltaStats', stats[0].value)
-
   const idx = stats.findIndex(s => s.id === statId);
   const newValue = stats[idx].current + augmentValue;
   stats[idx].current = clamp(newValue, 0, stats[idx].max);
 
-  // console.log('saving stats ', stats)
   saveStats(petId, stats, now);
 }
+
+
+
+export const savePetAllStatsToCookie = () => {
+  console.log('savePetAllStatsToCookie')
+  setObjToCookie('tly_virtualpet', {
+    timestamp: new Date().getTime(),
+    pets: store.pets.map(p => ({
+      ...p.stats_saved,
+      id: p.id
+    }))
+  });
+}
+
+  // setObjToCookie('tly_virtualpet', {
+  //   timestamp: new Date().getTime(),
+  //   pets:[]
+  // });
 
 global.petStore = {
   getAllData: () => store,

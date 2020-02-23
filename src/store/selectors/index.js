@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getBaseStats, getDeltaStats } from 'util/pet-store';
+import { getPets, getSprites } from 'util/pet-store';
 
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
@@ -8,6 +8,7 @@ export const getCounter = state => state.data.counter;
 export const getActivePetId = state => state.activePet.id || null;
 export const getActivePetStats = state => state.activePet.stats || null;
 export const getActivePet = state => state.activePet || null;
+
 
 export const selectCustomLabels = createSelector(
   [getCustomData],
@@ -128,42 +129,6 @@ export const selectActivePetAnimation = createSelector(
   }
 );
 
-const getDeltaStat = (deltaStats, label, fillType) => {
-  const stat = deltaStats.find(dS => dS.id === label);
-
-  return {
-    cur: stat.current,
-    max: stat.max,
-    percent: Math.round((stat.current / stat.max) * 100),
-    fillType: fillType
-  }
-}
-
-const getStatObj = (stats, baseStats, label, fillType) => {
-  if(stats[label] !== undefined && baseStats[label] !== undefined){
-
-    return {
-      cur: stats[label],
-      max: baseStats[label],
-      percent: Math.round((stats[label] / baseStats[label]) * 100),
-      fillType: fillType
-    };
-  }else{
-    return null;
-  }
-}
-
-const getDeltaStatsArray = (id) => {
-  const deltaStats = getDeltaStats(id, new Date().getTime());
-  return deltaStats.map(stat => ({
-    label: stat.id,
-    cur: stat.current,
-    max: stat.max,
-    percent: Math.round((stat.current / stat.max) * 100),
-    fillType: 'fill'
-  }))
-}
-
 const selectStats = createSelector(
   [getActivePetId, selectActivePet],
 
@@ -173,11 +138,8 @@ export const selectActivePetStats = createSelector(
   (activePet, currentStats) => {
     if(!activePet) return null;
 
-    const baseStats = getBaseStats(activePet.id);
-
     return {
-      level: currentStats.level,
-      xp: getStatObj(currentStats, baseStats, 'xp', 'fill')
+      level: currentStats.level
     }
   }
 );
