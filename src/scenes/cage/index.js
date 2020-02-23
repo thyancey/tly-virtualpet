@@ -20,7 +20,7 @@ const $Cage = styled.div`
   height:100%;
 
   color: ${themeGet('color', 'blue')};
-  border: .5rem dashed ${themeGet('color', 'black')};
+  /* border: .5rem dashed ${themeGet('color', 'black')}; */
 
   h2{
     color: ${themeGet('color', 'white')};

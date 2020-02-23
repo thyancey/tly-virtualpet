@@ -1,9 +1,5 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
-import { getCookieObj, setObjToCookie } from './tools';
-
-const clamp = (val, min, max) => {
-  return Math.min(Math.max(val, min), max);
-}
+import { clamp, getCookieObj, setObjToCookie } from './tools';
 
 const store = {
   pets:[],

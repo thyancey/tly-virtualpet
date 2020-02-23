@@ -5,6 +5,9 @@ export const round = (number, pad) => {
   return Math.round(number * rounder) / rounder;
 }
 
+export const clamp = (val, min, max) => {
+  return Math.min(Math.max(val, min), max);
+}
 
 export const setObjToCookie = (cookieName, obj) => {
   let cookieValue = '';

@@ -1,6 +1,49 @@
 {
   "pets": [
     {
+      "id": "tlj",
+      "type": "painting",
+      "animal": "painting",
+      "name": "The Last Judgement",
+      "animations": {
+        "DEFAULT": [ "TLJ_Idle1" ],
+        "IDLE": [ "TLJ_Idle1" ],
+        "WALK": [ "TLJ_Idle1" ]
+      },
+      "stats_initial":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "2",
+            "perSecond": "0",
+            "max": "10"
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "300",
+            "perSecond": "0",
+            "max": "500"
+          },
+          { 
+            "id":"sin",
+            "value": "0",
+            "perSecond": "1",
+            "max": "20000"
+          }
+        ]
+      },
+      "graphics":{
+        "TLJ_Idle1":{
+          "sprite": "TLJ_Idle",
+          "speed": "10",
+          "frames": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 8, 9, 10, 9, 8  ]
+        }
+      }
+    },
+    {
       "id": "bocado",
       "type": "megupet",
       "animal": "bocado",
@@ -278,6 +321,15 @@
         "scale": 2,
         "grid": [ 2, 2 ],
         "cells": [ 134, 62 ]
+      }
+    },
+    "TLJ_Idle":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/tlj/anim-idle.jpg",
+      "spriteInfo":{
+        "scale": ".8",
+        "grid": [ 4, 4 ],
+        "cells": [ 1000, 1000 ]
       }
     },
     "Bocado":{
