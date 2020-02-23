@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
-
-import { LilButton } from 'components/button';
-import { } from 'store/selectors';
 
 import { Button } from 'components/button';
 
@@ -27,9 +22,12 @@ const $Menu = styled.div`
 
 const $MenuButton = styled.div`
   position:absolute;
-  right:3rem;
-  top:3rem;
+  right:1rem;
+  top:1rem;
   z-index:1;
+  button{
+    padding:3rem 4rem;
+  }
 `;
 
 const $MainPanel = styled.div`
@@ -85,9 +83,6 @@ class Menu extends Component {
   }
 
   render(){
-    const { onToggleMenu } = this.props;
-
-    console.log('menu is ', this.state.isOpen)
     return(
       <$Menu id="menu" >
         <$MenuButton>
@@ -103,16 +98,5 @@ class Menu extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({})
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {},
-    dispatch
-  )
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Menu)
+export default Menu;
 

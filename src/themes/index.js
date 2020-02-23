@@ -27,7 +27,8 @@ export default {
     z3: '-.2rem .5rem 1rem .2rem rgba(0,0,0,.36)'
   },
   value:{
-    headerHeight: '7.5rem'
+    headerHeight: '7.5rem',
+    menuWidth: '12rem'
   },
   mixins:{}
 };

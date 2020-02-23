@@ -29,7 +29,7 @@ class Pet extends Component {
 
     this.state = {
       posX: 0,
-      posY: 0
+      posY: 480
     }
     global.document.addEventListener('keydown', this.onKeyDown);
   }
@@ -92,6 +92,7 @@ class Pet extends Component {
 
   render(){
     const { petData, animation, containerWidth, containerHeight } = this.props;
+
     let drawCommand = null;
     if(animation.type){
       drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ]);
@@ -99,7 +100,7 @@ class Pet extends Component {
 
     return (
       <$PetContainer>
-        <AnimationCanvas position={[50, 50]} containerWidth={containerWidth} containerHeight={containerHeight} animation={animation} drawCommand={drawCommand} />
+        <AnimationCanvas containerWidth={containerWidth} containerHeight={containerHeight} animation={animation} drawCommand={drawCommand} />
       </$PetContainer>
     );
   }

@@ -35,9 +35,6 @@ const $PetSelection = styled.div`
   left:0;
   width:100%;
   height:100%;
-  /* border-radius:2rem;
-  background-color: ${themeGet('color', 'blue')};
-  opacity:.9; */
 `;
 
 const $TypeList = styled.ul`

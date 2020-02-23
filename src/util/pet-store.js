@@ -120,9 +120,13 @@ export const getStartStat = (petId, statId) => {
 export const getDeltaStats = (petId, timestamp) => {
   // console.log('getDeltaStats', petId, timestamp)
   const petDef = getPetDefinition(petId);
-  // console.log('petDef', petDef)
-  const oldStats = petDef.stats_saved.stats || [];
-  const timeDiff = (timestamp - petDef.stats_saved.timestamp) / 1000;
+
+  return getAdjustedStats(petDef.stats_saved, timestamp);
+}
+
+export const getAdjustedStats = (statsObj, timestamp) =>{
+  const oldStats = statsObj.stats || [];
+  const timeDiff = (timestamp - statsObj.timestamp) / 1000;
 
   return oldStats.map(s => ({
     ...s,
@@ -131,6 +135,7 @@ export const getDeltaStats = (petId, timestamp) => {
     current: clamp(s.value + (s.perSecond * timeDiff), 0, s.max)
   }));
 }
+
 export const saveStats = (petId, stats, timestamp) => {
   const petDef = getPetDefinition(petId);
   petDef.stats_saved = {
@@ -150,6 +155,18 @@ export const augmentPetStat = (petId, statId, augmentValue) => {
   saveStats(petId, stats, now);
 }
 
+export const resetPetState = petId => {
+  const petDef = getPetDefinition(petId);
+  const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
+
+  const now = new Date().getTime();
+  const statsObj = getAdjustedStats({
+    timestamp: now,
+    stats: definedStats
+  }, now);
+
+  saveStats(petId, statsObj, new Date().getTime());
+}
 
 
 export const savePetAllStatsToCookie = () => {

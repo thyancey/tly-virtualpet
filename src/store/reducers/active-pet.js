@@ -2,15 +2,15 @@ import {
   setActivePetId
 } from '../actions';
 import { 
-  incrementXp,
   setMood,
   setActivity,
-  augmentStat
+  augmentStat,
+  resetPet
 } from '../actions/pet';
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, augmentPetStat } from 'util/pet-store';
+import { getPetDefinition, augmentPetStat, resetPetState } from 'util/pet-store';
 
 const initialState = {
   id: null,
@@ -48,5 +48,13 @@ export default handleActions({
       ...state,
       activity: action.payload
     }
+  },
+
+  [resetPet.toString()]: (state, action) => {
+    const petId = action.payload;
+
+    resetPetState(petId);
+
+    return state;
   }
 }, initialState);

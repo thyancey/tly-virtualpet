@@ -6,21 +6,12 @@ import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
 
 import Pet from '../../components/pet';
-import PetStats from './pet-stats';
-
 import { 
   selectActivePet
 } from '../../store/selectors';
 
-import { getDeltaStats } from 'util/pet-store';
+import {} from 'store/actions/pet';
 
-
-import {
-  incrementXp,
-  augmentStat,
-  setMood,
-  setActivity
-} from 'store/actions/pet';
 
 const $Cage = styled.div`
   position:relative;
@@ -35,13 +26,6 @@ const $Cage = styled.div`
     color: ${themeGet('color', 'white')};
   }
 `
-const $PetStatsContainer = styled.div`
-  position:absolute;
-  top:1rem;
-  right:1rem;
-`
-
-const STAT_PING_RATE = 1500;
 
 class Cage extends Component {
   constructor(props){
@@ -49,29 +33,10 @@ class Cage extends Component {
 
     this.containerRef = React.createRef();
     this.onResize = this.onResize.bind(this);
-    this.statPinger = null;
 
     this.state = {
       containerWidth: 500,
-      containerHeight: 500,
-      pingIdx: 0
-    }
-  }
-
-  startStatPinger(){
-    this.killStatPinger();
-
-    this.statPinger = global.setInterval(() => {
-      this.setState({
-        pingIdx: this.state.pingIdx + 1
-      });
-    }, STAT_PING_RATE);
-  }
-
-  killStatPinger(){
-    if(this.statPinger){
-      global.clearTimeout(this.statPinger);
-      this.statPinger = null;
+      containerHeight: 500
     }
   }
 
@@ -84,7 +49,6 @@ class Cage extends Component {
 
   componentDidMount() {
     global.addEventListener('resize', this.onResize);
-    this.startStatPinger();
   }
 
   onResize(){
@@ -100,38 +64,10 @@ class Cage extends Component {
     }
   }
 
-  getDeltaStatsArray(activePet){
-    if(!activePet || !activePet.id) return [];
-
-    const deltaStats = getDeltaStats(activePet.id, new Date().getTime());
-    
-    return deltaStats.map(stat => ({
-      id: stat.id,
-      type: stat.type,
-      label: stat.label || stat.id,
-      cur: stat.current,
-      max: stat.max,
-      percent: (stat.current / stat.max) * 100,
-      fillType: 'fill'
-    }));
-  }
-
   render(){
     const { 
-      activePet,
-      incrementXp,
-      augmentStat,
-      setMood,
-      setActivity
+      activePet
     } = this.props;
-
-    const deltaStats = this.getDeltaStatsArray(activePet);
-    // console.log('activePet', activePet);
-    // console.log('deltaStats', deltaStats);
-
-    const level = deltaStats.find(ds => ds.id === 'level');
-    let levelStat = null;
-    if(level) levelStat = level.cur;
 
     if(!activePet){
       return null;
@@ -140,20 +76,8 @@ class Cage extends Component {
         <$Cage ref={this.containerRef} >
           <Pet 
             petData={activePet} 
-            level={levelStat}
             containerWidth={this.state.containerWidth}
             containerHeight={this.state.containerHeight} />
-          <$PetStatsContainer>
-            <PetStats 
-              petData={activePet.data} 
-              activity={activePet.activity}
-              mood={activePet.mood}
-              deltaStats={deltaStats}
-              incrementXp={incrementXp}
-              augmentStat={augmentStat}
-              setMood={setMood}
-              setActivity={setActivity} />
-          </$PetStatsContainer>
         </$Cage>
       );
     }
@@ -167,12 +91,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { 
-      incrementXp,
-      augmentStat,
-      setMood,
-      setActivity 
-    },
+    {},
     dispatch
   )
 
