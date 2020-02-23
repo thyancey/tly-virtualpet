@@ -28,13 +28,8 @@ const $Cage = styled.div`
   width:100%;
   height:100%;
 
-  background-color:  ${themeGet('color', 'black')};
   color: ${themeGet('color', 'blue')};
-  border: .5rem dashed ${themeGet('color', 'blue')};
-
-  border-radius: 2rem;
-  /* padding: 2rem; */
-  box-shadow: 0rem 0rem 2rem ${themeGet('color', 'blue')};
+  border: .5rem dashed ${themeGet('color', 'black')};
 
   h2{
     color: ${themeGet('color', 'white')};
