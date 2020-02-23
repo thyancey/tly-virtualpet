@@ -68,6 +68,7 @@ export default class AnimationCanvas extends Component {
               canvasHeight={this.props.containerHeight}
               sprite={this.state.img}
               spriteInfo={this.props.animation.spriteInfo}
+              direction={this.props.direction}
               drawCommand={ this.props.drawCommand } />;
   }
 }

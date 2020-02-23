@@ -83,12 +83,22 @@ const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
 const createSpriteObj = (label, graphic, sprite) => {
   sprite.spriteInfo = sprite.spriteInfo || {};
 
+  let direction;
+  if(graphic.direction !== undefined){
+    direction = graphic.direction;
+  }else if(sprite.spriteInfo.direction !== undefined){
+    direction = sprite.spriteInfo.direction;
+  }else{
+    direction = 0;
+  }
+
   return {
     type: sprite.type,
     imageUrl: sprite.imageUrl,
     label: label,
     spriteInfo:{
       speed: graphic.speed || sprite.spriteInfo.speed || 1,
+      direction: direction,
       dir: graphic.dir || sprite.spriteInfo.dir || 1,
       scale: getFallbackValue(graphic.scale, sprite.spriteInfo.scale, 1),
       frames: getFallbackValue(graphic.frames, sprite.spriteInfo.frames),

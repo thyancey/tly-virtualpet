@@ -308,6 +308,7 @@
           "sprite": "Raccoon",
           "speed": "20",
           "dir": 1,
+          "flipX": true,
           "frames": [4, 5]
         }
       }
@@ -328,6 +329,7 @@
       "imageUrl": "pets/tlj/anim-idle.jpg",
       "spriteInfo":{
         "scale": ".8",
+        "direction": 1,
         "grid": [ 4, 4 ],
         "cells": [ 1000, 1000 ]
       }
@@ -355,6 +357,7 @@
       "imageUrl": "pets/raccoon.png",
       "spriteInfo":{
         "scale": ".8",
+        "direction": 0,
         "grid": [ 3, 2 ],
         "cells": [ 400, 500 ]
       }

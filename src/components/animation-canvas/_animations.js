@@ -3,7 +3,7 @@ export const getAnimation = animationLabel => {
 }
 
 const A = {
-  SpinSquare: (ctx, bounds, pos, props) => {
+  SpinSquare: (ctx, bounds, pos, direction, props) => {
     ctx.save();
     ctx.beginPath();
     ctx.clearRect(0, 0, bounds[0], bounds[1]);
@@ -18,7 +18,7 @@ const A = {
     );
     ctx.restore();
   },
-  SpinSquare2: (ctx, bounds, pos, props) => {
+  SpinSquare2: (ctx, bounds, pos, direction, props) => {
     ctx.save();
     ctx.beginPath();
     ctx.clearRect(0, 0, bounds[0], bounds[1]);
@@ -33,7 +33,7 @@ const A = {
     );
     ctx.restore();
   },
-  Sprite_Still: (ctx, bounds, pos, props) => {
+  Sprite_Still: (ctx, bounds, pos, direction, props) => {
     if(!props.sprite) return;
 
     const cCoords = getStillCellCoords(props.spriteInfo, props.spriteInfo.frame);
@@ -51,19 +51,23 @@ const A = {
 
     ctx.save();
     ctx.clearRect(0, 0, bounds[0], bounds[1]);
+    if(direction === -1){
+      ctx.translate(sW, 0);
+    }
+    ctx.scale(direction, 1);
     ctx.drawImage(
       props.sprite, 
       cCoords.x, 
       cCoords.y, 
       cCoords.w, 
       cCoords.h, 
-      x, 
+      x * direction, 
       y, 
       sW, 
       sH);
     ctx.restore();
   },
-  Sprite_Animated: (ctx, bounds, pos, props) => {
+  Sprite_Animated: (ctx, bounds, pos, direction, props) => {
     if(!props.sprite) return;
     
     const frame = props.spriteInfo.frame;
@@ -90,13 +94,17 @@ const A = {
 
     ctx.save();
     ctx.clearRect(0, 0, bounds[0], bounds[1]);
+    if(direction === -1){
+      ctx.translate(sW, 0);
+    }
+    ctx.scale(direction, 1);
     ctx.drawImage(
       props.sprite, 
       cCoords.x, 
       cCoords.y, 
       cCoords.w, 
       cCoords.h, 
-      x, 
+      x * direction, 
       y, 
       sW, 
       sH);

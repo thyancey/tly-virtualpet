@@ -53,7 +53,8 @@ class Pet extends Component {
       maxY: 0,
       minX: 0,
       maxX: 0,
-      isOnGround: false
+      isOnGround: false,
+      direction: 1
     }
     global.document.addEventListener('keyup', this.onKeyUp);
     global.document.addEventListener('keydown', this.onKeyDown);
@@ -95,6 +96,16 @@ class Pet extends Component {
   movePet(x, y){
     this.vY += y;
     this.vX += x;
+
+    if(x < 0){
+      this.setState({
+        direction: -1
+      });
+    }else if(x > 0){
+      this.setState({
+        direction: 1
+      });
+    }
 
     this.startWalking();
   }
@@ -157,8 +168,8 @@ class Pet extends Component {
     }
   }
 
-  getDrawCommand(type, newBounds, newPosition){
-    return (ctx, bounds, position, props) => getAnimation(type)(ctx, newBounds, newPosition, props);
+  getDrawCommand(type, newBounds, newPosition, newDirection){
+    return (ctx, props) => getAnimation(type)(ctx, newBounds, newPosition, newDirection, props);
   }
 
   affectPetGravity(){
@@ -228,8 +239,6 @@ class Pet extends Component {
       this.recalcMaxBounds(true);
     }
     if(prevProps.containerWidth !== this.props.containerWidth || prevProps.containerHeight !== this.props.containerHeight){
-      console.log('containerWidth')
-
       this.recalcMaxBounds();
     }
   }
@@ -239,16 +248,15 @@ class Pet extends Component {
 
     let drawCommand = null;
     if(animation.type){
-      drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ]);
+      if(animation.spriteInfo.direction === 0){
+        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], this.state.direction);
+      }else{
+        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], animation.spriteInfo.direction);
+      }
     }
-
-    // console.log('drawCommand:', animation);
-    // console.log('maxY', this.state.maxY)
 
     return (
       <$PetContainer>
-        <span>{`vY: ${this.vY}`}</span>
-        <span>{`vX: ${this.vX}`}</span>
         <AnimationCanvas containerWidth={containerWidth} containerHeight={containerHeight} animation={animation} drawCommand={drawCommand} />
       </$PetContainer>
     );

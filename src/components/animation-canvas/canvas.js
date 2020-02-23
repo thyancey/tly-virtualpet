@@ -15,7 +15,8 @@ export default class Canvas extends Component {
   }
 
   componentDidUpdate() {
-    this.props.drawCommand && this.props.drawCommand(this.ctx, this.width, this.height, { ...this.props });
+    this.props.drawCommand && this.props.drawCommand(this.ctx, { ...this.props });
+    // this.props.drawCommand && this.props.drawCommand(this.ctx, this.height, this.width, { ...this.props });
     
   }
 
