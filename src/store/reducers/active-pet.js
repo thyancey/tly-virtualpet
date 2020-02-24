@@ -7,7 +7,6 @@ import {
   augmentStat,
   resetPet
 } from '../actions/pet';
-import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions'; 
 import { getPetDefinition, augmentPetStat, resetPetState } from 'util/pet-store';
@@ -30,9 +29,7 @@ export default handleActions({
   },
 
   [augmentStat.toString()]: (state, action) => {
-    // console.log('augmentStat', action.payload);
-
-    augmentPetStat(state.id, action.payload.id, action.payload.value)
+    augmentPetStat(state.id, action.payload.id, action.payload.value);
     return state;
   },
 

@@ -8,6 +8,7 @@ import { ThemeProvider } from 'styled-components'
 import theme from 'themes/'
 
 const target = document.querySelector('#root')
+global.store = store;
 
 render(
   <Provider store={store}>

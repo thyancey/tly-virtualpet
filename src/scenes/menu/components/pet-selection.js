@@ -64,14 +64,19 @@ const $ObjectsList = styled.ul`
 
 class PetSelection extends Component {
 
+  onSelectPet(id){
+    this.props.setActivePetId(id);
+    this.props.onSelectPet(id);
+  }
+
   render(){
+    // console.log('R: PetSelection');
     const { 
       customArray, 
       activePetType, 
       activePetId,
       activeObjects, 
-      setActivePetType, 
-      setActivePetId,
+      setActivePetType
     } = this.props;
 
     return(
@@ -89,7 +94,7 @@ class PetSelection extends Component {
           <$ObjectsList>
             { activeObjects.map((o, i) => (
               <li key={i}>
-                <Button text={`${o.name} the ${o.animal}`} isActive={o.id === activePetId} onClick={() => setActivePetId(o.id)}/>
+                <Button text={`${o.name} the ${o.animal}`} isActive={o.id === activePetId} onClick={() => this.onSelectPet(o.id)}/>
               </li>
             ))}
           </$ObjectsList>

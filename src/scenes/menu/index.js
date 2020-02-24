@@ -37,7 +37,7 @@ const $MainPanel = styled.div`
   bottom:0;
   width:90%;
 
-  padding: 2rem;
+  padding-bottom: 4rem;
   padding-right:0;
   
 
@@ -83,6 +83,7 @@ class Menu extends Component {
   }
 
   render(){
+    // console.log('R: Menu');
     return(
       <$Menu id="menu" >
         <$MenuButton>
@@ -90,7 +91,7 @@ class Menu extends Component {
         </$MenuButton>
         <$MainPanel id="main-panel" isOpen={this.state.isOpen}>
           <$PanelContainer>
-            <PetSelection/>
+            <PetSelection onSelectPet={() => this.onToggleMenu()} />
           </$PanelContainer>
         </$MainPanel>
       </$Menu>

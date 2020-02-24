@@ -2,7 +2,8 @@ import {
   setCustomData,
   setOtherData,
   setActivePetType,
-  setActivePetId
+  setActivePetId,
+  ping
 } from '../actions';
 import { setTransition } from '../actions/transition';
 
@@ -20,7 +21,8 @@ const initialState = {
   customData: null,
   counter: 0,
   activePetType: null,
-  activePetId: null
+  activePetId: null,
+  ping: 0
 }
 
 export default handleActions({
@@ -86,5 +88,12 @@ export default handleActions({
       ...state,
       activePetId: action.payload
     }
-  }
+  },
+
+  [ping.toString()]: (state) => {
+    return {
+      ...state,
+      ping: state.ping + 1
+    }
+  },
 }, initialState);

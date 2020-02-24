@@ -21,6 +21,7 @@ export default class Canvas extends Component {
   }
 
   render() {
+    // console.log('R: Canvas');
     return <PureCanvas contextRef={this.saveContext} canvasWidth={this.props.canvasWidth} canvasHeight={this.props.canvasHeight}/>;
   }
 }

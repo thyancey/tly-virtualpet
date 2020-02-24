@@ -16,6 +16,17 @@ const $Scene = styled.div`
   right:0;
   bottom:0;
   z-index:-1;
+
+  .footer-image{
+    width: 100%;
+    height: 100%;
+  }
+
+  .background-image{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+  }
 `
 
 const $SceneFloor = styled.div`
@@ -37,39 +48,34 @@ const $SceneBackground = styled.div`
   bottom:0;
   z-index:-1;
 
-  background-color: ${p => p.color};
-  background-position: ${p => p.backgroundPosition};
 `
-
-const $BgImage = styled.div`
-  background-image: url(${p => p.image});
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-`;
 
 class Scene extends Component {
   render(){
+    // console.log('R: Scene');
     const { 
       activeScene
     } = this.props;
 
-    console.log('activeScene', activeScene)
 
     if(!activeScene){
       return null;
     }else{
-      console.log('scene is ', activeScene);
       const bgImage = activeScene.background.imageUrl ? activeScene.background.imageUrl : null;
+      const floorImage = activeScene.floor.imageUrl ? activeScene.floor.imageUrl : null;
       const bgPosition = activeScene.background.backgroundPosition ? activeScene.background.backgroundPosition : '0';
 
+      /*
+        TODO, using styled components with background-image was causing flickering for some reason (not because of re-render)
+        so for now, just made them non-styled components
+      */
       return(
         <$Scene>
-          <$SceneFloor image={activeScene.floor.imageUrl} height={activeScene.floor.height} color={activeScene.floor.color} >
-
+          <$SceneFloor height={activeScene.floor.height} color={activeScene.floor.color} >
+            <div className={'footer-image'} style={{ backgroundImage: `url(${floorImage})`}} />
           </$SceneFloor>
-          <$SceneBackground color={activeScene.background.color} >
-            {bgImage && <$BgImage image={bgImage} backgroundPosition={bgPosition} />}
+          <$SceneBackground style={{ backgroundColor: activeScene.background.color }} >
+            <div className={'background-image'} style={{ backgroundImage: `url(${bgImage})`, backgroundPosition: bgPosition }} />
           </$SceneBackground>
         </$Scene>
       );

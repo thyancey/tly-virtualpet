@@ -5,6 +5,7 @@
       "type": "painting",
       "animal": "painting",
       "name": "The Last Judgement",
+      "scene": "black",
       "animations": {
         "DEFAULT": [ "TLJ_Idle1" ],
         "IDLE": [ "TLJ_Idle1" ],
@@ -99,9 +100,10 @@
     },
     {
       "id": "ally-allosaurus",
-      "type": "dinosaur",
+      "type": "sample",
       "animal": "allosaurus",
       "name": "Ally",
+      "scene": "black",
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "animations": {
         "DEFAULT": [ "Dino_Idle1" ],
@@ -153,9 +155,10 @@
     },
     {
       "id": "billy-beaver",
-      "type": "rodent",
+      "type": "sample",
       "animal": "beaver",
       "name": "Billy",
+      "scene": "beaverDam",
       "imageUrl": "pets/rodent-beaver.jpg",
       "animations": {
         "DEFAULT": [ "Beaver_Idle1" ],
@@ -210,7 +213,7 @@
     },
     {
       "id": "rizzo-raccoon",
-      "type": "rodent",
+      "type": "sample",
       "animal": "raccoon",
       "name": "Rizzo",
       "scene": "outside",
@@ -303,6 +306,8 @@
       "type": "Sprite_Still",
       "imageUrl": "pets/rodent-beaver.jpg",
       "spriteInfo":{
+        "faceDirection": true,
+        "orientation": -1,
         "grid": [ 1, 1 ],
         "cells": [ 500, 500 ],
         "frame": 0

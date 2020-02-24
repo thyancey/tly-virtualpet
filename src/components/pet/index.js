@@ -15,6 +15,7 @@ import {
   setActivity
 } from '../../store/actions/pet';
 import { 
+  selectActivePetActivity,
   selectActivePetAnimation,
   selectActiveSceneFloorOffset
 } from '../../store/selectors';
@@ -39,7 +40,7 @@ class Pet extends Component {
     this.vY = 0;
     this.aY = 1.08;
 
-    this.frames = 0;
+    // this.frames = 0;
     this.rAF = 0;
     this.updateAnimationState = this.updateAnimationState.bind(this);
 
@@ -47,7 +48,7 @@ class Pet extends Component {
     this.keysDown = [];
 
     this.state = {
-      tick: 0,
+      // tick: 0,
       posX: 0,
       posY: 0,
       minY: 0,
@@ -67,18 +68,18 @@ class Pet extends Component {
   }
 
   updateAnimationState() {
-    if(this.frames % FRAME_RATE === 0){
-      this.setState(prevState => ({ 
-        tick: this.frames 
-      }));
-    }
+    // if(this.frames % FRAME_RATE === 0){
+    //   this.setState(prevState => ({ 
+    //     tick: this.frames 
+    //   }));
+    // }
     
     // console.log('tick');
     this.checkKeys();
     this.affectPetGravity();
 
 
-    this.frames++;
+    // this.frames++;
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
@@ -112,11 +113,15 @@ class Pet extends Component {
   }
 
   stopWalking(){
-    this.props.setActivity('IDLE');
+    if(this.props.activity !== 'IDLE'){
+      this.props.setActivity('IDLE');
+    }
   }
 
   startWalking(){
-    this.props.setActivity('WALK');
+    if(this.props.activity !== 'WALK'){
+      this.props.setActivity('WALK');
+    }
 
     //- TODO, use debounce, but not of the npm modules worked for some reason
     this.startIdleTimer();
@@ -208,12 +213,20 @@ class Pet extends Component {
     //- dont clamp top so they can jump real high
     const clampedY = Math.min(newY, this.state.maxY);
     
-
-    this.setState({
+    this.attemptToUpdatePosition({
       posX: clampedX,
       posY: clampedY,
       isOnGround: clampedY >= this.state.maxY
-    })
+    });
+  }
+
+  attemptToUpdatePosition(newStateObj){
+    for(let key in newStateObj){
+      if(this.state[key] !== newStateObj[key]){
+        this.setState(newStateObj);
+        return;
+      }
+    }
   }
 
   //- recalc pet position when window changes size, when pets change, etc
@@ -245,7 +258,8 @@ class Pet extends Component {
   }
 
   render(){
-    const { petData, animation, containerWidth, containerHeight } = this.props;
+    // console.log('R: Pet');
+    const { animation, containerWidth, containerHeight } = this.props;
 
     let drawCommand = null;
     if(animation.type){
@@ -266,6 +280,7 @@ class Pet extends Component {
 
 
 const mapStateToProps = (state) => ({
+  activity: selectActivePetActivity(state),
   animation: selectActivePetAnimation(state),
   floorOffset: selectActiveSceneFloorOffset(state)
 });

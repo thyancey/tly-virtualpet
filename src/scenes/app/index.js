@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
 import Loader from './loader';
+import Pinger from './pinger';
 
 import Stage from 'scenes/stage';
-import Image_Comp from './assets/comp.jpg';
 
 require('themes/app.scss');
 
@@ -32,23 +32,6 @@ const $Stage = styled.div`
   z-index:1;
 `
 
-const $Comp = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* width: 701px; */
-  /* height: 1099px; */
-
-  width:100%;
-  height:100%;
-
-  width:100%;
-  img{
-    width:100%;
-    height:100%;
-  }
-`
-
 class App extends Component {
 
   constructor(){
@@ -56,15 +39,14 @@ class App extends Component {
   }
 
   render(){
+    // console.log('R: App');
     return(
       <$App id="app" >
+        <Pinger />
         <Loader/>
         <$Stage>
           <Stage />
         </$Stage>
-        <$Comp>
-          <img src={Image_Comp} alt="loading"/>
-        </$Comp>
       </$App>
     );
   }

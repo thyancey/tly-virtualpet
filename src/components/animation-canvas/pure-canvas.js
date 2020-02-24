@@ -9,6 +9,7 @@ export default class PureCanvas extends Component {
   }
 
   render() {
+    // console.log('R: PureCanvas');
     return (
       <canvas
         width={this.props.canvasWidth}

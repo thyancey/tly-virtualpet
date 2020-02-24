@@ -65,10 +65,10 @@ class Cage extends Component {
   }
 
   render(){
+    // console.log('R: Cage');
     const { 
       activePet
     } = this.props;
-
 
     if(!activePet){
       return null;

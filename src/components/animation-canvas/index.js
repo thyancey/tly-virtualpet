@@ -62,6 +62,7 @@ export default class AnimationCanvas extends Component {
   }
 
   render() {
+    // console.log('R: CanvasIndex');
     return <Canvas 
               tick={this.state.tick} 
               canvasWidth={this.props.containerWidth} 

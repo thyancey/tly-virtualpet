@@ -10,8 +10,10 @@ import ProgressBar from './components/progress-bar';
 import { LilButton } from '../../components/button';
 import { Button } from 'components/button';
 
-import { getDeltaStats } from 'util/pet-store';
 
+import {
+  ping
+} from 'store/actions/index';
 import {
   augmentStat,
   setMood,
@@ -19,16 +21,14 @@ import {
   resetPet
 } from 'store/actions/pet';
 import { 
-  selectActivePet
+  selectActivePet,
+  selectActiveDeltaStats
 } from 'store/selectors';
 
 
 const $PetStats = styled.div`
-  /* background-color:  ${themeGet('color', 'purple')}; */
-
   padding: 1rem;
 `
-
 
 const $StatDisplay = styled.div`
   text-align:right;
@@ -53,8 +53,6 @@ const $NameContainer = styled.div`
 const $Name = styled.div`
   position:absolute;
   right:2rem;
-  /* left:50%; */
-  /* transform:translateX(-50%); */
   padding: 1rem 2rem;
   padding-right:4rem;
   bottom:1rem;
@@ -115,37 +113,29 @@ class PetStats extends Component {
     });
   }
 
-  getDeltaStatsArray(activePet){
-    if(!activePet || !activePet.id) return [];
+  updateStat(id, val){
+    this.props.augmentStat(id, val);
+    this.props.ping();
+  }
 
-    const deltaStats = getDeltaStats(activePet.id, new Date().getTime());
-    
-    return deltaStats.map(stat => ({
-      id: stat.id,
-      type: stat.type,
-      label: stat.label || stat.id,
-      cur: stat.current,
-      max: stat.max,
-      percent: (stat.current / stat.max) * 100,
-      fillType: 'fill'
-    }));
+  resetPet(id){
+    this.props.resetPet(id);
+    this.props.ping();
   }
 
   render(){
+    // console.log('R: Info');
     const { 
-      augmentStat,
       setMood,
       setActivity,
       activePet,
-      resetPet
+      deltaStats
     } = this.props;
     if(!activePet) return null;
 
     const petData = activePet.data;
     const activity = activePet.activity;
     const mood = activePet.mood;
-    
-    const deltaStats = this.getDeltaStatsArray(activePet);
 
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
 
@@ -159,7 +149,7 @@ class PetStats extends Component {
             ); */}
           }else{
             return (
-              <ProgressBar key={i} statObj={s} label={s.label} augmentAction={(id, val) => augmentStat(id, val)}/>
+              <ProgressBar key={i} statObj={s} label={s.label} augmentAction={(id, val) => this.updateStat(id, val)}/>
             );
           }
         })}
@@ -171,11 +161,11 @@ class PetStats extends Component {
           <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
           <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
           <p>{'Activity'}</p>
-          <LilButton isActive={activity === 'IDLE'} text={'IDLE'} onClick={e => setActivity('IDLE')} />
-          <LilButton isActive={activity === 'WALK'} text={'WALK'} onClick={e => setActivity('WALK')} />
+          <LilButton isActive={activity === 'IDLE'} text={'IDLE'} onClick={() => setActivity('IDLE')} />
+          <LilButton isActive={activity === 'WALK'} text={'WALK'} onClick={() => setActivity('WALK')} />
 
           <div>
-            <Button text={'RESET'} onClick={e => resetPet(activePet.id)} />
+            <Button text={'RESET'} onClick={() => this.resetPet(activePet.id)} />
           </div>
         </$Info>
         
@@ -191,7 +181,8 @@ class PetStats extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activePet: selectActivePet(state)
+  activePet: selectActivePet(state),
+  deltaStats: selectActiveDeltaStats(state)
 })
 
 const mapDispatchToProps = dispatch =>
@@ -200,7 +191,8 @@ const mapDispatchToProps = dispatch =>
       augmentStat,
       setMood,
       setActivity,
-      resetPet
+      resetPet,
+      ping
     },
     dispatch
   )

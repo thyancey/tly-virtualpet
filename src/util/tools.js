@@ -21,7 +21,6 @@ export const convertStringsToNumbersInDeepObj = parsedObj => {
       retObj[key] = convertStringsToNumbersInDeepObj(parsedValue);
     }else{
       if(!isNaN(parsedValue)){
-        console.log(`setting ${key} to number`)
         retObj[key] = Number(parsedValue);
       }else{
         retObj[key] = parsedValue;
