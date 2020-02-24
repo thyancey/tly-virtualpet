@@ -1,0 +1,27 @@
+{
+  "scenes":[
+    {
+      "id": "outside",
+      "floor": {
+        "height": "150",
+        "offset": "-25",
+        "imageUrl": "items/scenes/floor_grass.png"
+      },
+      "background":{
+        "color": "#000000",
+        "imageUrl": "items/scenes/bg_win95.jpg",
+        "backgroundPosition": "50% 0%"
+      }
+    },{
+      "id": "megupet",
+      "floor":{
+        "color": "#BFABAD",
+        "height": "150",
+        "offset": "-40"
+      },
+      "background":{
+        "color": "#A9D9D9"
+      }
+    }
+  ]
+}

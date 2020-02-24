@@ -48,6 +48,7 @@
       "type": "megupet",
       "animal": "bocado",
       "name": "Bocado",
+      "scene": "megupet",
       "animations": {
         "DEFAULT": [ "Bocado_Walk" ],
         "IDLE": [ "Bocado_Idle1", "Bocado_Eat" ],
@@ -208,57 +209,11 @@
       }
     },
     {
-      "id": "denny-degu",
-      "type": "rodent",
-      "animal": "degu",
-      "name": "Denny",
-      "imageUrl": "pets/rodent-degu.jpg",
-      "animations": {
-        "DEFAULT": [ "SpinSquare" ],
-        "IDLE": [ "SpinSquare" ]
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "15",
-            "perSecond": "0",
-            "max": "15"
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "300",
-            "perSecond": "0",
-            "max": "1000"
-          },
-          {
-            "id": "hunger",
-            "value": "0",
-            "perSecond": "1",
-            "max": "500"
-          },
-          { 
-            "id":"boredom",
-            "value": "0",
-            "perSecond": ".1",
-            "max": "200"
-          }
-        ]
-      },
-      "graphics":{
-        "SpinSquare":{
-          "sprite": "SpinSquare"
-        }
-      }
-    },
-    {
       "id": "rizzo-raccoon",
       "type": "rodent",
       "animal": "raccoon",
       "name": "Rizzo",
+      "scene": "outside",
       "imageUrl": "pets/rodent-degu.jpg",
       "animations": {
         "DEFAULT": [ "Raccoon_Idle1" ],
@@ -308,7 +263,6 @@
           "sprite": "Raccoon",
           "speed": "20",
           "dir": 1,
-          "flipX": true,
           "frames": [4, 5]
         }
       }
@@ -329,7 +283,7 @@
       "imageUrl": "pets/tlj/anim-idle.jpg",
       "spriteInfo":{
         "scale": ".8",
-        "direction": 1,
+        "faceDirection": false,
         "grid": [ 4, 4 ],
         "cells": [ 1000, 1000 ]
       }
@@ -340,6 +294,8 @@
       "spriteInfo":{
         "scale": ".5",
         "grid": [ 9, 5 ],
+        "faceDirection": true,
+        "orientation": -1,
         "cells": [ 418, 461 ]
       }
     },
@@ -357,7 +313,7 @@
       "imageUrl": "pets/raccoon.png",
       "spriteInfo":{
         "scale": ".8",
-        "direction": 0,
+        "faceDirection": true,
         "grid": [ 3, 2 ],
         "cells": [ 400, 500 ]
       }

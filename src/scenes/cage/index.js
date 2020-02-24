@@ -10,7 +10,7 @@ import {
   selectActivePet
 } from '../../store/selectors';
 
-import {} from 'store/actions/pet';
+import Scene from './components/scene';
 
 
 const $Cage = styled.div`
@@ -69,6 +69,7 @@ class Cage extends Component {
       activePet
     } = this.props;
 
+
     if(!activePet){
       return null;
     }else{
@@ -78,6 +79,7 @@ class Cage extends Component {
             petData={activePet} 
             containerWidth={this.state.containerWidth}
             containerHeight={this.state.containerHeight} />
+          <Scene />
         </$Cage>
       );
     }

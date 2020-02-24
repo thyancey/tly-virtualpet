@@ -16,13 +16,14 @@ import {
 } from '../../store/actions/pet';
 import { 
   selectActivePetAnimation,
+  selectActiveSceneFloorOffset
 } from '../../store/selectors';
 
 const $PetContainer = styled.div`
   position:relative;
   height: 100%;
 `;
-const FLOOR_OFFSET = -50;
+
 const FRAME_RATE = 1;
 const DRAG_Y = .99;
 const DRAG_X = .8;
@@ -224,7 +225,7 @@ class Pet extends Component {
 
       const stateObj = {
         maxX: this.props.containerWidth - spriteSize[0],
-        maxY: this.props.containerHeight - spriteSize[1] + FLOOR_OFFSET
+        maxY: this.props.containerHeight - spriteSize[1] + this.props.floorOffset
       }
       if(resetPetPosition){
         stateObj.posX = stateObj.maxX / 2
@@ -248,10 +249,10 @@ class Pet extends Component {
 
     let drawCommand = null;
     if(animation.type){
-      if(animation.spriteInfo.direction === 0){
-        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], this.state.direction);
+      if(animation.spriteInfo.faceDirection){
+        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], this.state.direction * (animation.spriteInfo.orientation || 1));
       }else{
-        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], animation.spriteInfo.direction);
+        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], animation.spriteInfo.orientation || 1);
       }
     }
 
@@ -265,7 +266,8 @@ class Pet extends Component {
 
 
 const mapStateToProps = (state) => ({
-  animation: selectActivePetAnimation(state)
+  animation: selectActivePetAnimation(state),
+  floorOffset: selectActiveSceneFloorOffset(state)
 });
 
 const mapDispatchToProps = dispatch => (

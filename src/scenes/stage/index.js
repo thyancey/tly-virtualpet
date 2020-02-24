@@ -92,6 +92,7 @@ class Stage extends Component {
 
   render(){
     const { } = this.props;
+    console.log('R: Stage');
 
     return(
       <$Stage>

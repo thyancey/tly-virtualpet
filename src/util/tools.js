@@ -9,6 +9,29 @@ export const clamp = (val, min, max) => {
   return Math.min(Math.max(val, min), max);
 }
 
+export const isObj = obj => {
+  return typeof obj === 'object' && obj !== null;
+}
+
+export const convertStringsToNumbersInDeepObj = parsedObj => {
+  let retObj = {};
+  for(let key in parsedObj){
+    const parsedValue = parsedObj[key];
+    if(isObj(parsedValue)){
+      retObj[key] = convertStringsToNumbersInDeepObj(parsedValue);
+    }else{
+      if(!isNaN(parsedValue)){
+        console.log(`setting ${key} to number`)
+        retObj[key] = Number(parsedValue);
+      }else{
+        retObj[key] = parsedValue;
+      }
+    }
+  }
+  
+  return retObj;
+}
+
 export const setObjToCookie = (cookieName, obj) => {
   let cookieValue = '';
   try{

@@ -1,6 +1,7 @@
 
 import { createSelector } from 'reselect';
 import { getPets, getSprites } from 'util/pet-store';
+import { getSceneDefinition } from 'util/item-store';
 
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
@@ -70,6 +71,33 @@ export const selectActivePet = createSelector(
   }
 );
 
+
+export const selectActiveScene = createSelector(
+  [selectActivePetData],
+  (activePetData) => {
+    if(!activePetData) return null;
+
+    const sceneId = activePetData.scene;
+    console.log('sceneId', sceneId)
+    const scene = getSceneDefinition(sceneId);
+    console.log('scene', scene)
+    if(scene){
+      return scene;
+    }else{
+      return null;
+    }
+  }
+);
+
+export const selectActiveSceneFloorOffset = createSelector(
+  [selectActiveScene],
+  (activeScene) => {
+    if(!activeScene) return null;
+
+    return activeScene.floor.offset || 0;
+  }
+);
+
 const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
   if(graphic !== undefined){
     return graphic;
@@ -83,13 +111,23 @@ const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
 const createSpriteObj = (label, graphic, sprite) => {
   sprite.spriteInfo = sprite.spriteInfo || {};
 
-  let direction;
-  if(graphic.direction !== undefined){
-    direction = graphic.direction;
-  }else if(sprite.spriteInfo.direction !== undefined){
-    direction = sprite.spriteInfo.direction;
+  let faceDirection;
+  if(graphic.faceDirection !== undefined){
+    faceDirection = graphic.faceDirection;
+  }else if(sprite.spriteInfo.faceDirection !== undefined){
+    faceDirection = sprite.spriteInfo.faceDirection;
   }else{
-    direction = 0;
+    faceDirection = true;
+  }
+
+  
+  let orientation;
+  if(graphic.orientation !== undefined){
+    orientation = graphic.orientation;
+  }else if(sprite.spriteInfo.orientation !== undefined){
+    orientation = sprite.spriteInfo.orientation;
+  }else{
+    orientation = 1;
   }
 
   return {
@@ -98,7 +136,8 @@ const createSpriteObj = (label, graphic, sprite) => {
     label: label,
     spriteInfo:{
       speed: graphic.speed || sprite.spriteInfo.speed || 1,
-      direction: direction,
+      faceDirection: faceDirection,
+      orientation: orientation,
       dir: graphic.dir || sprite.spriteInfo.dir || 1,
       scale: getFallbackValue(graphic.scale, sprite.spriteInfo.scale, 1),
       frames: getFallbackValue(graphic.frames, sprite.spriteInfo.frames),

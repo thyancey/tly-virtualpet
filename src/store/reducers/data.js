@@ -7,8 +7,8 @@ import {
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
-import PetStore from 'util/pet-store';
-import { setPetDefinitions, setSpriteDefinitions, setPetStoreData } from 'util/pet-store';
+import { setPetDefinitions, setSpriteDefinitions } from 'util/pet-store';
+import { setSceneDefinitions, setItemDefinitions } from 'util/item-store';
 
 //- customData in store is from an external json file at public/data.json
 const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects' ];
@@ -45,16 +45,24 @@ export default handleActions({
   },
 
   [setOtherData.toString()]: (state, action) => {
-    setPetDefinitions(action.payload.data.pets);
-    setSpriteDefinitions(action.payload.data.sprites);
     
     if(action.payload.type === 'pets'){
+      setPetDefinitions(action.payload.data.pets);
+      setSpriteDefinitions(action.payload.data.sprites);
       
       return {
         ...state,
         petsLoaded: true
       }
-    }else{
+    } else if(action.payload.type === 'items'){
+      setSceneDefinitions(action.payload.data.scenes || []);
+      setItemDefinitions(action.payload.data.items || []);
+      
+      return {
+        ...state,
+        petsLoaded: true
+      }
+    } else{
       return state
     }
   },
