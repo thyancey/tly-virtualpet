@@ -70,7 +70,7 @@ class PetSelection extends Component {
   }
 
   render(){
-    // console.log('R: PetSelection');
+    console.log('R: PetSelection');
     const { 
       customArray, 
       activePetType, 

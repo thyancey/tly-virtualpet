@@ -33,6 +33,7 @@ class LoadHelper extends Component {
   loadAllData(){
     this.loadStoreData();
     this.loadOtherData('pets', 'pets.json');
+    this.loadOtherData('scenes', 'scenes.json');
     this.loadOtherData('items', 'items.json');
   }
 

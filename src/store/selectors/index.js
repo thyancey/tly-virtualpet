@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getDeltaStats } from 'util/pet-store';
+import { getPets, getSprites, getDeltaStats, getStatRules } from 'util/pet-store';
 import { getSceneDefinition } from 'util/item-store';
 
 export const getCustomData = state => state.data.customData || {};
@@ -207,22 +207,34 @@ export const selectActiveDeltaStats = createSelector(
   (activePet, ping) => {
     if(!activePet) return null;
 
-    return getDeltaStatsArray(activePet);
+    const statRules =  getStatRules(activePet.id);
+
+    return getDeltaStatsArray(activePet, statRules);
   }
 )
 
-const getDeltaStatsArray = (activePet) => {
+export const selectActiveSceneStyles = createSelector(
+  [selectActiveScene],
+  (activeScene) => {
+    if(!activeScene) return null;
+    return activeScene.styles;
+  }
+)
+
+
+const getDeltaStatsArray = (activePet, statRules) => {
   if(!activePet || !activePet.id) return [];
 
   const deltaStats = getDeltaStats(activePet.id, new Date().getTime());
-  
-  return deltaStats.map(stat => ({
+
+  return deltaStats.map((stat, idx) => ({
     id: stat.id,
     type: stat.type,
     label: stat.label || stat.id,
     cur: stat.current,
     max: stat.max,
     percent: (stat.current / stat.max) * 100,
+    fullIsGood: statRules[idx].fullIsGood,
     fillType: 'fill'
   }));
 }

@@ -113,6 +113,16 @@ export const getStartStat = (petId, statId) => {
   return startStats.find(stat => stat.id === statId) || null;
 }
 
+export const getStatRules = (petId) => {
+  const petDef = getPetDefinition(petId);
+  if(!petDef) return [];
+
+  return petDef.stats_initial.stats.map(s => ({
+    fullIsGood: s.fullIsGood,
+    max: s.max
+  }));
+}
+
 export const getDeltaStats = (petId, timestamp) => {
   // console.log('getDeltaStats', petId, timestamp)
   const petDef = getPetDefinition(petId);

@@ -18,10 +18,9 @@ const $Bar = styled.div`
 
 const $Value = styled.span`
   position: relative;
-  color: ${themeGet('color', 'white')};
   z-index:1;
   text-align:right;
-  color: black;
+  color: white;
 `
 
 const $Label = styled.div`
@@ -52,43 +51,41 @@ const $Bg = styled.div`
   height:100%;
   width: ${p => p.progress + '%'};
   ${p => css`
-    background-color: ${getAlertColor(p.alertType)};
+    background-color: ${p => p.barColor};
   `}
  
   transition: width .3s ease-in-out, background-color .5s ease-in-out;
 `
-
-const getAlertColor = alertType => {
-  switch(alertType){
-    case 'normal': return themeGet('color', 'blue');
-    case 'critical': return themeGet('color', 'red');
-    case 'great': return themeGet('color', 'green');
-    default: return themeGet('color', 'blue');
-  }
-}
-
-const getAlertType = (fillType, percent) => {
+const getAlertType = (fillType, percent, fullIsGood) => {
   if(fillType === 'empty'){
     if(percent < 20){
-      return 'great';
+      return fullIsGood ? 'bad' : 'good';
     } else if (percent > 80){
-      return 'critical';
+      return fullIsGood ? 'good' : 'bad';
     }
   }else if(fillType === 'fill'){
     if(percent < 20){
-      return 'critical';
+      return fullIsGood ? 'bad' : 'good';
     } else if (percent > 80){
-      return 'great';
+      return fullIsGood ? 'good' : 'bad';
     }
   }
 
-  return 'normal';
+  return 'neutral';
 }
 
-const ProgressBar = ({ statObj, label, isActive, augmentAction }) => {
-  const alertType = getAlertType(statObj.fillType, statObj.percent);
+
+const getBarColor = (alertType, barStyles) => {
+  return barStyles[alertType] || barStyles['neutral'] || 'white';
+}
+
+const ProgressBar = ({ statObj, label, isActive, augmentAction, sceneStyles }) => {
+
+  const alertType = getAlertType(statObj.fillType, statObj.percent, statObj.fullIsGood);
+  const barColor = getBarColor(alertType, sceneStyles.bars);
+  
   return (
-    <$ProgressBar>
+    <$ProgressBar style={{ color: sceneStyles.text }}>
       <$Label>
         <h4>{label}</h4>
 
@@ -101,7 +98,7 @@ const ProgressBar = ({ statObj, label, isActive, augmentAction }) => {
       </$Label>
       <$Bar isActive={isActive} >
         <$Value>{ `${round(statObj.cur)} / ${statObj.max} (${round(statObj.percent)}%)` }</$Value>
-        <$Bg progress={statObj.percent} alertType={alertType} />
+        <$Bg progress={statObj.percent} barColor={barColor} />
       </$Bar>
     </$ProgressBar>
   );

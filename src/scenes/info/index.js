@@ -22,7 +22,8 @@ import {
 } from 'store/actions/pet';
 import { 
   selectActivePet,
-  selectActiveDeltaStats
+  selectActiveDeltaStats,
+  selectActiveSceneStyles
 } from 'store/selectors';
 
 
@@ -129,7 +130,8 @@ class PetStats extends Component {
       setMood,
       setActivity,
       activePet,
-      deltaStats
+      deltaStats,
+      sceneStyles
     } = this.props;
     if(!activePet) return null;
 
@@ -139,6 +141,7 @@ class PetStats extends Component {
 
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
 
+    
     return (
       <$PetStats>
         {deltaStats.map((s, i) => {
@@ -149,7 +152,7 @@ class PetStats extends Component {
             ); */}
           }else{
             return (
-              <ProgressBar key={i} statObj={s} label={s.label} augmentAction={(id, val) => this.updateStat(id, val)}/>
+              <ProgressBar key={i} sceneStyles={sceneStyles} statObj={s} label={s.label} augmentAction={(id, val) => this.updateStat(id, val)}/>
             );
           }
         })}
@@ -182,7 +185,8 @@ class PetStats extends Component {
 
 const mapStateToProps = (state) => ({
   activePet: selectActivePet(state),
-  deltaStats: selectActiveDeltaStats(state)
+  deltaStats: selectActiveDeltaStats(state),
+  sceneStyles: selectActiveSceneStyles(state)
 })
 
 const mapDispatchToProps = dispatch =>

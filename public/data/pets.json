@@ -63,20 +63,23 @@
             "type": "number",
             "value": "2",
             "perSecond": "0",
-            "max": "10"
+            "max": "10",
+            "fullIsGood": true
           },
           {
             "id": "xp",
             "type": "number",
             "value": "300",
             "perSecond": "0",
-            "max": "500"
+            "max": "500",
+            "fullIsGood": true
           },
           { 
             "id":"freshness",
             "value": "199",
             "perSecond": "-2",
-            "max": "200"
+            "max": "200",
+            "fullIsGood": true
           }
         ]
       },
@@ -118,26 +121,30 @@
             "type": "number",
             "value": "2",
             "perSecond": "0",
-            "max": "10"
+            "max": "10",
+            "fullIsGood": true
           },
           {
             "id": "xp",
             "type": "number",
             "value": "300",
             "perSecond": "0",
-            "max": "500"
+            "max": "500",
+            "fullIsGood": true
           },
           {
             "id": "hunger",
             "value": "0",
             "perSecond": "1",
-            "max": "500"
+            "max": "500",
+            "fullIsGood": false
           },
           { 
             "id":"bladder",
             "value": "0",
             "perSecond": ".1",
-            "max": "200"
+            "max": "200",
+            "fullIsGood": false
           }
         ]
       },
@@ -172,35 +179,40 @@
             "type": "number",
             "value": "5",
             "perSecond": "0",
-            "max": "10"
+            "max": "10",
+            "fullIsGood": true
           },
           {
             "id": "xp",
             "type": "number",
             "value": "300",
             "perSecond": "0",
-            "max": "500"
+            "max": "500",
+            "fullIsGood": true
           },
           {
             "id": "woodLust",
             "label": "WOOD LUST",
             "value": "0",
             "perSecond": "10",
-            "max": "500"
+            "max": "500",
+            "fullIsGood": true
           },
           { 
             "id":"toothLength",
             "label":"Tooth Length",
             "value": "0",
             "perSecond": ".1",
-            "max": "10"
+            "max": "10",
+            "fullIsGood": false
           },
           { 
             "id":"wetness",
             "label":"Wetness",
             "value": "100",
             "perSecond": "-.5",
-            "max": "100"
+            "max": "100",
+            "fullIsGood": true
           }
         ]
       },
@@ -231,27 +243,31 @@
             "type": "number",
             "value": "64",
             "perSecond": "0",
-            "max": "100"
+            "max": "100",
+            "fullIsGood": true
           },
           {
             "id": "xp",
             "type": "number",
             "value": "888",
             "perSecond": "0",
-            "max": "20000"
+            "max": "20000",
+            "fullIsGood": true
           },
           {
             "id": "hunger",
             "value": "0",
             "perSecond": "1",
-            "max": "500"
+            "max": "500",
+            "fullIsGood": false
           },
           { 
             "id":"mana",
             "label":"Banana Mana",
             "value": "0",
             "perSecond": "3",
-            "max": "200"
+            "max": "200",
+            "fullIsGood": true
           }
         ]
       },

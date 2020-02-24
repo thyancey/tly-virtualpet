@@ -9,7 +9,7 @@ import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
 import { setPetDefinitions, setSpriteDefinitions } from 'util/pet-store';
-import { setSceneDefinitions, setItemDefinitions } from 'util/item-store';
+import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'util/item-store';
 
 //- customData in store is from an external json file at public/data.json
 const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects' ];
@@ -17,6 +17,7 @@ const RESTRICT_KEYS = false;
  
 const initialState = {
   loaded: false,
+  extraLoaded: 0,
   title: 'loading',
   customData: null,
   counter: 0,
@@ -54,15 +55,22 @@ export default handleActions({
       
       return {
         ...state,
-        petsLoaded: true
+        extraLoaded: state.extraLoaded + 1
+      }
+    } else if(action.payload.type === 'scenes'){
+      setStyleDefinitions(action.payload.data.styles || []);
+      setSceneDefinitions(action.payload.data.scenes || []);
+      
+      return {
+        ...state,
+        extraLoaded: state.extraLoaded + 1
       }
     } else if(action.payload.type === 'items'){
-      setSceneDefinitions(action.payload.data.scenes || []);
       setItemDefinitions(action.payload.data.items || []);
       
       return {
         ...state,
-        petsLoaded: true
+        extraLoaded: state.extraLoaded + 1
       }
     } else{
       return state

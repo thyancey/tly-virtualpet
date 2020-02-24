@@ -3,16 +3,31 @@ import { convertStringsToNumbersInDeepObj } from './tools';
 
 const store = {
   items:[],
-  scenes:[]
+  scenes:[],
+  styles: []
 }
 
-export const setItemDefinitions = itemList => {
-  store.items = itemList.map(i => convertStringsToNumbersInDeepObj(i));
-}
-export const setSceneDefinitions = sceneList => {
-  store.scenes = sceneList.map(i => convertStringsToNumbersInDeepObj(i));
+export const getDefaultStyle = () => {
+  return store.styles.find(s => s.id === 'default');
 }
 
+export const setItemDefinitions = list => {
+  store.items = list.map(i => convertStringsToNumbersInDeepObj(i));
+}
+export const setStyleDefinitions = list => {
+  store.styles = list.map(i => convertStringsToNumbersInDeepObj(i));
+}
+export const setSceneDefinitions = list => {
+  const scenes = list.map(i => convertStringsToNumbersInDeepObj(i));
+  store.scenes = scenes.map(s => ({
+    ...s,
+    styles: getStyleDefinition(s.style)
+  }))
+}
+
+export const getStyleDefinition = id => {
+  return store.styles.find(p => p.id === id) || getDefaultStyle();
+}
 export const getSceneDefinition = id => {
   return store.scenes.find(p => p.id === id) || null;
 }
