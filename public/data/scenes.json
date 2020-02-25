@@ -51,9 +51,9 @@
       "id": "default",
       "text": "black",
       "bars":{
-        "good": "green",
-        "bad": "red",
-        "neutral": "blue"
+        "good": "#51f249",
+        "bad": "#F55658",
+        "neutral": "#1fb9f3"
       }
     }
   ]

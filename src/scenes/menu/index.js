@@ -7,10 +7,7 @@ import { Button } from 'components/button';
 
 import PetSelection from './components/pet-selection';
 
-
 require('themes/app.scss');
-
-
 
 const $Menu = styled.div`
   position:absolute;
@@ -20,23 +17,13 @@ const $Menu = styled.div`
   height:100%;
 `;
 
-const $MenuButton = styled.div`
-  position:absolute;
-  right:1rem;
-  top:1rem;
-  z-index:1;
-  button{
-    padding:3rem 4rem;
-  }
-`;
-
 const $MainPanel = styled.div`
   position:fixed;
-  top:0;
-  right:0%;
+  top:0rem;
   bottom:0;
   width:90%;
 
+  padding-top: 10rem;
   padding-bottom: 4rem;
   padding-right:0;
   
@@ -44,7 +31,7 @@ const $MainPanel = styled.div`
   ${p => p.isOpen ? 
     css`
       right:0%;
-    transition:right .2s ease-in;
+      transition:right .2s ease-in;
     `: 
     css`
       right:-90%;
@@ -66,32 +53,15 @@ const $PanelContainer = styled.div`
   box-shadow: ${themeGet('shadow', 'z3')}
 `;
 
+
 class Menu extends Component {
-  constructor(props){
-    super(props);
-
-    this.state = {
-      isOpen: false
-    }
-  }
-
-
-  onToggleMenu(force){
-    this.setState({
-      isOpen: force !== undefined ? force : !this.state.isOpen
-    });
-  }
-
   render(){
     // console.log('R: Menu');
     return(
       <$Menu id="menu" >
-        <$MenuButton>
-          <Button text={'menu'} onClick={e => this.onToggleMenu()}/>
-        </$MenuButton>
-        <$MainPanel id="main-panel" isOpen={this.state.isOpen}>
+        <$MainPanel id="main-panel" isOpen={this.props.isOpen}>
           <$PanelContainer>
-            <PetSelection onSelectPet={() => this.onToggleMenu()} />
+            <PetSelection onSelectPet={() => this.props.onToggleMenu()} />
           </$PanelContainer>
         </$MainPanel>
       </$Menu>

@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from 'themes/';
+import { clamp } from 'util/tools';
 
 import Pet from '../../components/pet';
 import { 
-  selectActivePet
+  selectActivePetId
 } from '../../store/selectors';
 
 import Scene from './components/scene';
@@ -42,7 +43,7 @@ class Cage extends Component {
 
   componentDidUpdate(prevProps){
     //- when the first canavs is rendered, check the page bounds
-    if(!prevProps.activePet && this.props.activePet){
+    if(!prevProps.activePetId && this.props.activePetId){
       this.onResize();
     }
   }
@@ -57,6 +58,7 @@ class Cage extends Component {
 
   updateCanvasDims(){
     if(this.containerRef.current){
+      global.spriteScale = clamp((this.containerRef.current.offsetWidth / 1000), .4, 1);
       this.setState({
         containerWidth: this.containerRef.current.offsetWidth,
         containerHeight: this.containerRef.current.offsetHeight
@@ -67,16 +69,17 @@ class Cage extends Component {
   render(){
     // console.log('R: Cage');
     const { 
-      activePet
+      activePetId
     } = this.props;
 
-    if(!activePet){
+
+    if(!activePetId){
       return null;
     }else{
       return(
         <$Cage ref={this.containerRef} >
           <Pet 
-            petData={activePet} 
+            activePetId={activePetId} 
             containerWidth={this.state.containerWidth}
             containerHeight={this.state.containerHeight} />
           <Scene />
@@ -88,7 +91,7 @@ class Cage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activePet: selectActivePet(state)
+  activePetId: selectActivePetId(state)
 })
 
 const mapDispatchToProps = dispatch =>

@@ -3,12 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 
-import { themeGet } from 'themes/';
+import { themeGet, getColor, mixin_clearBubble } from 'themes/';
 
 import ProgressBar from './components/progress-bar';
 
-import { LilButton } from '../../components/button';
-import { Button } from 'components/button';
+import { LilButton, Button } from 'components/button';
 
 
 import {
@@ -29,6 +28,8 @@ import {
 
 const $PetStats = styled.div`
   padding: 1rem;
+  position:relative;
+  ${mixin_clearBubble()}
 `
 
 const $StatDisplay = styled.div`
@@ -48,6 +49,7 @@ const $StatDisplayValue = styled.span`
 const $NameContainer = styled.div`
   position:fixed;
   bottom:0;
+  right:0;
   width:100%;
 `;
 
@@ -80,6 +82,33 @@ const $Level = styled.div`
   color: ${themeGet('color', 'blue')};
   background-color: ${themeGet('color', 'white')};
 `
+
+const $InfoButton = styled.div`
+  position:absolute;
+  right: .5rem;
+  bottom: .5rem;
+  z-index:1;
+`
+
+const $Info = styled.div`
+  ${mixin_clearBubble()}
+  max-height:500px;
+  transition: max-height .5s ease-in-out;
+  overflow: hidden;
+  opacity:1;
+  color: ${p => getColor('black')};
+
+  padding: 1rem;
+  margin: .5rem;
+  font-weight: bold;
+
+  ${p => !p.showInfo && css`
+    max-height:0;
+    opacity:0;
+    transition: max-height .5s ease-in-out, opacity .2s;
+  `}
+`
+
 const StatDisplay = ({ statObj }) => {
   return (
     <$StatDisplay>
@@ -88,16 +117,6 @@ const StatDisplay = ({ statObj }) => {
     </$StatDisplay>
   );
 };
-
-
-const $Info = styled.div`
-  border: 2px solid white;
-  background-color: ${themeGet('color', 'purple')};
-
-  ${p => !p.showInfo && css`
-    display:none;
-  `}
-`
 
 class PetStats extends Component {
   constructor(props){
@@ -157,18 +176,21 @@ class PetStats extends Component {
           }
         })}
         
-        <Button text={'info'} onClick={e => this.onToggleShowInfo()}/>
+        <$InfoButton>
+          <LilButton text={'info'} onClick={e => this.onToggleShowInfo()} />
+        </$InfoButton>
         <$Info showInfo={this.state.isInfoOpen}>
-          <p>{`${petData.id}`}</p>
           <p>{'Mood'}</p>
           <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
           <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
+          <hr/>
           <p>{'Activity'}</p>
           <LilButton isActive={activity === 'IDLE'} text={'IDLE'} onClick={() => setActivity('IDLE')} />
           <LilButton isActive={activity === 'WALK'} text={'WALK'} onClick={() => setActivity('WALK')} />
+          <hr/>
 
           <div>
-            <Button text={'RESET'} onClick={() => this.resetPet(activePet.id)} />
+            <Button text={'RESET PET'} onClick={() => this.resetPet(activePet.id)} style={{backgroundColor: getColor('red')}} />
           </div>
         </$Info>
         

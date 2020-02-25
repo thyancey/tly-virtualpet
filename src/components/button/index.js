@@ -1,6 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet } from 'themes/';
+import { themeGet, mixin_textStroke, shadeColor } from 'themes/';
+
+const thickness = '2px';
+const spread = '2px';
+const color = 'black';
 
 const $Button = styled.button`
   cursor:pointer;
@@ -9,23 +13,48 @@ const $Button = styled.button`
   border:none;
   border-radius: 1rem;
 
+  font-size:3rem;
+
+  color: ${themeGet('color', 'white')};
+  text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
   background-color: ${themeGet('color', 'blue')};
+
+  
+  /* background-color:transparent; */
+  /* color:${themeGet('color', 'black')}; */
+  /* text-shadow: .5px .5px 1.5px ${themeGet('color', 'white')}; */
+  /* ${mixin_textStroke('1.5px', '.5px', themeGet('color', 'white'))} */
+
+  border: .2rem solid rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: .1rem .1rem .5rem black;
+
+ 
   transition: background-color .1s ease-out;
-  box-shadow: 2px 2px 2px ${themeGet('color', 'green')};
 
   &:hover{
-    color: ${themeGet('color', 'white')};
-    background-color: ${themeGet('color', 'purple')};
-    transition: background-color .1s ease-out;
+    background-color: ${shadeColor('blue', 10)};
+    text-shadow: 1.5px 1.5px 1.5px ${themeGet('color', 'black')};
+    transform: translate(-1px, -1px);
+    
+    transition: background-color .1s ease-out, transform .1s ease-out;
+  }
+  
+  &:active{
+    background-color: ${shadeColor('blue', -10)};
+    transform: translate(.5px, 1px);
+    
+    transition: background-color .1s ease-out, transform .1s ease-out;
   }
 
   ${p => p.isActive && css`
-    color: ${themeGet('color', 'black')};
+    color: ${themeGet('color', 'yellow')};
+    text-shadow: 1px 1px 1.5px ${themeGet('color', 'black')};
     background-color: ${themeGet('color', 'green')};
-    box-shadow: 2px 2px 2px ${themeGet('color', 'blue')};
 
     &:hover{
-      background-color: ${themeGet('color', 'green')};
+      background-color: ${shadeColor('green', 10)};
     }
   `}
 `;
@@ -33,7 +62,7 @@ const $Button = styled.button`
 const $BigButton = styled($Button)`
   padding: 1rem 2rem;
   margin: 1rem;
-  font-size:2rem;
+  font-size:3rem;
   font-weight: 600;
 `;
 
@@ -45,17 +74,17 @@ const $LilButton = styled($Button)`
   font-weight: 600;
 `;
 
-export const Button = ({ text, isActive, onClick }) => {
+export const Button = ({ text, isActive, onClick, style }) => {
   return (
-    <$BigButton isActive={isActive} onClick={(e) => onClick && onClick(e)} >
+    <$BigButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
       <span>{ text }</span>
     </$BigButton>
   );
 }
 
-export const LilButton = ({ text, isActive, onClick }) => {
+export const LilButton = ({ text, isActive, onClick, style }) => {
   return (
-    <$LilButton isActive={isActive} onClick={(e) => onClick && onClick(e)} >
+    <$LilButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
       <span>{ text }</span>
     </$LilButton>
   );

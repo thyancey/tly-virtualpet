@@ -3,9 +3,11 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
+import { getColors, themeGet } from 'themes/';
 import Loader from './loader';
 import Pinger from './pinger';
+
+import Palette from 'components/palette';
 
 import Stage from 'scenes/stage';
 
@@ -32,14 +34,17 @@ const $Stage = styled.div`
   z-index:1;
 `
 
+
 class App extends Component {
 
   constructor(){
     super();
+
+    global.spriteScale = 1; //- used to change sprite size/bounds, gets updated in cage.js when window is resized
   }
 
   render(){
-    // console.log('R: App');
+    console.log('R: App', );
     return(
       <$App id="app" >
         <Pinger />

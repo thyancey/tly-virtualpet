@@ -20,6 +20,10 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 $font-roboto: 'Roboto', sans-serif;
 
+html{
+  font-size: 62.5%;
+}
+
 p, span, h1, h2, h3, h4, h5, h6{
   margin:0;
   padding:0;
@@ -39,9 +43,6 @@ h3{
   font-size:2.6rem;
 }
 
-html{
-  font-size: 62.5%;
-}
 
 body{
   margin:0;

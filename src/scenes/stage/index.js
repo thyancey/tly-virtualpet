@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Button } from 'components/button';
 
 import { themeGet } from 'themes/';
 
@@ -19,7 +20,7 @@ const $Stage = styled.section`
   width: 100%;
   height: 100%;
 
-  padding: 2rem;
+  padding: .5rem;
 `
 
 const $CageContainer = styled.div`
@@ -30,10 +31,14 @@ const $CageContainer = styled.div`
   left:0;
 `;
 
+const $Stuff = styled.div`
+  display:flex;
+  flex-direction:row;
+`;
 
 const $MenuContainer = styled.div`
   position:fixed;
-  width:${MENU_WIDTH};
+  /* width:${MENU_WIDTH}; */
 
   top:0;
   right:0;
@@ -41,26 +46,53 @@ const $MenuContainer = styled.div`
 `;
 
 const $InfoContainer = styled.div`
-  position:fixed;
-  width: calc(100% - ${MENU_WIDTH});
-
-  top:0;
-  left:0;
+margin:1rem;
+  flex:1;
   z-index:1;
 `;
 
+const $MenuButton = styled.div`
+  margin:1rem;
+  z-index:2;
+  button{
+    padding:1.5rem 2rem;
+    margin:0;
+  }
+`;
+
+
 class Stage extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      isOpen: false
+    }
+  }
+
+
+  onToggleMenu(force){
+    this.setState({
+      isOpen: force !== undefined ? force : !this.state.isOpen
+    });
+  }
+
   render(){
     // console.log('R: Stage');
     const { } = this.props;
 
     return(
       <$Stage>
-        <$InfoContainer  id="info-container">
-          <Info />
-        </$InfoContainer>
-        <$MenuContainer id="menu-container">
-          <Menu />
+        <$Stuff>
+          <$InfoContainer  id="info-container">
+            <Info />
+          </$InfoContainer>
+          <$MenuButton>
+            <Button text={'menu'} onClick={() => this.onToggleMenu()}/>
+          </$MenuButton>
+        </$Stuff>
+        <$MenuContainer id="menu-container" >
+          <Menu isOpen={this.state.isOpen} onToggleMenu={f => this.onToggleMenu(f)}/>
         </$MenuContainer>
         <$CageContainer>
           <Cage  />

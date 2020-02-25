@@ -43,7 +43,7 @@ const A = {
       coords = pos;
     }
 
-    const s = props.spriteInfo.scale || 1;
+    const s = (props.spriteInfo.scale || 1) * (global.spriteScale || 1);
     const x = coords[0];
     const y = coords[1];
     const sW = cCoords.w * s;
@@ -86,7 +86,7 @@ const A = {
       coords = pos;
     }
 
-    const s = props.spriteInfo.scale || 1;
+    const s = (props.spriteInfo.scale || 1) * (global.spriteScale || 1);
     const x = coords[0];
     const y = coords[1];
     const sW = cCoords.w * s;

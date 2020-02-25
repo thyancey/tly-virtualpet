@@ -233,12 +233,12 @@ class Pet extends Component {
   recalcMaxBounds(resetPetPosition){
     const spriteInfo = this.props.animation && this.props.animation.spriteInfo || null;
     if(spriteInfo){
-      const spriteScale = spriteInfo.scale;
+      const spriteScale = spriteInfo.scale * global.spriteScale;
       const spriteSize = spriteInfo.cells.map(s => s * spriteScale);
 
       const stateObj = {
-        maxX: this.props.containerWidth - spriteSize[0],
-        maxY: this.props.containerHeight - spriteSize[1] + this.props.floorOffset
+        maxX: (this.props.containerWidth - spriteSize[0]),
+        maxY: (this.props.containerHeight - spriteSize[1] + this.props.floorOffset)
       }
       if(resetPetPosition){
         stateObj.posX = stateObj.maxX / 2
@@ -249,7 +249,7 @@ class Pet extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    if(prevProps.petData.id !== this.props.petData.id){
+    if(prevProps.activePetId !== this.props.activePetId){
       this.recalcMaxBounds(true);
     }
     if(prevProps.containerWidth !== this.props.containerWidth || prevProps.containerHeight !== this.props.containerHeight){

@@ -71,6 +71,13 @@ export const selectActivePet = createSelector(
   }
 );
 
+export const selectActivePetId = createSelector(
+  [getActivePet],
+  (activePet) => {
+    if(!activePet) return null;
+    return activePet.id
+  }
+);
 
 export const selectActiveScene = createSelector(
   [selectActivePetData],
