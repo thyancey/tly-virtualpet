@@ -172,9 +172,9 @@ export const selectActivePetAnimation = createSelector(
 
 
     const activity = activePet.activity;
-    const animationGroup = aData.animations[activity] || aData.animations.DEFAULT;
-    const animIdx = Math.floor(Math.random() * animationGroup.length)
-    const animationLabel = animationGroup[animIdx];
+    const activityObj = aData.activities[activity] || aData.activities.DEFAULT;
+    const animIdx = Math.floor(Math.random() * activityObj.animations.length)
+    const animationLabel = activityObj.animations[animIdx];
 
     const foundGraphic = aData.graphics[animationLabel];
     if(foundGraphic){

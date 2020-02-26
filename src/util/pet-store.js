@@ -37,12 +37,12 @@ export const setPetDefinitions = petList => {
   };
 
   store.pets = petList.map(p => {
-    let defaultAnimation = p.animations.DEFAULT;
-    if(!defaultAnimation){
+    let defaultActivity = p.activities.DEFAULT;
+    if(!defaultActivity){
       try{
-        defaultAnimation = p.animations[Object.keys(p.animations)[0]];
+        defaultActivity = p.activities[Object.keys(p.activities)[0]];
       }catch(e){
-        console.error(`could not autodeclare default animation for pet "${p.id}"`);
+        console.error(`could not autodeclare default activity for pet "${p.id}"`);
       }
     }
 
@@ -64,9 +64,9 @@ export const setPetDefinitions = petList => {
 
     return {
       ...p,
-      animations:{
-        ...p.animations,
-        DEFAULT: defaultAnimation
+      activities:{
+        ...p.activities,
+        DEFAULT: defaultActivity
       }
     }
   });

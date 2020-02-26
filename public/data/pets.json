@@ -6,10 +6,10 @@
       "animal": "painting",
       "name": "The Last Judgement",
       "scene": "black",
-      "animations": {
-        "DEFAULT": [ "TLJ_Idle1" ],
-        "IDLE": [ "TLJ_Idle1" ],
-        "WALK": [ "TLJ_Idle1" ]
+      "activities": {
+        "DEFAULT": { "animations": [ "TLJ_Idle1" ] },
+        "IDLE": { "animations": [ "TLJ_Idle1" ] },
+        "WALK": { "animations": [ "TLJ_Idle1" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -50,10 +50,10 @@
       "animal": "bocado",
       "name": "Bocado",
       "scene": "megupet",
-      "animations": {
-        "DEFAULT": [ "Bocado_Walk" ],
-        "IDLE": [ "Bocado_Idle1", "Bocado_Eat" ],
-        "WALK": [ "Bocado_Walk" ]
+      "activities": {
+        "DEFAULT": { "animations": [ "Bocado_Walk" ] },
+        "IDLE": { "animations": [ "Bocado_Idle1", "Bocado_Eat" ] },
+        "WALK": { "animations": [ "Bocado_Walk" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -108,10 +108,10 @@
       "name": "Ally",
       "scene": "black",
       "imageUrl": "pets/dinosaur-allosaurus.jpg",
-      "animations": {
-        "DEFAULT": [ "Dino_Idle1" ],
-        "IDLE": [ "Dino_Idle1" ],
-        "WALK": [ "Dino_Walk1" ]
+      "activities": {
+        "DEFAULT": { "animations": [ "Dino_Idle1" ] },
+        "IDLE": { "animations": [ "Dino_Idle1" ] },
+        "WALK": { "animations": [ "Dino_Walk1" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -167,9 +167,9 @@
       "name": "Billy",
       "scene": "beaverDam",
       "imageUrl": "pets/rodent-beaver.jpg",
-      "animations": {
-        "DEFAULT": [ "Beaver_Idle1" ],
-        "IDLE": [ "Beaver_Idle1" ]
+      "activities": {
+        "DEFAULT": { "animations": [ "Beaver_Idle1" ] },
+        "IDLE": { "animations": [ "Beaver_Idle1" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -230,10 +230,41 @@
       "name": "Rizzo",
       "scene": "outside",
       "imageUrl": "pets/rodent-degu.jpg",
-      "animations": {
-        "DEFAULT": [ "Raccoon_Idle1" ],
-        "IDLE": [ "Raccoon_Idle1" ],
-        "WALK": [ "Raccoon_Walk1" ]
+      "moods":[
+        {
+          "id": "HAPPY",
+          "when":[
+            { "stat":"mana", "value": ">80%" }
+          ],
+          "activities": [ "WALK", "EAT", "IDLE" ]
+        },
+        {
+          "id": "SAD",
+          "when":[
+            { "stat":"mana", "value": "<20%" },
+            { "stat":"hunger", "value": "<10%" }
+          ],
+          "activities": [ "EAT", "IDLE_SAD" ]
+        },
+        {
+          "id": "DEAD",
+          "when":[
+            { "stat":"hunger", "value": "=0" }
+          ],
+          "activities": [ "DEAD" ]
+        },
+        {
+          "id": "DEFAULT",
+          "activities": [ "WALK", "EAT", "IDLE" ]
+        }
+      ],
+      "activities": {
+        "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
+        "IDLE": { "animations": [ "Raccoon_Idle1" ] },
+        "IDLE_SAD": { "animations": [ "Raccoon_Idle2" ] },
+        "WALK": { "animations": [ "Raccoon_Walk1" ] },
+        "EAT": { "animations": [ "Raccoon_Idle1" ] },
+        "DEAD": { "animations": [ "Raccoon_Dead1" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -283,6 +314,12 @@
           "speed": "20",
           "dir": 1,
           "frames": [4, 5]
+        },
+        "Raccoon_Dead1":{
+          "sprite": "Raccoon",
+          "speed": "20",
+          "dir": 1,
+          "frames": [6, 7, 8]
         }
       }
     }
@@ -335,7 +372,7 @@
       "spriteInfo":{
         "scale": ".8",
         "faceDirection": true,
-        "grid": [ 3, 2 ],
+        "grid": [ 3, 3 ],
         "cells": [ 400, 500 ]
       }
     },

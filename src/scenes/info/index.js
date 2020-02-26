@@ -183,10 +183,12 @@ class PetStats extends Component {
           <p>{'Mood'}</p>
           <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
           <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
+          <LilButton isActive={mood === 'DEAD'} text={'DEAD'} onClick={e => setMood && setMood('DEAD')} />
           <hr/>
           <p>{'Activity'}</p>
           <LilButton isActive={activity === 'IDLE'} text={'IDLE'} onClick={() => setActivity('IDLE')} />
           <LilButton isActive={activity === 'WALK'} text={'WALK'} onClick={() => setActivity('WALK')} />
+          <LilButton isActive={activity === 'DEAD'} text={'DEAD'} onClick={() => setActivity('DEAD')} />
           <hr/>
 
           <div>
