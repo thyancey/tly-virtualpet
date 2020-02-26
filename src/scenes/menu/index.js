@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import { themeGet } from 'themes/';
+import { themeGet, getColor, shadeColor } from 'themes/';
 
 import { Button } from 'components/button';
 
 import PetSelection from './components/pet-selection';
+
+import { deleteAllData } from 'util/pet-store';
 
 require('themes/app.scss');
 
@@ -53,6 +55,21 @@ const $PanelContainer = styled.div`
   box-shadow: ${themeGet('shadow', 'z3')}
 `;
 
+const $ResetButton = styled.div`
+  position:absolute;
+  right:1rem;
+  bottom:1rem;
+  button{
+    background-color: ${getColor('black')};
+
+    &:hover{
+      background-color: ${getColor('red')};
+    }
+    &:active{
+      background-color: ${shadeColor('red', -20)};
+    }
+  }
+`
 
 class Menu extends Component {
   render(){
@@ -62,6 +79,9 @@ class Menu extends Component {
         <$MainPanel id="main-panel" isOpen={this.props.isOpen}>
           <$PanelContainer>
             <PetSelection onSelectPet={() => this.props.onToggleMenu()} />
+            <$ResetButton>
+              <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} />
+            </$ResetButton>
           </$PanelContainer>
         </$MainPanel>
       </$Menu>

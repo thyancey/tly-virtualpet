@@ -1,5 +1,5 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
-import { clamp, getCookieObj, setObjToCookie } from './tools';
+import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
 
 const store = {
   pets:[],
@@ -36,7 +36,6 @@ export const setPetDefinitions = petList => {
     pets: []
   };
 
-  console.log('savedData', savedData)
   store.pets = petList.map(p => {
     let defaultAnimation = p.animations.DEFAULT;
     if(!defaultAnimation){
@@ -123,14 +122,14 @@ export const getStatRules = (petId) => {
   }));
 }
 
-export const getDeltaStats = (petId, timestamp) => {
-  // console.log('getDeltaStats', petId, timestamp)
+export const getPetDeltaStats = (petId, timestamp) => {
+  // console.log('getPetDeltaStats', petId, timestamp)
   const petDef = getPetDefinition(petId);
 
-  return getAdjustedStats(petDef.stats_saved, timestamp);
+  return getDeltaStats(petDef.stats_saved, timestamp);
 }
 
-export const getAdjustedStats = (statsObj, timestamp) =>{
+export const getDeltaStats = (statsObj, timestamp) =>{
   const oldStats = statsObj.stats || [];
   const timeDiff = (timestamp - statsObj.timestamp) / 1000;
 
@@ -142,18 +141,13 @@ export const getAdjustedStats = (statsObj, timestamp) =>{
   }));
 }
 
-export const saveStats = (petId, stats, timestamp) => {
-  const petDef = getPetDefinition(petId);
-  petDef.stats_saved = {
-    timestamp: timestamp,
-    stats: stats.map(s => ({ ...s, value: s.current }))
-  }
-  setPetDefinition(petId, petDef);
-  savePetAllStatsToCookie();
-}
+
+
+
+
 export const augmentPetStat = (petId, statId, augmentValue) => {
   const now = new Date().getTime();
-  const stats = getDeltaStats(petId, now).slice(0);
+  const stats = getPetDeltaStats(petId, now).slice(0);
   const idx = stats.findIndex(s => s.id === statId);
   const newValue = stats[idx].current + augmentValue;
   stats[idx].current = clamp(newValue, 0, stats[idx].max);
@@ -161,22 +155,23 @@ export const augmentPetStat = (petId, statId, augmentValue) => {
   saveStats(petId, stats, now);
 }
 
-export const resetPetState = petId => {
+
+
+
+
+/* SAVING */
+export const saveStats = (petId, stats, timestamp) => {
   const petDef = getPetDefinition(petId);
-  const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
-
-  const now = new Date().getTime();
-  const statsObj = getAdjustedStats({
-    timestamp: now,
-    stats: definedStats
-  }, now);
-
-  saveStats(petId, statsObj, new Date().getTime());
+  petDef.stats_saved = {
+    timestamp: timestamp,
+    stats: stats.map(s => ({ ...s, value: s.current }))
+  }
+  setPetDefinition(petId, petDef);
+  saveAllPetStatsToCookie();
 }
 
-
-export const savePetAllStatsToCookie = () => {
-  console.log('savePetAllStatsToCookie')
+export const saveAllPetStatsToCookie = () => {
+  console.log('saveAllPetStatsToCookie')
   setObjToCookie('tly_virtualpet', {
     timestamp: new Date().getTime(),
     pets: store.pets.map(p => ({
@@ -186,16 +181,51 @@ export const savePetAllStatsToCookie = () => {
   });
 }
 
-  // setObjToCookie('tly_virtualpet', {
-  //   timestamp: new Date().getTime(),
-  //   pets:[]
-  // });
+
+export const saveAllPetStatsToCookieNow = () => {
+  store.pets.forEach(p => {
+
+    const now = new Date().getTime();
+    const stats = getPetDeltaStats(p.id, now).slice(0);
+
+    p.stats_saved = {
+      timestamp: now,
+      stats: stats.map(s => ({ ...s, value: s.current }))
+    }
+    setPetDefinition(p.id, p);
+  });
+
+  saveAllPetStatsToCookie();
+}
+
+
+
+/* RESETTING */
+export const resetPetState = petId => {
+  const petDef = getPetDefinition(petId);
+  const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
+
+  const now = new Date().getTime();
+  const statsObj = getDeltaStats({
+    timestamp: now,
+    stats: definedStats
+  }, now);
+
+  saveStats(petId, statsObj, new Date().getTime());
+}
+
+export const deleteAllData = () => {
+  store.pets = [];
+  deleteCookie('tly_virtualpet');
+  global.location.reload();
+}
+
 
 global.petStore = {
   getAllData: () => store,
   getPets: () => getPets(),
   getPetStoreData: (itemType) => getPetStoreData(itemType),
-  getDeltaStats: (petId, timestamp) => getDeltaStats(petId, timestamp)
+  getPetDeltaStats: (petId, timestamp) => getPetDeltaStats(petId, timestamp)
 }
 
 

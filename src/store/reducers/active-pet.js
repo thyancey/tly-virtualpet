@@ -9,7 +9,7 @@ import {
 } from '../actions/pet';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, augmentPetStat, resetPetState } from 'util/pet-store';
+import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData } from 'util/pet-store';
 
 const initialState = {
   id: null,

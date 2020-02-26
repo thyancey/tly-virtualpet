@@ -7,6 +7,8 @@ import { getColors, themeGet } from 'themes/';
 import Loader from './loader';
 import Pinger from './pinger';
 
+import { saveAllPetStatsToCookieNow } from 'util/pet-store';
+
 import Palette from 'components/palette';
 
 import Stage from 'scenes/stage';
@@ -41,6 +43,14 @@ class App extends Component {
     super();
 
     global.spriteScale = 1; //- used to change sprite size/bounds, gets updated in cage.js when window is resized
+
+    window.addEventListener('beforeunload', (e) => {
+      this.onExitPage();
+    });
+  }
+
+  onExitPage(){
+    saveAllPetStatsToCookieNow();
   }
 
   render(){
