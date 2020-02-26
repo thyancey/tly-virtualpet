@@ -173,6 +173,10 @@ export const selectActivePetAnimation = createSelector(
 
     const activity = activePet.activity;
     const activityObj = aData.activities[activity] || aData.activities.DEFAULT;
+    if(!activityObj){
+      console.error(`Error getting activity ${activity}`);
+      return null;
+    }
     const animIdx = Math.floor(Math.random() * activityObj.animations.length)
     const animationLabel = activityObj.animations[animIdx];
 

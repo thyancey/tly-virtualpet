@@ -123,7 +123,7 @@ class Pet extends Component {
       this.props.setActivity('WALK');
     }
 
-    //- TODO, use debounce, but not of the npm modules worked for some reason
+    //- TODO, use debounce, but none of the npm modules worked for some reason
     this.startIdleTimer();
   }
 
@@ -260,6 +260,8 @@ class Pet extends Component {
   render(){
     // console.log('R: Pet');
     const { animation, containerWidth, containerHeight } = this.props;
+    //- some error happened
+    if(!animation) return null;
 
     let drawCommand = null;
     if(animation.type){

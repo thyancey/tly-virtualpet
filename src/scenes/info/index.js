@@ -157,10 +157,11 @@ class PetStats extends Component {
     const petData = activePet.data;
     const activity = activePet.activity;
     const mood = activePet.mood;
+    // console.log('activities', petData.activities);
+    const activityIds = Object.keys(petData.activities);
 
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
 
-    
     return (
       <$PetStats>
         {deltaStats.map((s, i) => {
@@ -186,9 +187,9 @@ class PetStats extends Component {
           <LilButton isActive={mood === 'DEAD'} text={'DEAD'} onClick={e => setMood && setMood('DEAD')} />
           <hr/>
           <p>{'Activity'}</p>
-          <LilButton isActive={activity === 'IDLE'} text={'IDLE'} onClick={() => setActivity('IDLE')} />
-          <LilButton isActive={activity === 'WALK'} text={'WALK'} onClick={() => setActivity('WALK')} />
-          <LilButton isActive={activity === 'DEAD'} text={'DEAD'} onClick={() => setActivity('DEAD')} />
+          {activityIds.map((aId, idx) => (
+            <LilButton key={idx} isActive={activity === aId} text={aId} onClick={() => setActivity(aId)} />
+          ))}
           <hr/>
 
           <div>

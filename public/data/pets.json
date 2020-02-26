@@ -7,9 +7,11 @@
       "name": "The Last Judgement",
       "scene": "black",
       "activities": {
-        "DEFAULT": { "animations": [ "TLJ_Idle1" ] },
-        "IDLE": { "animations": [ "TLJ_Idle1" ] },
-        "WALK": { "animations": [ "TLJ_Idle1" ] }
+        "DEFAULT": { "animations": [ "TLJ_Flap" ] },
+        "IDLE": { "animations": [ "TLJ_Flap" ] },
+        "HANGRY": { "animations": [ "TLJ_Swoop" ] },
+        "WALK": { "animations": [ "TLJ_FlapFast" ] },
+        "HAPPY": { "animations": [ "TLJ_Flap" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -37,10 +39,80 @@
         ]
       },
       "graphics":{
-        "TLJ_Idle1":{
-          "sprite": "TLJ_Idle",
+        "TLJ_Still":{
+          "sprite": "TLJ_Flap",
+          "speed": "10",
+          "frames": [ 0 ]
+        },
+        "TLJ_Swoop":{
+          "sprite": "TLJ_Swoop",
           "speed": "10",
           "frames": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 8, 9, 10, 9, 8  ]
+        },
+        "TLJ_Flap":{
+          "sprite": "TLJ_Flap",
+          "speed": "10",
+          "frames": [ 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0, 0  ]
+        },
+        "TLJ_FlapFast":{
+          "sprite": "TLJ_Flap",
+          "speed": "2",
+          "frames": [ 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0  ]
+        }
+      }
+    },
+    {
+      "id": "monalisa",
+      "type": "painting",
+      "animal": "painting",
+      "name": "The Mona Lisa",
+      "scene": "black",
+      "activities": {
+        "DEFAULT": { "animations": [ "ML_Idle1" ] },
+        "IDLE": { "animations": [ "ML_Idle1" ] },
+        "EAT": { "animations": [ "ML_Eat1" ] },
+        "DEAD": { "animations": [ "ML_Sad1" ] }
+      },
+      "stats_initial":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "2",
+            "perSecond": "0",
+            "max": "10"
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "300",
+            "perSecond": "0",
+            "max": "500"
+          },
+          { 
+            "id":"smiles",
+            "value": "0",
+            "perSecond": "1",
+            "max": "1000"
+          }
+        ]
+      },
+      "graphics":{
+        "ML_Idle1":{
+          "sprite": "MonaLisa",
+          "speed": "10",
+          "frames": [ 0 ]
+        },
+        "ML_Eat1":{
+          "sprite": "MonaLisa",
+          "speed": "10",
+          "frames": [ 0, 1 ]
+        },
+        "ML_Sad1":{
+          "sprite": "MonaLisa",
+          "speed": "10",
+          "frames": [ 2 ]
         }
       }
     },
@@ -52,7 +124,8 @@
       "scene": "megupet",
       "activities": {
         "DEFAULT": { "animations": [ "Bocado_Walk" ] },
-        "IDLE": { "animations": [ "Bocado_Idle1", "Bocado_Eat" ] },
+        "IDLE": { "animations": [ "Bocado_Idle1" ] },
+        "ANGRY": { "animations": [ "Bocado_Eat" ] },
         "WALK": { "animations": [ "Bocado_Walk" ] }
       },
       "stats_initial":{
@@ -261,9 +334,10 @@
       "activities": {
         "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
         "IDLE": { "animations": [ "Raccoon_Idle1" ] },
-        "IDLE_SAD": { "animations": [ "Raccoon_Idle2" ] },
+        "SAD": { "animations": [ "Raccoon_Still" ] },
+        "CASTIN": { "animations": [ "Raccoon_Castin" ] },
+        "NANA_RAGE": { "animations": [ "Raccoon_NanaRage1" ] },
         "WALK": { "animations": [ "Raccoon_Walk1" ] },
-        "EAT": { "animations": [ "Raccoon_Idle1" ] },
         "DEAD": { "animations": [ "Raccoon_Dead1" ] }
       },
       "stats_initial":{
@@ -303,7 +377,25 @@
         ]
       },
       "graphics":{
+        "Raccoon_NanaRage1":{
+          "sprite": "Raccoon",
+          "speed": "2",
+          "dir": 1,
+          "frames": [0, 1, 2, 3]
+        },
+        "Raccoon_Still":{
+          "sprite": "Raccoon",
+          "speed": "50",
+          "dir": 1,
+          "frames": [0]
+        },
         "Raccoon_Idle1":{
+          "sprite": "Raccoon",
+          "speed": "50",
+          "dir": 1,
+          "frames": [0, 3]
+        },
+        "Raccoon_Castin":{
           "sprite": "Raccoon",
           "speed": "10",
           "dir": 1,
@@ -334,13 +426,23 @@
         "cells": [ 134, 62 ]
       }
     },
-    "TLJ_Idle":{
+    "TLJ_Swoop":{
       "type": "Sprite_Animated",
       "imageUrl": "pets/tlj/anim-idle.jpg",
       "spriteInfo":{
         "scale": ".8",
         "faceDirection": false,
         "grid": [ 4, 4 ],
+        "cells": [ 1000, 1000 ]
+      }
+    },
+    "TLJ_Flap":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/tlj/anim-flap.jpg",
+      "spriteInfo":{
+        "scale": ".8",
+        "faceDirection": false,
+        "grid": [ 4, 2 ],
         "cells": [ 1000, 1000 ]
       }
     },
@@ -378,6 +480,17 @@
     },
     "SpinSquare":{
       "type": "SpinSquare"
+    },
+    "MonaLisa":{
+      "type": "Sprite_Animated",
+      "imageUrl": "pets/painting-monalisa.jpg",
+      "spriteInfo":{
+        "scale": ".8",
+        "faceDirection": true,
+        "orientation": -1,
+        "grid": [ 2, 2 ],
+        "cells": [ 600, 894 ]
+      }
     }
   }
 }
