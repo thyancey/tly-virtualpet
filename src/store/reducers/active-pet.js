@@ -28,13 +28,14 @@ export default handleActions({
     //- update the route
     changeQueryObj('pet', petObj.id, global.location.search);
     // const found = allPets.find(p => p.id === activePetId);
-    console.log('petfdfsfsdfdsffsd', petObj);
 
     if(petObj.isAlive){
       return {
         ...state,
         id: petObj.id,
-        isAlive: true
+        isAlive: true,
+        mood: null,
+        activity: null
       }
     }else{
       return {
