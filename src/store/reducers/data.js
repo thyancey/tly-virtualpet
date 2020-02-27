@@ -14,10 +14,13 @@ import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'ut
 //- customData in store is from an external json file at public/data.json
 const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects' ];
 const RESTRICT_KEYS = false;
+
+const REQUIRED_EXTRAS = [ 'pets', 'items', 'scenes' ];
  
 const initialState = {
   loaded: false,
-  extraLoaded: 0,
+  extrasLoaded: 0,
+  loadingComplete: false,
   title: 'loading',
   customData: null,
   counter: 0,
@@ -30,6 +33,7 @@ export default handleActions({
   [setCustomData.toString()]: (state, action) => {
     const cleanObj = {};
     const parsedData = action.payload;
+    console.log('setCustomData', action.payload)
     for(let key in parsedData){
       if(VALID_KEYS.indexOf(key) === -1){
         console.warn(`key supplied in /data.json "${key}" is not a valid key`);
@@ -48,32 +52,26 @@ export default handleActions({
   },
 
   [setOtherData.toString()]: (state, action) => {
+    let extrasLoaded = state.extrasLoaded;
+
+    if(REQUIRED_EXTRAS.indexOf(action.payload.type) > -1){
+      extrasLoaded += 1;
+    }
     
     if(action.payload.type === 'pets'){
       setPetDefinitions(action.payload.data.pets);
       setSpriteDefinitions(action.payload.data.sprites);
-      
-      return {
-        ...state,
-        extraLoaded: state.extraLoaded + 1
-      }
     } else if(action.payload.type === 'scenes'){
       setStyleDefinitions(action.payload.data.styles || []);
       setSceneDefinitions(action.payload.data.scenes || []);
-      
-      return {
-        ...state,
-        extraLoaded: state.extraLoaded + 1
-      }
     } else if(action.payload.type === 'items'){
       setItemDefinitions(action.payload.data.items || []);
-      
-      return {
-        ...state,
-        extraLoaded: state.extraLoaded + 1
-      }
-    } else{
-      return state
+    }
+
+    return {
+      ...state,
+      extrasLoaded: extrasLoaded,
+      loadingComplete: extrasLoaded === REQUIRED_EXTRAS.length
     }
   },
 

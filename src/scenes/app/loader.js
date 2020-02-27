@@ -67,7 +67,7 @@ class LoadHelper extends Component {
                     }, 
                     err => {
                       console.error('Error fretching url', err);
-                      this.setDefaultData();
+                      // this.setDefaultData();
                     }) //- bad url responds with 200/ok? so this doesnt get thrown
               .then(json => {
                       console.log('data was read successfully')
@@ -76,11 +76,11 @@ class LoadHelper extends Component {
                     }, 
                     err => {
                       console.error('Error parsing store JSON (or the url was bad)', err);
-                      this.setDefaultData();
+                      // this.setDefaultData();
                     })
               .catch(e => {
                 console.error('Error parsing store JSON (or the url was bad)', e);
-                this.setDefaultData();
+                // this.setDefaultData();
               });
   }
 

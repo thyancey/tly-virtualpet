@@ -78,7 +78,7 @@ class Stage extends Component {
   }
 
   render(){
-    // console.log('R: Stage');
+    console.log('R: Stage', this.props);
     const { } = this.props;
 
     return(
@@ -95,7 +95,7 @@ class Stage extends Component {
           <Menu isOpen={this.state.isOpen} onToggleMenu={f => this.onToggleMenu(f)}/>
         </$MenuContainer>
         <$CageContainer>
-          <Cage  />
+          <Cage />
         </$CageContainer>
       </$Stage>
     );

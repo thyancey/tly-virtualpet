@@ -6,15 +6,18 @@ import store, { history } from './store'
 import App from './scenes/app'
 import { ThemeProvider } from 'styled-components'
 import theme from 'themes/'
+import routes from './routes'
+
 
 const target = document.querySelector('#root')
 global.store = store;
+global.historyz = history;
 
 render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <ThemeProvider theme={theme}>
-        <App />
+        { routes }
       </ThemeProvider>
     </ConnectedRouter>
   </Provider>,

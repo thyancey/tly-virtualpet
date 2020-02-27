@@ -1,3 +1,6 @@
+
+import queryString from 'query-string';
+
 export const round = (number, pad) => {
   if(!pad) return Math.round(number);
   
@@ -82,4 +85,24 @@ export const getCookie = (cname) => {
 
 export const deleteCookie = cname => {
   setCookie(cname, '', 1);
+}
+
+export const getSearchObj = (searchString) => {
+  return queryString.parse(searchString);
+}
+
+export const updateAndGetNewQueryString = (key, value, search) => {
+  const queryObj = queryString.parse(search);
+  queryObj[key] = value;
+  return `?${queryString.stringify(queryObj)}`;
+}
+
+
+//- https://stackoverflow.com/questions/10970078/modifying-a-query-string-without-reloading-the-page
+export const changeQueryObj = (key, value, searchString) => {
+  if (window.history.pushState) {
+    const newQueryString = updateAndGetNewQueryString(key, value, searchString);
+    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + newQueryString;
+    window.history.pushState({path:newurl},'',newurl);
+  }
 }

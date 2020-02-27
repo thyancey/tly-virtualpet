@@ -180,7 +180,6 @@
       "animal": "allosaurus",
       "name": "Ally",
       "scene": "black",
-      "imageUrl": "pets/dinosaur-allosaurus.jpg",
       "activities": {
         "DEFAULT": { "animations": [ "Dino_Idle1" ] },
         "IDLE": { "animations": [ "Dino_Idle1" ] },
@@ -239,7 +238,6 @@
       "animal": "beaver",
       "name": "Billy",
       "scene": "beaverDam",
-      "imageUrl": "pets/rodent-beaver.jpg",
       "activities": {
         "DEFAULT": { "animations": [ "Beaver_Idle1" ] },
         "IDLE": { "animations": [ "Beaver_Idle1" ] }
@@ -302,7 +300,6 @@
       "animal": "raccoon",
       "name": "Rizzo",
       "scene": "outside",
-      "imageUrl": "pets/rodent-degu.jpg",
       "moods":[
         {
           "id": "HAPPY",
@@ -419,7 +416,7 @@
   "sprites":{
     "Dino":{
       "type": "Sprite_Animated",
-      "imageUrl": "pets/dino.png",
+      "imageUrl": "./pets/dino.png",
       "spriteInfo":{
         "scale": 2,
         "grid": [ 2, 2 ],
@@ -428,7 +425,7 @@
     },
     "TLJ_Swoop":{
       "type": "Sprite_Animated",
-      "imageUrl": "pets/tlj/anim-idle.jpg",
+      "imageUrl": "./pets/tlj/anim-idle.jpg",
       "spriteInfo":{
         "scale": ".8",
         "faceDirection": false,
@@ -438,7 +435,7 @@
     },
     "TLJ_Flap":{
       "type": "Sprite_Animated",
-      "imageUrl": "pets/tlj/anim-flap.jpg",
+      "imageUrl": "./pets/tlj/anim-flap.jpg",
       "spriteInfo":{
         "scale": ".8",
         "faceDirection": false,
@@ -448,7 +445,7 @@
     },
     "Bocado":{
       "type": "Sprite_Animated",
-      "imageUrl": "pets/bocado-1.png",
+      "imageUrl": "./pets/bocado-1.png",
       "spriteInfo":{
         "scale": ".5",
         "grid": [ 9, 5 ],
@@ -459,7 +456,7 @@
     },
     "Beaver":{
       "type": "Sprite_Still",
-      "imageUrl": "pets/rodent-beaver.jpg",
+      "imageUrl": "./pets/rodent-beaver.jpg",
       "spriteInfo":{
         "faceDirection": true,
         "orientation": -1,
@@ -470,7 +467,7 @@
     },
     "Raccoon":{
       "type": "Sprite_Animated",
-      "imageUrl": "pets/raccoon.png",
+      "imageUrl": "./pets/raccoon.png",
       "spriteInfo":{
         "scale": ".8",
         "faceDirection": true,
@@ -483,7 +480,7 @@
     },
     "MonaLisa":{
       "type": "Sprite_Animated",
-      "imageUrl": "pets/painting-monalisa.jpg",
+      "imageUrl": "./pets/painting-monalisa.jpg",
       "spriteInfo":{
         "scale": ".8",
         "faceDirection": true,

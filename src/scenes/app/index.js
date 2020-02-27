@@ -3,13 +3,20 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getColors, themeGet } from 'themes/';
+import { themeGet } from 'themes/';
 import Loader from './loader';
 import Pinger from './pinger';
 
-import { saveAllPetStatsToCookieNow } from 'util/pet-store';
+import { selectDeeplinkedPet } from 'store/selectors/routes';
+import { push } from 'connected-react-router';
 
-import Palette from 'components/palette';
+import { 
+  selectActivePetId, selectIsLoadingComplete
+} from 'store/selectors';
+
+import { setActivePetId } from 'store/actions';
+
+import { saveAllPetStatsToCookieNow } from 'util/pet-store';
 
 import Stage from 'scenes/stage';
 
@@ -38,7 +45,6 @@ const $Stage = styled.div`
 
 
 class App extends Component {
-
   constructor(){
     super();
 
@@ -53,8 +59,26 @@ class App extends Component {
     saveAllPetStatsToCookieNow();
   }
 
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.loadingComplete && !prevProps.loadingComplete){
+      this.onLoadComplete();
+    }
+  }
+
+  onLoadComplete(){
+    this.loadDeeplinkedPet();
+  }
+
+  loadDeeplinkedPet(force){
+    if(this.props.queryPet && (force || !this.props.activePetId)){
+      this.props.setActivePetId(this.props.queryPet);
+    }
+  }
+
   render(){
-    console.log('R: App', );
+    // global.test = this;
+    // console.log('R: App', this.props );
+
     return(
       <$App id="app" >
         <Pinger />
@@ -68,12 +92,14 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  loaded: state.data.loaded
+  loadingComplete: selectIsLoadingComplete(state),
+  queryPet: selectDeeplinkedPet(state),
+  activePetId: selectActivePetId(state)
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { },
+    { push, setActivePetId },
     dispatch
   )
 

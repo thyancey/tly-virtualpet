@@ -64,7 +64,7 @@ class Pet extends Component {
 
   componentDidMount() {
     this.rAF = requestAnimationFrame(this.updateAnimationState);
-    this.recalcMaxBounds(true);
+    this.resetPetPosition();
   }
 
   updateAnimationState() {
@@ -248,9 +248,16 @@ class Pet extends Component {
     }
   }
 
+  resetPetPosition(){
+    window.setTimeout(() => {
+      this.recalcMaxBounds(true)
+    },0);
+  }
+
   componentDidUpdate(prevProps, prevState){
+    global.ooh = this;
     if(prevProps.activePetId !== this.props.activePetId){
-      this.recalcMaxBounds(true);
+      this.resetPetPosition();
     }
     if(prevProps.containerWidth !== this.props.containerWidth || prevProps.containerHeight !== this.props.containerHeight){
       this.recalcMaxBounds();

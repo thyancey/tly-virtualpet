@@ -5,11 +5,11 @@
       "floor": {
         "height": "150",
         "offset": "-25",
-        "imageUrl": "items/scenes/floor_grass.png"
+        "imageUrl": "./items/scenes/floor_grass.png"
       },
       "background":{
         "color": "#ffffff",
-        "imageUrl": "items/scenes/bg_win95.jpg",
+        "imageUrl": "./items/scenes/bg_win95.jpg",
         "backgroundPosition": "50% 0%"
       }
     },{
@@ -41,7 +41,7 @@
       },
       "background":{
         "color": "#000000",
-        "imageUrl": "items/scenes/bg_beaver.jpg",
+        "imageUrl": "./items/scenes/bg_beaver.jpg",
         "backgroundPosition": "50% 0%"
       }
     }

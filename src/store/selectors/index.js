@@ -3,6 +3,9 @@ import { createSelector } from 'reselect';
 import { getPets, getSprites, getPetDeltaStats, getStatRules } from 'util/pet-store';
 import { getSceneDefinition } from 'util/item-store';
 
+export const getLoaded = state => state.data.loaded || false;
+export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
+export const getLoadingComplete= state => state.data.loadingComplete || 0;
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
@@ -10,6 +13,13 @@ export const getActivePetId = state => state.activePet.id || null;
 export const getActivePetStats = state => state.activePet.stats || null;
 export const getActivePet = state => state.activePet || null;
 export const getPing = state => state.data.ping || 0;
+
+export const selectIsLoadingComplete = createSelector(
+  [getLoadingComplete],
+  (loaded = false) => {
+    return loaded;
+  }
+);
 
 export const selectCustomLabels = createSelector(
   [getCustomData],
