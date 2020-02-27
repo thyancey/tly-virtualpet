@@ -5,16 +5,18 @@ import {
   setMood,
   setActivity,
   augmentStat,
-  resetPet
+  resetPet,
+  killPet
 } from '../actions/pet';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData } from 'util/pet-store';
+import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData, killThisPet } from 'util/pet-store';
 import { changeQueryObj } from 'util/tools';
 
 const initialState = {
   id: null,
   mood: null,
+  isAlive: true,
   activity:null
 };
 
@@ -25,10 +27,23 @@ export default handleActions({
 
     //- update the route
     changeQueryObj('pet', petObj.id, global.location.search);
-    
-    return {
-      ...state,
-      id: petObj.id
+    // const found = allPets.find(p => p.id === activePetId);
+    console.log('petfdfsfsdfdsffsd', petObj);
+
+    if(petObj.isAlive){
+      return {
+        ...state,
+        id: petObj.id,
+        isAlive: true
+      }
+    }else{
+      return {
+        ...state,
+        id: petObj.id,
+        isAlive: false,
+        mood: 'DEAD',
+        activity: 'DEAD'
+      }
     }
   },
 
@@ -56,6 +71,25 @@ export default handleActions({
 
     resetPetState(petId);
 
-    return state;
+    return {
+      ...state,
+      isAlive: true,
+      mood: null,
+      activity: null
+    }
+  },
+
+  [killPet.toString()]: (state, action) => {
+    console.log(" KILL ", action.payload);
+    killThisPet(action.payload);
+
+    return {
+      ...state,
+      isAlive: false,
+      mood: 'DEAD',
+      activity: 'DEAD'
+    }
   }
+
+  
 }, initialState);

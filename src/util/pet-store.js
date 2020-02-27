@@ -16,8 +16,15 @@ export const getSprites = () => {
 export const getPetDefinition = petId => {
   return store.pets.find(p => p.id === petId) || null;
 }
-export const setPetDefinition = (petId, petDef) => {
-  store.pets[petId] = petDef;
+export const setPetDefinition = (petId, petDef, saveAfter) => {
+  const petIdx = store.pets.findIndex(p => p.id === petId);
+  if(petIdx > -1){
+    store.pets[petIdx] = petDef;
+  }else{
+    store.pets.push = petDef;
+  }
+
+  if(saveAfter)  saveAllPetStatsToCookie();
 }
 
 export const formatStatObj = statObj => {
@@ -36,6 +43,8 @@ export const setPetDefinitions = petList => {
     pets: []
   };
 
+  console.log('savedData', savedData)
+
   store.pets = petList.map(p => {
     let defaultActivity = p.activities.DEFAULT;
     if(!defaultActivity){
@@ -53,14 +62,18 @@ export const setPetDefinitions = petList => {
     /* if cookie stats, use them here instead */
     if(savedPet){
       initialStats = mergeStats(definedStats, savedPet.stats, true);
+      p.isAlive = savedPet.isAlive;
     }else{
       initialStats = definedStats;
+      p.isAlive = true;
     }
 
     p.stats_saved = {
       timestamp: savedData.timestamp || new Date().getTime(),
+      isAlive: savedData.isAlive,
       stats: initialStats
     }
+    setPetDefinition(p.id, p);
 
     return {
       ...p,
@@ -117,6 +130,7 @@ export const getStatRules = (petId) => {
   if(!petDef) return [];
 
   return petDef.stats_initial.stats.map(s => ({
+    doesKill: s.doesKill || false,
     fullIsGood: s.fullIsGood,
     max: s.max
   }));
@@ -142,6 +156,12 @@ export const getDeltaStats = (statsObj, timestamp) =>{
 }
 
 
+export const killThisPet = petId => {
+  console.error('KILL THIS PET ', petId)
+  const petDef = getPetDefinition(petId);
+  petDef.isAlive = false;
+  setPetDefinition(petId, petDef, true);
+}
 
 
 
@@ -162,12 +182,14 @@ export const augmentPetStat = (petId, statId, augmentValue) => {
 /* SAVING */
 export const saveStats = (petId, stats, timestamp) => {
   const petDef = getPetDefinition(petId);
+  // console.log(petDef)
+  // console.error('saving isAlive as ', petDef.isAlive)
   petDef.stats_saved = {
     timestamp: timestamp,
+    isAlive: petDef.isAlive,
     stats: stats.map(s => ({ ...s, value: s.current }))
   }
-  setPetDefinition(petId, petDef);
-  saveAllPetStatsToCookie();
+  setPetDefinition(petId, petDef, true);
 }
 
 export const saveAllPetStatsToCookie = () => {
@@ -190,6 +212,7 @@ export const saveAllPetStatsToCookieNow = () => {
 
     p.stats_saved = {
       timestamp: now,
+      isAlive: p.isAlive,
       stats: stats.map(s => ({ ...s, value: s.current }))
     }
     setPetDefinition(p.id, p);
@@ -205,12 +228,17 @@ export const resetPetState = petId => {
   const petDef = getPetDefinition(petId);
   const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
 
+  petDef.isAlive = true;
+  setPetDefinition(petId, petDef)
+
   const now = new Date().getTime();
   const statsObj = getDeltaStats({
     timestamp: now,
+    isAlive: true,
     stats: definedStats
   }, now);
 
+  console.log('resetPetState-> ', statsObj)
   saveStats(petId, statsObj, new Date().getTime());
 }
 

@@ -17,7 +17,8 @@ import {
   augmentStat,
   setMood,
   setActivity,
-  resetPet
+  resetPet,
+  killPet
 } from 'store/actions/pet';
 import { 
   selectActivePet,
@@ -143,6 +144,26 @@ class PetStats extends Component {
     this.props.ping();
   }
 
+  getDeadStats(deltaStats){
+    return deltaStats.filter(ds => {
+      if(ds.doesKill){
+        if(ds.fullIsGood && ds.cur === 0){
+          return true;
+        }else if(!ds.fullIsGood && ds.cur === ds.max){
+          return true;
+        }
+      }
+
+      return false;
+    });
+  }
+
+  checkForDead(deltaStats){
+    if(this.getDeadStats(deltaStats).length > 0){
+      this.props.killPet(this.props.activePet.id)
+    }
+  }
+
   render(){
     // console.log('R: Info');
     const { 
@@ -161,6 +182,9 @@ class PetStats extends Component {
     const activityIds = Object.keys(petData.activities);
 
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
+
+    const isAlive = activePet.isAlive;
+    if(isAlive) this.checkForDead(deltaStats);
 
     return (
       <$PetStats>
@@ -221,7 +245,8 @@ const mapDispatchToProps = dispatch =>
       setMood,
       setActivity,
       resetPet,
-      ping
+      ping,
+      killPet
     },
     dispatch
   )

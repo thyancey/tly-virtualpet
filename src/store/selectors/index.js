@@ -242,6 +242,7 @@ const getDeltaStatsArray = (activePet, statRules) => {
     max: stat.max,
     percent: (stat.current / stat.max) * 100,
     fullIsGood: statRules[idx].fullIsGood,
+    doesKill: statRules[idx].doesKill,
     fillType: 'fill'
   }));
 }

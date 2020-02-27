@@ -32,9 +32,11 @@
           },
           { 
             "id":"sin",
-            "value": "0",
-            "perSecond": "1",
-            "max": "20000"
+            "value": "20000",
+            "perSecond": "-100",
+            "max": "20000",
+            "fullIsGood": true,
+            "doesKill": true
           }
         ]
       },
@@ -92,9 +94,11 @@
           },
           { 
             "id":"smiles",
-            "value": "0",
-            "perSecond": "1",
-            "max": "1000"
+            "value": "50",
+            "perSecond": "-3",
+            "max": "1000",
+            "fullIsGood": true,
+            "doesKill": true
           }
         ]
       },
@@ -152,7 +156,8 @@
             "value": "199",
             "perSecond": "-2",
             "max": "200",
-            "fullIsGood": true
+            "fullIsGood": true,
+            "doesKill": true
           }
         ]
       },
@@ -209,7 +214,8 @@
             "value": "0",
             "perSecond": "1",
             "max": "500",
-            "fullIsGood": false
+            "fullIsGood": false,
+            "doesKill": true
           },
           { 
             "id":"bladder",
@@ -267,7 +273,8 @@
             "value": "0",
             "perSecond": "10",
             "max": "500",
-            "fullIsGood": true
+            "fullIsGood": true,
+            "doesKill": true
           },
           { 
             "id":"toothLength",
@@ -283,7 +290,8 @@
             "value": "100",
             "perSecond": "-.5",
             "max": "100",
-            "fullIsGood": true
+            "fullIsGood": true,
+            "doesKill": true
           }
         ]
       },
@@ -361,6 +369,7 @@
             "value": "0",
             "perSecond": "1",
             "max": "500",
+            "doesKill": true,
             "fullIsGood": false
           },
           { 
@@ -369,7 +378,8 @@
             "value": "0",
             "perSecond": "3",
             "max": "200",
-            "fullIsGood": true
+            "fullIsGood": true,
+            "doesKill": true
           }
         ]
       },

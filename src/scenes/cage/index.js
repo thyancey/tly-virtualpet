@@ -67,7 +67,7 @@ class Cage extends Component {
   }
 
   render(){
-    console.log('R: Cage', this.props);
+    // console.log('R: Cage', this.props);
     const { 
       activePetId
     } = this.props;
