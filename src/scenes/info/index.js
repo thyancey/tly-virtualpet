@@ -147,6 +147,7 @@ class PetStats extends Component {
   getDeadStats(deltaStats){
     return deltaStats.filter(ds => {
       if(ds.doesKill){
+        console.log(`${ds.id}, fullIsGood:${ds.fullIsGood}, cur:${ds.cur}, max:${ds.max}`)
         if(ds.fullIsGood && ds.cur === 0){
           return true;
         }else if(!ds.fullIsGood && ds.cur === ds.max){

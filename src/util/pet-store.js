@@ -151,7 +151,7 @@ export const getDeltaStats = (statsObj, timestamp) =>{
     ...s,
     value: s.value,
     max: s.max,
-    current: clamp(s.value + (s.perSecond * timeDiff), 0, s.max)
+    current: Math.round(clamp(s.value + (s.perSecond * timeDiff), 0, s.max))
   }));
 }
 

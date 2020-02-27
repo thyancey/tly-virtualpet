@@ -11,7 +11,8 @@
         "IDLE": { "animations": [ "TLJ_Flap" ] },
         "HANGRY": { "animations": [ "TLJ_Swoop" ] },
         "WALK": { "animations": [ "TLJ_FlapFast" ] },
-        "HAPPY": { "animations": [ "TLJ_Flap" ] }
+        "HAPPY": { "animations": [ "TLJ_Flap" ] },
+        "DEAD": { "animations": [ "TLJ_Dead" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -45,6 +46,11 @@
           "sprite": "TLJ_Flap",
           "speed": "10",
           "frames": [ 0 ]
+        },
+        "TLJ_Dead":{
+          "sprite": "TLJ_Flap",
+          "speed": "10",
+          "frames": [ 7 ]
         },
         "TLJ_Swoop":{
           "sprite": "TLJ_Swoop",
@@ -130,7 +136,8 @@
         "DEFAULT": { "animations": [ "Bocado_Walk" ] },
         "IDLE": { "animations": [ "Bocado_Idle1" ] },
         "ANGRY": { "animations": [ "Bocado_Eat" ] },
-        "WALK": { "animations": [ "Bocado_Walk" ] }
+        "WALK": { "animations": [ "Bocado_Walk" ] },
+        "DEAD": { "animations": [ "Bocado_Dead" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -176,6 +183,11 @@
           "sprite": "Bocado",
           "speed": "15",
           "frames": [0, 1]
+        },
+        "Bocado_Dead":{
+          "sprite": "Bocado",
+          "speed": "15",
+          "frames": [32]
         }
       }
     },
@@ -188,7 +200,8 @@
       "activities": {
         "DEFAULT": { "animations": [ "Dino_Idle1" ] },
         "IDLE": { "animations": [ "Dino_Idle1" ] },
-        "WALK": { "animations": [ "Dino_Walk1" ] }
+        "WALK": { "animations": [ "Dino_Walk1" ] },
+        "DEAD": { "animations": [ "Dino_Dead" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -212,7 +225,7 @@
           {
             "id": "hunger",
             "value": "0",
-            "perSecond": "1",
+            "perSecond": "5",
             "max": "500",
             "fullIsGood": false,
             "doesKill": true
@@ -235,6 +248,11 @@
           "sprite": "Dino",
           "speed": 5,
           "frames": [0, 1, 2, 3]
+        },
+        "Dino_Dead":{
+          "sprite": "Dino",
+          "speed": 5,
+          "frames": [4]
         }
       }
     },
@@ -246,7 +264,8 @@
       "scene": "beaverDam",
       "activities": {
         "DEFAULT": { "animations": [ "Beaver_Idle1" ] },
-        "IDLE": { "animations": [ "Beaver_Idle1" ] }
+        "IDLE": { "animations": [ "Beaver_Idle1" ] },
+        "DEAD": { "animations": [ "Beaver_Dead" ] }
       },
       "stats_initial":{
         "timestamp": null,
@@ -270,10 +289,10 @@
           {
             "id": "woodLust",
             "label": "WOOD LUST",
-            "value": "0",
+            "value": "3",
             "perSecond": "10",
             "max": "500",
-            "fullIsGood": true,
+            "fullIsGood": false,
             "doesKill": true
           },
           { 
@@ -290,14 +309,17 @@
             "value": "100",
             "perSecond": "-.5",
             "max": "100",
-            "fullIsGood": true,
-            "doesKill": true
+            "fullIsGood": true
           }
         ]
       },
       "graphics":{
         "Beaver_Idle1":{
           "sprite": "Beaver",
+          "frame": 0
+        },
+        "Beaver_Dead":{
+          "sprite": "BeaverDead",
           "frame": 0
         }
       }
@@ -375,7 +397,7 @@
           { 
             "id":"mana",
             "label":"Banana Mana",
-            "value": "0",
+            "value": "1",
             "perSecond": "3",
             "max": "200",
             "fullIsGood": true,
@@ -467,6 +489,17 @@
     "Beaver":{
       "type": "Sprite_Still",
       "imageUrl": "./pets/rodent-beaver.jpg",
+      "spriteInfo":{
+        "faceDirection": true,
+        "orientation": -1,
+        "grid": [ 1, 1 ],
+        "cells": [ 500, 500 ],
+        "frame": 0
+      }
+    },
+    "BeaverDead":{
+      "type": "Sprite_Still",
+      "imageUrl": "./pets/rodent-beaver-dead.jpg",
       "spriteInfo":{
         "faceDirection": true,
         "orientation": -1,
