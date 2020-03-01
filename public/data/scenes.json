@@ -1,6 +1,18 @@
 {
   "scenes":[
     {
+      "id": "magnadoodle",
+      "floor": {
+        "height": "150",
+        "offset": "-80"
+      },
+      "background":{
+        "color": "#000000",
+        "imageUrl": "./items/scenes/magnadoodle_bg.jpg",
+        "backgroundPosition": "50% 0%"
+      }
+    },
+    {
       "id": "outside",
       "floor": {
         "height": "150",

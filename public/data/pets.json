@@ -1,6 +1,88 @@
 {
   "pets": [
     {
+      "id": "hotdoug",
+      "type": "magnadoodle",
+      "animal": "Hot Dog",
+      "name": "Hot Doug",
+      "scene": "magnadoodle",
+      "activities": {
+        "DEFAULT": { "animations": [ "hd_idle" ] },
+        "IDLE": { "animations": [ "hd_idle" ] },
+        "EAT": { "animations": [ "hd_eat" ] },
+        "WALK": { "animations": [ "hd_walk" ] },
+        "LIL_IDLE": { "animations": [ "hd_lil_idle" ] },
+        "LIL_WALK": { "animations": [ "hd_lil_walk" ] },
+        "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ] },
+        "DEAD": { "animations": [ "hd_dead" ] }
+      },
+      "stats_initial":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "2",
+            "perSecond": "0",
+            "max": "10"
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "300",
+            "perSecond": "0",
+            "max": "500"
+          },
+          { 
+            "id":"meatyness",
+            "label":"MEATYNESS",
+            "value": "3500",
+            "perSecond": "-10",
+            "max": "4000",
+            "fullIsGood": true,
+            "doesKill": true
+          }
+        ]
+      },
+      "graphics":{
+        "hd_idle":{
+          "sprite": "HotDoug",
+          "speed": "50",
+          "frames": [ 0, 13 ]
+        },
+        "hd_eat":{
+          "sprite": "HotDoug",
+          "speed": "20",
+          "frames": [ 18, 0, 17, 11, 17, 11, 0, 18 ]
+        },
+        "hd_walk":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 2, 4, 3, 2, 0 ]
+        },
+        "hd_lil_idle":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 7 ]
+        },
+        "hd_lil_walk":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 7, 8, 9, 8, 7 ]
+        },
+        "hd_lil_emerge":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 9, 10, 4, 14 ]
+        },
+        "hd_dead":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 12 ]
+        }
+      }
+    },
+    {
       "id": "tlj",
       "type": "painting",
       "animal": "painting",
@@ -446,6 +528,16 @@
     }
   ],
   "sprites":{
+    "HotDoug":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/hot-doug.png",
+      "spriteInfo":{
+        "scale": 1,
+        "orientation": -1,
+        "grid": [ 6, 4 ],
+        "cells": [ 400, 533 ]
+      }
+    },
     "Dino":{
       "type": "Sprite_Animated",
       "imageUrl": "./pets/dino.png",
