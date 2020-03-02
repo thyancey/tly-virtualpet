@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { ping } from 'store/actions';
 
-const STAT_PING_RATE = 1500;
+const STAT_PING_RATE = 500000;
 
 require('themes/app.scss');
 
@@ -22,6 +22,7 @@ class Pinger extends Component {
   }
 
   componentDidMount(){
+    this.props.ping();
     this.startStatPinger();
   }
 

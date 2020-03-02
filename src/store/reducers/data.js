@@ -8,7 +8,7 @@ import {
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
-import { setPetDefinitions, setSpriteDefinitions } from 'util/pet-store';
+import { setPetDefinitions, setSpriteDefinitions, getPetDefinition } from 'util/pet-store';
 import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'util/item-store';
 
 //- customData in store is from an external json file at public/data.json
@@ -90,9 +90,18 @@ export default handleActions({
   },
 
   [setActivePetId.toString()]: (state, action) => {
-    return {
-      ...state,
-      activePetId: action.payload
+    //- pet existssetPetDefinitions
+    const petDef = getPetDefinition(action.payload);
+    if(petDef){
+      return {
+        ...state,
+        activePetId: action.payload
+      }
+    }else{
+      console.error(`Could not get pet definition for id "${action.payload}"`);
+      return {
+        ...state
+      }
     }
   },
 

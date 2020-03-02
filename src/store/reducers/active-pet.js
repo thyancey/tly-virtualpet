@@ -26,25 +26,29 @@ export default handleActions({
     //- get stats, etc
 
     //- update the route
-    changeQueryObj('pet', petObj.id, global.location.search);
-    // const found = allPets.find(p => p.id === activePetId);
-
-    if(petObj.isAlive){
-      return {
-        ...state,
-        id: petObj.id,
-        isAlive: true,
-        mood: null,
-        activity: null
+    if(petObj){
+      changeQueryObj('pet', petObj.id, global.location.search);
+      // const found = allPets.find(p => p.id === activePetId);
+  
+      if(petObj.isAlive){
+        return {
+          ...state,
+          id: petObj.id,
+          isAlive: true,
+          mood: null,
+          activity: null
+        }
+      }else{
+        return {
+          ...state,
+          id: petObj.id,
+          isAlive: false,
+          mood: 'DEAD',
+          activity: 'DEAD'
+        }
       }
     }else{
-      return {
-        ...state,
-        id: petObj.id,
-        isAlive: false,
-        mood: 'DEAD',
-        activity: 'DEAD'
-      }
+      return state;
     }
   },
 

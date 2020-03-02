@@ -17,7 +17,8 @@ import {
 import { 
   selectActivePetActivity,
   selectActivePetAnimation,
-  selectActiveSceneFloorOffset
+  selectActiveSceneFloorOffset,
+  selectCurrentPetBehavior
 } from '../../store/selectors';
 
 const $PetContainer = styled.div`
@@ -255,7 +256,7 @@ class Pet extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    global.ooh = this;
+    global.activePet = this;
     if(prevProps.activePetId !== this.props.activePetId){
       this.resetPetPosition();
     }
@@ -266,6 +267,7 @@ class Pet extends Component {
 
   render(){
     // console.log('R: Pet');
+    // console.log('behavior:', this.props.behavior);
     const { animation, containerWidth, containerHeight } = this.props;
     //- some error happened
     if(!animation) return null;
@@ -289,6 +291,7 @@ class Pet extends Component {
 
 
 const mapStateToProps = (state) => ({
+  behavior: selectCurrentPetBehavior(state),
   activity: selectActivePetActivity(state),
   animation: selectActivePetAnimation(state),
   floorOffset: selectActiveSceneFloorOffset(state)

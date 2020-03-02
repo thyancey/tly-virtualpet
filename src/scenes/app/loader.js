@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setCustomData, setOtherData } from 'store/actions';
+import fetchy from 'node-fetch';
 
 
 let dataLocation = './data';
@@ -42,14 +43,14 @@ class LoadHelper extends Component {
    ;
     console.log(`reading ${type} data from '${url}'`);
 
-    fetch(url).then(response => {
+    fetchy(url).then(response => {
       return response.json();
     }, 
     err => {
       console.error(`Error fretching ${type} data from ${url}`, err);
     }) //- bad url responds with 200/ok? so this doesnt get thrown
       .then(json => {
-        console.log(`${type} data was read successfully`);
+        console.log(`${type} data was read successfully`, json);
         this.props.setOtherData({ type: type, data: json });
         return true;
       }, 
@@ -62,7 +63,7 @@ class LoadHelper extends Component {
     const url = `${dataLocation}/data.json`;
     console.log(`reading app data from '${url}'`);
 
-    fetch(url).then(response => {
+    fetchy(url).then(response => {
                       return response.json();
                     }, 
                     err => {

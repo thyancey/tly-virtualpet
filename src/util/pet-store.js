@@ -1,5 +1,6 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
 import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
+import { parse } from 'query-string';
 
 const SAVE_SCHEMA_VERSION = 3;
 
@@ -44,6 +45,10 @@ export const getDefaultSavedData = () => ({
   pets: []
 });
 
+export const parseMoodSwings = (moodSwings) => {
+  return moodSwings || [];
+}
+
 export const setPetDefinitions = petList => {
   //- grab cookie, if cookie, get list of saved pet stats
   let savedData = getCookieObj('tly_virtualpet');
@@ -68,6 +73,8 @@ export const setPetDefinitions = petList => {
         console.error(`could not autodeclare default activity for pet "${p.id}"`);
       }
     }
+
+    const moodSwings = parseMoodSwings(p.moodSwings);
 
     const savedPet = savedData.pets.find(savedPet => savedPet.id === p.id);
     const definedStats = p.stats_initial.stats.map(stat => formatStatObj(stat));
@@ -94,7 +101,8 @@ export const setPetDefinitions = petList => {
       activities:{
         ...p.activities,
         DEFAULT: defaultActivity
-      }
+      },
+      moodSwings:moodSwings
     }
   });
 }
@@ -268,6 +276,7 @@ global.petStore = {
   getAllData: () => store,
   getPets: () => getPets(),
   getPetStoreData: (itemType) => getPetStoreData(itemType),
+  getPetDefinition: (id) => getPetDefinition(id),
   getPetDeltaStats: (petId, timestamp) => getPetDeltaStats(petId, timestamp)
 }
 

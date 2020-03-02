@@ -16,6 +16,95 @@
         "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ] },
         "DEAD": { "animations": [ "hd_dead" ] }
       },
+      "moodSwings":[
+        {
+          "when":[
+            { "type":"status", "isDead": true }
+          ],
+          "then": "DEAD"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" },
+            { "type": "activity", "activity": "EATING" }
+          ],
+          "then": "EAT"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" },
+            { "type": "activity", "activity": "WALK" }
+          ],
+          "then": "LIL_WALK"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" }
+          ],
+          "then": "LIL_IDLE"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_20%" },
+            { "type":"stat", "stat":"meatyness", "value": "<_40%" }
+          ],
+          "then": "LIL_EMERGE"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
+            { "type": "activity", "activity": "EATING" }
+          ],
+          "then": "EAT"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
+            { "type": "activity", "activity": "WALK" }
+          ],
+          "then": "WALK"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" }
+          ],
+          "then": "IDLE"
+        }
+      ],
+      "moods":[
+        {
+          "id": "HAPPY",
+          "from": [ "SAD", "DEFAULT" ],
+          "to": [ "*" ],
+          "when":[
+            { "stat":"mana", "value": ">80%" }
+          ],
+          "activities": [ "WALK", "EAT", "IDLE" ]
+        },
+        {
+          "id": "SAD",
+          "from": ["*"],
+          "to": ["*"],
+          "when":[
+            { "stat":"mana", "value": "<20%" },
+            { "stat":"hunger", "value": "<10%" }
+          ],
+          "activities": [ "EAT", "IDLE_SAD" ]
+        },
+        {
+          "id": "DEAD",
+          "from": ["*"],
+          "to": [],
+          "when":[
+            { "stat":"hunger", "value": "=0" }
+          ],
+          "activities": [ "DEAD" ]
+        },
+        {
+          "id": "DEFAULT",
+          "activities": [ "WALK", "EAT", "IDLE" ]
+        }
+      ],
       "stats_initial":{
         "timestamp": null,
         "stats": [
@@ -36,7 +125,7 @@
           { 
             "id":"meatyness",
             "label":"MEATYNESS",
-            "value": "3500",
+            "value": "200",
             "perSecond": "-10",
             "max": "4000",
             "fullIsGood": true,
@@ -79,450 +168,6 @@
           "sprite": "HotDoug",
           "speed": "30",
           "frames": [ 12 ]
-        }
-      }
-    },
-    {
-      "id": "tlj",
-      "type": "painting",
-      "animal": "painting",
-      "name": "The Last Judgement",
-      "scene": "black",
-      "activities": {
-        "DEFAULT": { "animations": [ "TLJ_Flap" ] },
-        "IDLE": { "animations": [ "TLJ_Flap" ] },
-        "HANGRY": { "animations": [ "TLJ_Swoop" ] },
-        "WALK": { "animations": [ "TLJ_FlapFast" ] },
-        "HAPPY": { "animations": [ "TLJ_Flap" ] },
-        "DEAD": { "animations": [ "TLJ_Dead" ] }
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "2",
-            "perSecond": "0",
-            "max": "10"
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "300",
-            "perSecond": "0",
-            "max": "500"
-          },
-          { 
-            "id":"sin",
-            "value": "20000",
-            "perSecond": "-100",
-            "max": "20000",
-            "fullIsGood": true,
-            "doesKill": true
-          }
-        ]
-      },
-      "graphics":{
-        "TLJ_Still":{
-          "sprite": "TLJ_Flap",
-          "speed": "10",
-          "frames": [ 0 ]
-        },
-        "TLJ_Dead":{
-          "sprite": "TLJ_Flap",
-          "speed": "10",
-          "frames": [ 7 ]
-        },
-        "TLJ_Swoop":{
-          "sprite": "TLJ_Swoop",
-          "speed": "10",
-          "frames": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 8, 9, 10, 9, 8  ]
-        },
-        "TLJ_Flap":{
-          "sprite": "TLJ_Flap",
-          "speed": "10",
-          "frames": [ 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0, 0  ]
-        },
-        "TLJ_FlapFast":{
-          "sprite": "TLJ_Flap",
-          "speed": "2",
-          "frames": [ 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 0, 0  ]
-        }
-      }
-    },
-    {
-      "id": "monalisa",
-      "type": "painting",
-      "animal": "painting",
-      "name": "The Mona Lisa",
-      "scene": "black",
-      "activities": {
-        "DEFAULT": { "animations": [ "ML_Idle1" ] },
-        "IDLE": { "animations": [ "ML_Idle1" ] },
-        "EAT": { "animations": [ "ML_Eat1" ] },
-        "DEAD": { "animations": [ "ML_Sad1" ] }
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "2",
-            "perSecond": "0",
-            "max": "10"
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "300",
-            "perSecond": "0",
-            "max": "500"
-          },
-          { 
-            "id":"smiles",
-            "value": "50",
-            "perSecond": "-3",
-            "max": "1000",
-            "fullIsGood": true,
-            "doesKill": true
-          }
-        ]
-      },
-      "graphics":{
-        "ML_Idle1":{
-          "sprite": "MonaLisa",
-          "speed": "10",
-          "frames": [ 0 ]
-        },
-        "ML_Eat1":{
-          "sprite": "MonaLisa",
-          "speed": "10",
-          "frames": [ 0, 1 ]
-        },
-        "ML_Sad1":{
-          "sprite": "MonaLisa",
-          "speed": "10",
-          "frames": [ 2 ]
-        }
-      }
-    },
-    {
-      "id": "bocado",
-      "type": "megupet",
-      "animal": "bocado",
-      "name": "Bocado",
-      "scene": "megupet",
-      "activities": {
-        "DEFAULT": { "animations": [ "Bocado_Walk" ] },
-        "IDLE": { "animations": [ "Bocado_Idle1" ] },
-        "ANGRY": { "animations": [ "Bocado_Eat" ] },
-        "WALK": { "animations": [ "Bocado_Walk" ] },
-        "DEAD": { "animations": [ "Bocado_Dead" ] }
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "2",
-            "perSecond": "0",
-            "max": "10",
-            "fullIsGood": true
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "300",
-            "perSecond": "0",
-            "max": "500",
-            "fullIsGood": true
-          },
-          { 
-            "id":"freshness",
-            "value": "199",
-            "perSecond": "-2",
-            "max": "200",
-            "fullIsGood": true,
-            "doesKill": true
-          }
-        ]
-      },
-      "graphics":{
-        "Bocado_Eat":{
-          "sprite": "Bocado",
-          "speed": "15",
-          "frames": [14, 15]
-        },
-        "Bocado_Walk":{
-          "sprite": "Bocado",
-          "speed": "15",
-          "frames": [15, 16]
-        },
-        "Bocado_Idle1":{
-          "sprite": "Bocado",
-          "speed": "15",
-          "frames": [0, 1]
-        },
-        "Bocado_Dead":{
-          "sprite": "Bocado",
-          "speed": "15",
-          "frames": [32]
-        }
-      }
-    },
-    {
-      "id": "ally-allosaurus",
-      "type": "sample",
-      "animal": "allosaurus",
-      "name": "Ally",
-      "scene": "black",
-      "activities": {
-        "DEFAULT": { "animations": [ "Dino_Idle1" ] },
-        "IDLE": { "animations": [ "Dino_Idle1" ] },
-        "WALK": { "animations": [ "Dino_Walk1" ] },
-        "DEAD": { "animations": [ "Dino_Dead" ] }
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "2",
-            "perSecond": "0",
-            "max": "10",
-            "fullIsGood": true
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "300",
-            "perSecond": "0",
-            "max": "500",
-            "fullIsGood": true
-          },
-          {
-            "id": "hunger",
-            "value": "0",
-            "perSecond": "5",
-            "max": "500",
-            "fullIsGood": false,
-            "doesKill": true
-          },
-          { 
-            "id":"bladder",
-            "value": "0",
-            "perSecond": ".1",
-            "max": "200",
-            "fullIsGood": false
-          }
-        ]
-      },
-      "graphics":{
-        "Dino_Idle1":{
-          "sprite": "Dino",
-          "frame": 0
-        },
-        "Dino_Walk1":{
-          "sprite": "Dino",
-          "speed": 5,
-          "frames": [0, 1, 2, 3]
-        },
-        "Dino_Dead":{
-          "sprite": "Dino",
-          "speed": 5,
-          "frames": [4]
-        }
-      }
-    },
-    {
-      "id": "billy-beaver",
-      "type": "sample",
-      "animal": "beaver",
-      "name": "Billy",
-      "scene": "beaverDam",
-      "activities": {
-        "DEFAULT": { "animations": [ "Beaver_Idle1" ] },
-        "IDLE": { "animations": [ "Beaver_Idle1" ] },
-        "DEAD": { "animations": [ "Beaver_Dead" ] }
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "5",
-            "perSecond": "0",
-            "max": "10",
-            "fullIsGood": true
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "300",
-            "perSecond": "0",
-            "max": "500",
-            "fullIsGood": true
-          },
-          {
-            "id": "woodLust",
-            "label": "WOOD LUST",
-            "value": "3",
-            "perSecond": "10",
-            "max": "500",
-            "fullIsGood": false,
-            "doesKill": true
-          },
-          { 
-            "id":"toothLength",
-            "label":"Tooth Length",
-            "value": "0",
-            "perSecond": ".1",
-            "max": "10",
-            "fullIsGood": false
-          },
-          { 
-            "id":"wetness",
-            "label":"Wetness",
-            "value": "100",
-            "perSecond": "-.5",
-            "max": "100",
-            "fullIsGood": true
-          }
-        ]
-      },
-      "graphics":{
-        "Beaver_Idle1":{
-          "sprite": "Beaver",
-          "frame": 0
-        },
-        "Beaver_Dead":{
-          "sprite": "BeaverDead",
-          "frame": 0
-        }
-      }
-    },
-    {
-      "id": "rizzo-raccoon",
-      "type": "sample",
-      "animal": "raccoon",
-      "name": "Rizzo",
-      "scene": "outside",
-      "moods":[
-        {
-          "id": "HAPPY",
-          "when":[
-            { "stat":"mana", "value": ">80%" }
-          ],
-          "activities": [ "WALK", "EAT", "IDLE" ]
-        },
-        {
-          "id": "SAD",
-          "when":[
-            { "stat":"mana", "value": "<20%" },
-            { "stat":"hunger", "value": "<10%" }
-          ],
-          "activities": [ "EAT", "IDLE_SAD" ]
-        },
-        {
-          "id": "DEAD",
-          "when":[
-            { "stat":"hunger", "value": "=0" }
-          ],
-          "activities": [ "DEAD" ]
-        },
-        {
-          "id": "DEFAULT",
-          "activities": [ "WALK", "EAT", "IDLE" ]
-        }
-      ],
-      "activities": {
-        "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
-        "IDLE": { "animations": [ "Raccoon_Idle1" ] },
-        "SAD": { "animations": [ "Raccoon_Still" ] },
-        "CASTIN": { "animations": [ "Raccoon_Castin" ] },
-        "NANA_RAGE": { "animations": [ "Raccoon_NanaRage1" ] },
-        "WALK": { "animations": [ "Raccoon_Walk1" ] },
-        "DEAD": { "animations": [ "Raccoon_Dead1" ] }
-      },
-      "stats_initial":{
-        "timestamp": null,
-        "stats": [
-          {
-            "id": "level",
-            "type": "number",
-            "value": "64",
-            "perSecond": "0",
-            "max": "100",
-            "fullIsGood": true
-          },
-          {
-            "id": "xp",
-            "type": "number",
-            "value": "888",
-            "perSecond": "0",
-            "max": "20000",
-            "fullIsGood": true
-          },
-          {
-            "id": "hunger",
-            "value": "0",
-            "perSecond": "1",
-            "max": "500",
-            "doesKill": true,
-            "fullIsGood": false
-          },
-          { 
-            "id":"mana",
-            "label":"Banana Mana",
-            "value": "1",
-            "perSecond": "3",
-            "max": "200",
-            "fullIsGood": true,
-            "doesKill": true
-          }
-        ]
-      },
-      "graphics":{
-        "Raccoon_NanaRage1":{
-          "sprite": "Raccoon",
-          "speed": "2",
-          "dir": 1,
-          "frames": [0, 1, 2, 3]
-        },
-        "Raccoon_Still":{
-          "sprite": "Raccoon",
-          "speed": "50",
-          "dir": 1,
-          "frames": [0]
-        },
-        "Raccoon_Idle1":{
-          "sprite": "Raccoon",
-          "speed": "50",
-          "dir": 1,
-          "frames": [0, 3]
-        },
-        "Raccoon_Castin":{
-          "sprite": "Raccoon",
-          "speed": "10",
-          "dir": 1,
-          "frames": [0, 1, 2, 3]
-        },
-        "Raccoon_Walk1":{
-          "sprite": "Raccoon",
-          "speed": "20",
-          "dir": 1,
-          "frames": [4, 5]
-        },
-        "Raccoon_Dead1":{
-          "sprite": "Raccoon",
-          "speed": "20",
-          "dir": 1,
-          "frames": [6, 7, 8]
         }
       }
     }

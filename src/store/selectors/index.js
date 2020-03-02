@@ -2,6 +2,7 @@
 import { createSelector } from 'reselect';
 import { getPets, getSprites, getPetDeltaStats, getStatRules } from 'util/pet-store';
 import { getSceneDefinition } from 'util/item-store';
+import { getPetDefinition } from '../../util/pet-store';
 
 export const getLoaded = state => state.data.loaded || false;
 export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
@@ -174,40 +175,6 @@ export const selectActivePetActivity = createSelector(
   }
 );
 
-export const selectActivePetAnimation = createSelector(
-  [selectActivePet, getSprites],
-  (activePet, sprites) => {
-    if(!activePet|| !sprites) return null;
-    const aData = activePet.data;
-
-
-    const activity = activePet.activity;
-    const activityObj = aData.activities[activity] || aData.activities.DEFAULT;
-    if(!activityObj){
-      console.error(`Error getting activity ${activity}`);
-      return null;
-    }
-    const animIdx = Math.floor(Math.random() * activityObj.animations.length)
-    const animationLabel = activityObj.animations[animIdx];
-
-    const foundGraphic = aData.graphics[animationLabel];
-    if(foundGraphic){
-      const sprite = sprites[foundGraphic.sprite];
-
-      if(animationLabel && foundGraphic && sprite){
-        const spriteObj = createSpriteObj(animationLabel, foundGraphic, sprite);
-        return spriteObj;
-      }else{
-        console.error(`Error getting spriteObj for ${animationLabel}`);
-        return null;
-      }
-    }else{
-      console.error(`Error getting graphic for ${animationLabel}`);
-      return null;
-    }
-  }
-);
-
 
 export const selectActiveDeltaStats = createSelector(
   [selectActivePet, getPing],
@@ -245,4 +212,203 @@ const getDeltaStatsArray = (activePet, statRules) => {
     doesKill: statRules[idx].doesKill,
     fillType: 'fill'
   }));
+} 
+
+export const VALID_EXPRESSIONS = [ '=', '<', '<=', '>', '>=' ];
+
+export const evaluateExpression = (expression, value, criteria) => {
+  if(VALID_EXPRESSIONS.indexOf(expression) === -1){
+    console.error(`evaluateExpression(): invalid expression "${expression}" from valueString "${value}"`);
+    return false;
+  }
+
+  // console.log('evaluateExpression()', expression, value, criteria);
+
+  switch(expression){
+    case '=':
+      return value === criteria;
+    case '<':
+      return value < criteria;
+    case '<=':
+      return value <= criteria;
+    case '>':
+      return value > criteria;
+    case '>=':
+      return value >= criteria;
+    default: return false;
+  }
 }
+
+export const evaluateStat = (stat, value, statValue) => {
+  const valueTokens = value.split('_');
+
+  const valueExpression = valueTokens[0];
+  const valueCriteria = valueTokens[1];
+  
+  const percentageSplit = valueCriteria.split('%');
+
+  let checkValue;
+  let criteria = percentageSplit[0];
+
+  if(percentageSplit.length > 1){
+    checkValue = statValue.percent;
+  }else{
+    checkValue = statValue.cur;
+  }
+
+  if(!valueExpression){
+    console.error('evaluateSet(), valueExpression is not defined! ', value)
+  }
+  const expression = evaluateExpression(valueExpression, checkValue, criteria);
+  console.log('foundExpression:', expression);
+  return expression;
+}
+
+export const evaluateWhen = (when, statusObj) => {
+  console.log('evaluateWhen()', when, statusObj);
+
+  switch(when.type){
+    case 'activity': {
+      if(statusObj.activity === when.activity){
+        return when;
+      }else{
+        return null;
+      }
+    }
+    case 'stat': {
+      const statValue = statusObj.stats.find(s => s.id === when.stat);
+      if(statValue === null){
+        // console.error(`evaluateWhen(): stat "${when.stat}" does not exist for pet`);
+        return null;
+      }
+
+      const statResult = evaluateStat(when.stat, when.value, statValue);
+      if(statResult){
+        return when;
+      }else{
+        console.log(`....evaluateWhen(): stat "${when.stat}" evaluated false for pet`);
+      }
+
+      if(statusObj.stats === when.activity){
+        return when;
+      }else{
+        return null;
+      }
+    }
+    case 'status': {
+      if(when.isDead === true){
+        return statusObj.status.isDead === true ? when : null;
+      }else if(when.isDead === false){
+        return statusObj.status.isDead === false ? when : null;
+      }else{
+        console.warn(`evaluateWhen(): status is missing "isDead" attribute`);
+        return null;
+      }
+    }
+    default: {
+      console.error(`unknown when type "${when.type}"`);
+      return null;
+    }
+  }
+}
+
+export const checkMoodSwing = (moodSwings, moodSwingData) => {
+  let behavior = null;
+  //- check each swing
+  for(let i = 0; i < moodSwings.length; i++){
+    const m = moodSwings[i];
+
+    let whenResult = null;
+    for(let w = 0; w < m.when.length; w++){
+
+      //- if any when is false, skip this swing
+      whenResult = evaluateWhen(m.when[w], moodSwingData);
+
+      if(!whenResult){
+        break;
+      }
+    }
+
+    if(whenResult){
+      // console.log('COMPLETED SWING WITH', m, whenResult);
+      behavior = m.then;
+      break;
+    }else{
+      // console.log('AAABBORRTTEDDD SWING on', m);
+      behavior = 'NO_BEHAVIOR'
+    }
+  };
+  
+
+  // console.error('done with ', behavior);
+    //- each swing
+
+
+    //- return with the then
+  
+  //- return with nothing?
+  return behavior || 'PLACEHOLDER';
+}
+
+export const selectCurrentPetBehavior = createSelector(
+  [selectActivePet, selectActiveDeltaStats, selectActivePetActivity],
+  (activePet, stats, activity) => {
+    if(!activePet || !activePet.id){
+      return 'PET NOT FOUND';
+    }
+    const petDef = getPetDefinition(activePet.id);
+    if(!petDef){
+      return 'PET DEFINTION NOT FOUND';
+    }
+    const status = {
+      isDead: activePet && !activePet.isAlive || false
+    }
+
+
+    // console.log('pet is ', activePet);
+    const newActivity = checkMoodSwing(petDef.moodSwings, {
+      status: status,
+      stats: stats,
+      activity: activity
+    });
+
+    console.log('newActivity is ', newActivity);
+    return newActivity;
+  }
+);
+
+export const selectActivePetAnimation = createSelector(
+  [selectActivePet, getSprites, selectCurrentPetBehavior],
+  (activePet, sprites, behavior) => {
+    if(!activePet|| !sprites) return null;
+    const aData = activePet.data;
+
+    console.log('AP', activePet)
+
+    const activity = behavior;
+    // const activity = activePet.activity;
+    const activityObj = aData.activities[activity] || aData.activities.DEFAULT;
+    if(!activityObj){
+      console.error(`Error getting activity ${activity}`);
+      return null;
+    }
+    const animIdx = Math.floor(Math.random() * activityObj.animations.length)
+    const animationLabel = activityObj.animations[animIdx];
+
+    const foundGraphic = aData.graphics[animationLabel];
+    if(foundGraphic){
+      const sprite = sprites[foundGraphic.sprite];
+
+      if(animationLabel && foundGraphic && sprite){
+        const spriteObj = createSpriteObj(animationLabel, foundGraphic, sprite);
+        return spriteObj;
+      }else{
+        console.error(`Error getting spriteObj for ${animationLabel}`);
+        return null;
+      }
+    }else{
+      console.error(`Error getting graphic for ${animationLabel}`);
+      return null;
+    }
+  }
+);
