@@ -6,7 +6,8 @@ const SAVE_SCHEMA_VERSION = 3;
 
 const store = {
   pets:[],
-  sprites:[]
+  sprites:[],
+  taxonomy: []
 }
 
 export const getPets = () => {
@@ -19,6 +20,70 @@ export const getSprites = () => {
 export const getPetDefinition = petId => {
   return store.pets.find(p => p.id === petId) || null;
 }
+
+/*
+TAXONOMY EXAMPLE
+allTypes: [
+  {
+    type: 'wildlife',
+    pets: [
+      {
+        id:'wildlife-billybeaver',
+        label:'Billy the Beaver'
+      }
+    ]
+  }
+]
+*/
+
+export const getTaxonomy = () => {
+  return store.taxonomy;
+}
+
+//- right now this doesnt need to be dynamic, so its run on load one time and stored to easy access variable
+export const gatherTaxonomy = (pets) => {
+  let allPetTypes = [];
+  pets.forEach(p => {
+    let foundTypeIndex = allPetTypes.findIndex(t => t.type === p.type);
+    if(foundTypeIndex > -1){
+      const foundType = allPetTypes[foundTypeIndex];
+      foundType.pets.push({ id: p.id, label: p.name });
+
+      allPetTypes[foundTypeIndex] = foundType;
+    }else{
+      allPetTypes.push({
+        type: p.type,
+        pets:[]
+      });
+    }
+  });
+
+  return allPetTypes;
+}
+
+export const getPetTypes = () => {
+  console.error('getPetTypes')
+
+  let allPetTypes = [];
+  store.pets.forEach(p => {
+    let foundTypeIndex = allPetTypes.findIndex(t => t.type === p.type);
+    if(foundTypeIndex > -1){
+      const foundType = allPetTypes[foundTypeIndex];
+      foundType.pets.push({ id: p.id, label: p.name });
+
+      allPetTypes[foundTypeIndex] = foundType;
+    }else{
+      allPetTypes.push({
+        type: p.type,
+        pets:[]
+      });
+    }
+  });
+
+  return allPetTypes;
+}
+
+
 export const setPetDefinition = (petId, petDef, saveAfter) => {
   const petIdx = store.pets.findIndex(p => p.id === petId);
   if(petIdx > -1){
@@ -105,6 +170,8 @@ export const setPetDefinitions = petList => {
       moodSwings:moodSwings
     }
   });
+
+  store.taxonomy = gatherTaxonomy(store.pets);
 }
 
 const mergeStats = (origArray, newArray, overwrite) => {
@@ -196,7 +263,6 @@ export const augmentPetStat = (petId, statId, augmentValue) => {
 
   saveStats(petId, stats, now);
 }
-
 
 
 

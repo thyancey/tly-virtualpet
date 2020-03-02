@@ -9,8 +9,7 @@ import {
   getActivePetType,
   getActivePetId,
   getCounter,
-  selectCustomArray, 
-  selectCustomLabels, 
+  selectPetTaxonomy,
   selectActivePets
 } from 'store/selectors';
 
@@ -72,7 +71,7 @@ class PetSelection extends Component {
   render(){
     console.log('R: PetSelection');
     const { 
-      customArray, 
+      taxonomy,
       activePetType, 
       activePetId,
       activeObjects, 
@@ -85,9 +84,9 @@ class PetSelection extends Component {
           <h2>{'Select a pet'}</h2>
 
           <$TypeList>
-            { customArray.map((c, i) => (
+            { taxonomy.map((c, i) => (
               <li key={i}>
-                <Button text={c} isActive={c === activePetType} onClick={() => setActivePetType(c)}/>
+                <Button text={c.type} isActive={c.type === activePetType} onClick={() => setActivePetType(c.type)}/>
               </li>
             ))}
           </$TypeList>
@@ -106,12 +105,10 @@ class PetSelection extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  customTitle: state.data.customData && state.data.customData.customTitle,
   activePetType: getActivePetType(state),
   activePetId: getActivePetId(state),
   counter: getCounter(state),
-  customArray: selectCustomArray(state),
-  customLabels: selectCustomLabels(state),
+  taxonomy: selectPetTaxonomy(state),
   activeObjects: selectActivePets(state),
 })
 

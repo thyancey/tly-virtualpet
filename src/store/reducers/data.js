@@ -33,7 +33,7 @@ export default handleActions({
   [setCustomData.toString()]: (state, action) => {
     const cleanObj = {};
     const parsedData = action.payload;
-    console.log('setCustomData', action.payload)
+    // console.log('setCustomData', action.payload);
     for(let key in parsedData){
       if(VALID_KEYS.indexOf(key) === -1){
         console.warn(`key supplied in /data.json "${key}" is not a valid key`);

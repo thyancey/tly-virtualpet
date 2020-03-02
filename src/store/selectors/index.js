@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getPetDeltaStats, getStatRules } from 'util/pet-store';
+import { getPets, getSprites, getPetDeltaStats, getStatRules, getTaxonomy } from 'util/pet-store';
 import { getSceneDefinition } from 'util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
 
@@ -410,5 +410,12 @@ export const selectActivePetAnimation = createSelector(
       console.error(`Error getting graphic for ${animationLabel}`);
       return null;
     }
+  }
+);
+
+export const selectPetTaxonomy = createSelector(
+  [getTaxonomy],
+  (taxonomy = []) => {
+    return taxonomy
   }
 );
