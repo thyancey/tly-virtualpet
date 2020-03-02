@@ -15,7 +15,9 @@ export default class AnimationCanvas extends Component {
 
     this.state = { 
       tick: 0,
-      img: null
+      img: null,
+      overlayImg: null,
+      loadStarted: false
      };
     this.updateAnimationState = this.updateAnimationState.bind(this);
   }
@@ -39,35 +41,56 @@ export default class AnimationCanvas extends Component {
     cancelAnimationFrame(this.rAF);
   }
 
-  updateImage(imageUrl){
+  updateImage(imageUrl, overlayUrl){
+    if(imageUrl || overlayUrl){
+      this.setState({ 'loadStarted': true });
+    }
     if(imageUrl){
       let img = new Image();
       img.src = imageUrl;
+
       img.onload = () => {
+        console.log('LAODED IMG')
         this.setState({
           img: img
         });
       };
-    }else{
-      return null;
     }
+    
+    if(overlayUrl){
+      let img = new Image();
+      img.src = overlayUrl;
 
+      img.onload = () => {
+        console.log('LAODED OVERLA')
+        this.setState({
+          overlayImg: img
+        });
+      };
+    }
   }
 
   componentDidUpdate(prevProps){
-    const { imageUrl } = this.props.animation;
-    if(imageUrl && (prevProps.animation.imageUrl !== imageUrl || !this.state.img)){
-      this.updateImage(imageUrl);
+    const { imageUrl, overlayUrl } = this.props.animation;
+    if(!this.state.loadStarted && imageUrl && 
+      (
+        prevProps.animation.imageUrl !== imageUrl 
+        || !this.state.img 
+        || prevProps.animation.overlayUrl !== overlayUrl
+      )){
+      this.updateImage(imageUrl, overlayUrl);
     }
   }
 
   render() {
+    // console.log('overlayImg', this.state.overlayImg);
     // console.log('R: CanvasIndex');
     return <Canvas 
               tick={this.state.tick} 
               canvasWidth={this.props.containerWidth} 
               canvasHeight={this.props.containerHeight}
               sprite={this.state.img}
+              overlaySprite={this.state.overlayImg}
               spriteInfo={this.props.animation.spriteInfo}
               direction={this.props.direction}
               drawCommand={ this.props.drawCommand } />;

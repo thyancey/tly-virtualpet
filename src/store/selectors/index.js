@@ -151,6 +151,7 @@ const createSpriteObj = (label, graphic, sprite) => {
   return {
     type: sprite.type,
     imageUrl: sprite.imageUrl,
+    overlayUrl: sprite.overlayUrl,
     label: label,
     spriteInfo:{
       speed: graphic.speed || sprite.spriteInfo.speed || 1,

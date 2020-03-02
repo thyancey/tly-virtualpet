@@ -108,6 +108,18 @@ const A = {
       y, 
       sW, 
       sH);
+
+      // console.log('overlay sprite', props.overlaySprite)
+    props.overlaySprite && ctx.drawImage(
+        props.overlaySprite, 
+        cCoords.x, 
+        cCoords.y, 
+        cCoords.w, 
+        cCoords.h, 
+        x * direction, 
+        y, 
+        sW, 
+        sH);
     ctx.restore();
   }
 }

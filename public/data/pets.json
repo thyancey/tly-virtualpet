@@ -71,40 +71,6 @@
           "then": "IDLE"
         }
       ],
-      "moods":[
-        {
-          "id": "HAPPY",
-          "from": [ "SAD", "DEFAULT" ],
-          "to": [ "*" ],
-          "when":[
-            { "stat":"mana", "value": ">80%" }
-          ],
-          "activities": [ "WALK", "EAT", "IDLE" ]
-        },
-        {
-          "id": "SAD",
-          "from": ["*"],
-          "to": ["*"],
-          "when":[
-            { "stat":"mana", "value": "<20%" },
-            { "stat":"hunger", "value": "<10%" }
-          ],
-          "activities": [ "EAT", "IDLE_SAD" ]
-        },
-        {
-          "id": "DEAD",
-          "from": ["*"],
-          "to": [],
-          "when":[
-            { "stat":"hunger", "value": "=0" }
-          ],
-          "activities": [ "DEAD" ]
-        },
-        {
-          "id": "DEFAULT",
-          "activities": [ "WALK", "EAT", "IDLE" ]
-        }
-      ],
       "stats_initial":{
         "timestamp": null,
         "stats": [
@@ -125,9 +91,9 @@
           { 
             "id":"meatyness",
             "label":"MEATYNESS",
-            "value": "200",
-            "perSecond": "-10",
-            "max": "4000",
+            "value": "50",
+            "perSecond": "-1",
+            "max": "100",
             "fullIsGood": true,
             "doesKill": true
           }
@@ -176,6 +142,7 @@
     "HotDoug":{
       "type": "Sprite_Animated",
       "imageUrl": "./pets/hot-doug.png",
+      "overlayUrl": "./pets/hot-doug-overlay-examples.png",
       "spriteInfo":{
         "scale": 1,
         "orientation": -1,
