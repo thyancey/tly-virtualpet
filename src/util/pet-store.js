@@ -1,6 +1,8 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
 import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
 
+const SAVE_SCHEMA_VERSION = 3;
+
 const store = {
   pets:[],
   sprites:[]
@@ -36,14 +38,26 @@ export const formatStatObj = statObj => {
   }
 }
 
+export const getDefaultSavedData = () => ({ 
+  schemaVersion: SAVE_SCHEMA_VERSION,
+  timestamp: null, 
+  pets: []
+});
+
 export const setPetDefinitions = petList => {
   //- grab cookie, if cookie, get list of saved pet stats
-  const savedData = getCookieObj('tly_virtualpet') || { 
-    timestamp: null, 
-    pets: []
-  };
+  let savedData = getCookieObj('tly_virtualpet');
+  console.log('savedData', savedData);
+  if(savedData && (!savedData.schemaVersion || savedData.schemaVersion < SAVE_SCHEMA_VERSION)){
+    console.warn(`Schema version ${savedData.schemaVersion} is behind version ${SAVE_SCHEMA_VERSION}, resetting all your data, sorry bubs`);
+    deleteCookie('tly_virtualpet');
+    savedData = null;
+  }
 
-  console.log('savedData', savedData)
+  if(!savedData){
+    savedData = getDefaultSavedData();
+  }
+
 
   store.pets = petList.map(p => {
     let defaultActivity = p.activities.DEFAULT;
@@ -193,8 +207,9 @@ export const saveStats = (petId, stats, timestamp) => {
 }
 
 export const saveAllPetStatsToCookie = () => {
-  console.log('saveAllPetStatsToCookie')
+  console.log('saveAllPetStatsToCookie');
   setObjToCookie('tly_virtualpet', {
+    schemaVersion: SAVE_SCHEMA_VERSION,
     timestamp: new Date().getTime(),
     pets: store.pets.map(p => ({
       ...p.stats_saved,
