@@ -80,15 +80,6 @@ export default class AnimationCanvas extends Component {
       }
     }
 
-
-    // if(!this.state.loadStarted && imageUrl && 
-    //   (
-    //     prevProps.animation.imageUrl !== imageUrl 
-    //     || !this.state.img 
-    //     || prevProps.animation.overlayUrl !== overlayUrl
-    //   )){
-    //   this.updateImage(imageUrl, overlayUrl);
-    // }
   }
 
   render() {

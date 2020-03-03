@@ -1,19 +1,32 @@
-# tly-virtualpet
-> This project is WIP
+
+# !! This project is WIP !! 
+# Overview
 
 Like a tom-a-gotchye. Working towards a world where anyone can make a virtual pet out of anything
+
+## Installation / Setup
+```bash
+npm install
+npm start
+```
+
+## To build static site
+```bash
+npm run build
+```
 
 
 
 # Pet Behavior
-Pets determine their **Behavior** by interpreting their current [Activities](#Activities) and [Mood Swing](#Mood-Swings) criteria
+Pets determine their **Behavior** by interpreting their current [Activities](#activities) and [Mood Swing](#mood-swings) criteria
 
-Once a **Behavior** is known, it can be used to look up a [Status](#Status) and get an [Animation](#Animation)
+Once a **Behavior** is known, it can be used to look up a [Status](#statuses) and get an [Animation](#animations)
 
-**Behaviors** also may restrict other [Activities](#Activities) from occuring
+**Behaviors** also may restrict other [Activities](#activities) from occuring
 
 
-[Statuses](#Status) and **Behaviors** Are almost the same, however the difference is that a [Status](#Status) is a definition what should happen, where as a **Behavior** represents the current state of what is happening.
+[Statuses](#statuses) and **Behaviors** Are almost the same, however the difference is that a [Status](#statuses) is a definition what should happen, where as a **Behavior** represents the current state of what is happening.
+
 
 
 # Pet Architecture
@@ -50,10 +63,48 @@ Rule sets for cause and effect based on current activities, stats, and statuses
     "then": "WALK_HURT"
   }
 ```
+
+### When Statements
+types:
+* stat
+  * stat *id of the stat to check*
+  * value *expression of stat value, see stat values below*
+* activity
+  * acitivity *id of the activity that must be active*
+* status *TODO, needs refactor*
+
+
+### Stat expressions in When Statements
+Stat values MUST follow the syntax below. 
+>"{comparison}_{value}{unit}"
+* *Note the "_" in between the comparison and value*
+* *the percentage unit is optional. Without it, expression will use the raw value instead*
+
+
+examples:
+* "<=_30%"
+* "<=_30"
+* "<_30"
+* ">=_0.1234"
+
+comparison | value
+-----------|-------
+= | exact number match
+< | less than
+<= | less than or equal to
+> | greater than
+>= | greater than or equal to
+
+
+unit | value
+-----------|-------
+(empty) | use number value
+% | use percentages
+
 ---
 ## Statuses
 
-dictate an animation to play. Statuses are triggered via [Mood Swings](#Mood-Swings)
+dictate an animation to play. Statuses are triggered via [Mood Swings](#mood-swings)
 ```javascript
   "WALK_HURT": { "animations": [ "example_walk_hurt_01", "example_walk_hurt_02" ] }
 ```
