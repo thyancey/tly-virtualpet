@@ -332,11 +332,11 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
       behavior = m.then;
       break;
     }else{
-      behavior = 'NO_BEHAVIOR'
+      behavior = 'DEFAULT'
     }
   };
   
-  return behavior || 'PLACEHOLDER';
+  return behavior || 'ERROR';
 }
 
 export const selectCurrentPetBehavior = createSelector(
@@ -375,11 +375,10 @@ export const selectActivePetAnimation = createSelector(
   [selectActivePet, getSprites, selectCurrentPetBehavior],
   (activePet, sprites, behavior) => {
     if(!activePet|| !sprites) return null;
+    
     const aData = activePet.data;
-
-    // console.log('AP', activePet);
-
     const statusObj = aData.statuses[behavior] || aData.statuses.DEFAULT;
+
     if(!statusObj){
       console.error(`Error getting behavior ${behavior}`);
       return null;

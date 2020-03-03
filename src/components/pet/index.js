@@ -236,6 +236,7 @@ class Pet extends Component {
   recalcMaxBounds(resetPetPosition){
     const spriteInfo = this.props.animation && this.props.animation.spriteInfo || null;
     if(spriteInfo){
+      console.log('see ', spriteInfo)
       const spriteScale = spriteInfo.scale * global.spriteScale;
       const spriteSize = spriteInfo.cells.map(s => s * spriteScale);
 

@@ -50,7 +50,6 @@ export default class AnimationCanvas extends Component {
       img.src = imageUrl;
 
       img.onload = () => {
-        console.log('LAODED IMG')
         this.setState({
           img: img
         });
@@ -62,7 +61,6 @@ export default class AnimationCanvas extends Component {
       img.src = overlayUrl;
 
       img.onload = () => {
-        console.log('LAODED OVERLA')
         this.setState({
           overlayImg: img
         });
@@ -72,14 +70,25 @@ export default class AnimationCanvas extends Component {
 
   componentDidUpdate(prevProps){
     const { imageUrl, overlayUrl } = this.props.animation;
-    if(!this.state.loadStarted && imageUrl && 
-      (
-        prevProps.animation.imageUrl !== imageUrl 
-        || !this.state.img 
-        || prevProps.animation.overlayUrl !== overlayUrl
-      )){
-      this.updateImage(imageUrl, overlayUrl);
+    if(imageUrl){
+      if(prevProps.animation.imageUrl !== imageUrl || prevProps.animation.overlayUrl !== overlayUrl){
+        this.updateImage(imageUrl, overlayUrl);
+      }else{
+        if(!this.state.img && !this.state.loadStarted){
+          this.updateImage(imageUrl, overlayUrl);
+        }
+      }
     }
+
+
+    // if(!this.state.loadStarted && imageUrl && 
+    //   (
+    //     prevProps.animation.imageUrl !== imageUrl 
+    //     || !this.state.img 
+    //     || prevProps.animation.overlayUrl !== overlayUrl
+    //   )){
+    //   this.updateImage(imageUrl, overlayUrl);
+    // }
   }
 
   render() {

@@ -15,7 +15,6 @@ import {
 } from 'store/actions/index';
 import {
   augmentStat,
-  setMood,
   forceBehavior,
   resetPet,
   killPet
@@ -24,7 +23,8 @@ import {
   selectActivePet,
   selectActiveDeltaStats,
   selectActiveSceneStyles,
-  selectCurrentPetBehavior
+  selectCurrentPetBehavior,
+  selectActivePetActivities
 } from 'store/selectors';
 
 
@@ -169,17 +169,16 @@ class PetStats extends Component {
   render(){
     // console.log('R: Info');
     const { 
-      setMood,
       activePet,
       behavior,
       deltaStats,
       forceBehavior,
-      sceneStyles
+      sceneStyles,
+      activities
     } = this.props;
     if(!activePet) return null;
 
     const petData = activePet.data;
-    const mood = activePet.mood;
 
     const statusIds = Object.keys(petData.statuses);
 
@@ -187,6 +186,7 @@ class PetStats extends Component {
 
     const isAlive = activePet.isAlive;
     if(isAlive) this.checkForDead(deltaStats);
+
 
     return (
       <$PetStats>
@@ -207,12 +207,13 @@ class PetStats extends Component {
           <LilButton text={'info'} onClick={e => this.onToggleShowInfo()} />
         </$InfoButton>
         <$Info showInfo={this.state.isInfoOpen}>
-          <p>{'Mood'}</p>
-          <LilButton isActive={mood === 'HAPPY'} text={'HAPPY'} onClick={e => setMood && setMood('HAPPY')} />
-          <LilButton isActive={mood === 'SAD'} text={'SAD'} onClick={e => setMood && setMood('SAD')} />
-          <LilButton isActive={mood === 'DEAD'} text={'DEAD'} onClick={e => setMood && setMood('DEAD')} />
+          <p>{'Activities'}</p>
+          <LilButton isActive={activities.indexOf('WALKING') > -1} text={'WALKING'} />
+          <LilButton isActive={activities.indexOf('JUMPING') > -1} text={'JUMPING'} />
+          <LilButton isActive={activities.indexOf('DUCKING') > -1} text={'DUCKING'} />
+          <LilButton isActive={activities.indexOf('EATING') > -1} text={'EATING'} />
           <hr/>
-          <p>{'Activity'}</p>
+          <p>{'Status'}</p>
           {statusIds.map((aId, idx) => (
             <LilButton key={idx} isActive={behavior === aId} text={aId} onClick={() => forceBehavior(aId)} />
           ))}
@@ -238,14 +239,14 @@ const mapStateToProps = (state) => ({
   activePet: selectActivePet(state),
   deltaStats: selectActiveDeltaStats(state),
   sceneStyles: selectActiveSceneStyles(state),
-  behavior: selectCurrentPetBehavior(state)
+  behavior: selectCurrentPetBehavior(state),
+  activities: selectActivePetActivities(state)
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       augmentStat,
-      setMood,
       forceBehavior,
       resetPet,
       ping,
