@@ -3,7 +3,9 @@ import {
 } from '../actions';
 import { 
   setMood,
-  setActivity,
+  addActivity,
+  removeActivity,
+  forceBehavior,
   augmentStat,
   resetPet,
   killPet
@@ -17,7 +19,8 @@ const initialState = {
   id: null,
   mood: null,
   isAlive: true,
-  activity:null
+  forcedBehavior: null,
+  activities: []
 };
 
 export default handleActions({
@@ -35,16 +38,16 @@ export default handleActions({
           ...state,
           id: petObj.id,
           isAlive: true,
-          mood: null,
-          activity: null
+          activities: [],
+          mood: null
         }
       }else{
         return {
           ...state,
           id: petObj.id,
           isAlive: false,
-          mood: 'DEAD',
-          activity: 'DEAD'
+          activities: [],
+          mood: 'DEAD'
         }
       }
     }else{
@@ -58,16 +61,42 @@ export default handleActions({
   },
 
   [setMood.toString()]: (state, action) => {
+    console.error('setMood')
     return {
       ...state,
       mood: action.payload
     }
   },
 
-  [setActivity.toString()]: (state, action) => {
+  [addActivity.toString()]: (state, action) => {
+    const activity = action.payload;
+    // console.log('addActivity > ', activity);
+
+    if(state.activities.indexOf(activity) > -1){
+      return state;
+    }else{
+      return {
+        ...state,
+        activities: [ ...state.activities, activity ]
+      } 
+    }
+  },
+
+  [removeActivity.toString()]: (state, action) => {
+    const activity = action.payload;
+    // console.error('removeActivity < ', activity);
+    
     return {
       ...state,
-      activity: action.payload
+      activities: state.activities.filter(a => a !== activity)
+    }
+  },
+
+  [forceBehavior.toString()]: (state, action) => {
+    const newBehavior = state.forcedBehavior !== action.payload ? action.payload : null;
+    return {
+      ...state,
+      forcedBehavior: newBehavior
     }
   },
 
@@ -80,7 +109,7 @@ export default handleActions({
       ...state,
       isAlive: true,
       mood: null,
-      activity: null
+      activities: []
     }
   },
 
@@ -92,7 +121,7 @@ export default handleActions({
       ...state,
       isAlive: false,
       mood: 'DEAD',
-      activity: 'DEAD'
+      activities: []
     }
   }
 

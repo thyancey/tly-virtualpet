@@ -130,12 +130,12 @@ export const setPetDefinitions = petList => {
 
 
   store.pets = petList.map(p => {
-    let defaultActivity = p.activities.DEFAULT;
-    if(!defaultActivity){
+    let defaultStatus = p.statuses.DEFAULT;
+    if(!defaultStatus){
       try{
-        defaultActivity = p.activities[Object.keys(p.activities)[0]];
+        defaultStatus = p.statuses[Object.keys(p.statuses)[0]];
       }catch(e){
-        console.error(`could not autodeclare default activity for pet "${p.id}"`);
+        console.error(`could not autodeclare default status for pet "${p.id}"`);
       }
     }
 
@@ -163,9 +163,9 @@ export const setPetDefinitions = petList => {
 
     return {
       ...p,
-      activities:{
-        ...p.activities,
-        DEFAULT: defaultActivity
+      statuses:{
+        ...p.statuses,
+        DEFAULT: defaultStatus
       },
       moodSwings:moodSwings
     }

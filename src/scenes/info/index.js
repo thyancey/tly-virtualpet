@@ -16,14 +16,15 @@ import {
 import {
   augmentStat,
   setMood,
-  setActivity,
+  forceBehavior,
   resetPet,
   killPet
 } from 'store/actions/pet';
 import { 
   selectActivePet,
   selectActiveDeltaStats,
-  selectActiveSceneStyles
+  selectActiveSceneStyles,
+  selectCurrentPetBehavior
 } from 'store/selectors';
 
 
@@ -169,18 +170,18 @@ class PetStats extends Component {
     // console.log('R: Info');
     const { 
       setMood,
-      setActivity,
       activePet,
+      behavior,
       deltaStats,
+      forceBehavior,
       sceneStyles
     } = this.props;
     if(!activePet) return null;
 
     const petData = activePet.data;
-    const activity = activePet.activity;
     const mood = activePet.mood;
-    // console.log('activities', petData.activities);
-    const activityIds = Object.keys(petData.activities);
+
+    const statusIds = Object.keys(petData.statuses);
 
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
 
@@ -212,8 +213,8 @@ class PetStats extends Component {
           <LilButton isActive={mood === 'DEAD'} text={'DEAD'} onClick={e => setMood && setMood('DEAD')} />
           <hr/>
           <p>{'Activity'}</p>
-          {activityIds.map((aId, idx) => (
-            <LilButton key={idx} isActive={activity === aId} text={aId} onClick={() => setActivity(aId)} />
+          {statusIds.map((aId, idx) => (
+            <LilButton key={idx} isActive={behavior === aId} text={aId} onClick={() => forceBehavior(aId)} />
           ))}
           <hr/>
 
@@ -236,7 +237,8 @@ class PetStats extends Component {
 const mapStateToProps = (state) => ({
   activePet: selectActivePet(state),
   deltaStats: selectActiveDeltaStats(state),
-  sceneStyles: selectActiveSceneStyles(state)
+  sceneStyles: selectActiveSceneStyles(state),
+  behavior: selectCurrentPetBehavior(state)
 })
 
 const mapDispatchToProps = dispatch =>
@@ -244,7 +246,7 @@ const mapDispatchToProps = dispatch =>
     {
       augmentStat,
       setMood,
-      setActivity,
+      forceBehavior,
       resetPet,
       ping,
       killPet

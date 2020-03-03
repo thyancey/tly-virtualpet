@@ -6,7 +6,7 @@
       "animal": "Hot Dog",
       "name": "Hot Doug",
       "scene": "magnadoodle",
-      "activities": {
+      "statuses": {
         "DEFAULT": { "animations": [ "hd_idle" ] },
         "IDLE": { "animations": [ "hd_idle" ] },
         "EAT": { "animations": [ "hd_eat" ] },
@@ -33,7 +33,7 @@
         {
           "when":[
             { "type":"stat", "stat":"meatyness", "value": "<_20%" },
-            { "type": "activity", "activity": "WALK" }
+            { "type": "activity", "activity": "WALKING" }
           ],
           "then": "LIL_WALK"
         },
@@ -60,7 +60,7 @@
         {
           "when":[
             { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
-            { "type": "activity", "activity": "WALK" }
+            { "type": "activity", "activity": "WALKING" }
           ],
           "then": "WALK"
         },
@@ -108,7 +108,7 @@
         "hd_eat":{
           "sprite": "HotDoug",
           "speed": "20",
-          "frames": [ 18, 0, 17, 11, 17, 11, 0, 18 ]
+          "frames": [ 18, 17, 11, 17, 11, 18 ]
         },
         "hd_walk":{
           "sprite": "HotDoug",

@@ -11,6 +11,7 @@ export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
 export const getActivePetId = state => state.activePet.id || null;
+export const getForcedBehavior = state => state.activePet.forcedBehavior || null;
 export const getActivePetStats = state => state.activePet.stats || null;
 export const getActivePet = state => state.activePet || null;
 export const getPing = state => state.data.ping || 0;
@@ -96,9 +97,9 @@ export const selectActiveScene = createSelector(
     if(!activePetData) return null;
 
     const sceneId = activePetData.scene;
-    console.log('sceneId', sceneId)
+    console.log('sceneId', sceneId);
     const scene = getSceneDefinition(sceneId);
-    console.log('scene', scene)
+    console.log('scene', scene);
     if(scene){
       return scene;
     }else{
@@ -167,12 +168,13 @@ const createSpriteObj = (label, graphic, sprite) => {
   };
 }
 
-export const selectActivePetActivity = createSelector(
+
+export const selectActivePetActivities = createSelector(
   [selectActivePet],
   (activePet) => {
     if(!activePet) return null;
     
-    return activePet.activity;
+    return activePet.activities;
   }
 );
 
@@ -261,25 +263,25 @@ export const evaluateStat = (stat, value, statValue) => {
     console.error('evaluateSet(), valueExpression is not defined! ', value)
   }
   const expression = evaluateExpression(valueExpression, checkValue, criteria);
-  console.log('foundExpression:', expression);
+  // console.log('foundExpression:', expression);
   return expression;
 }
 
-export const evaluateWhen = (when, statusObj) => {
-  console.log('evaluateWhen()', when, statusObj);
+export const evaluateWhen = (when, moodSwingData) => {
+  // console.log('evaluateWhen()', when, moodSwingData);
 
   switch(when.type){
     case 'activity': {
-      if(statusObj.activity === when.activity){
+      if(moodSwingData.activities.indexOf(when.activity) > -1){
         return when;
       }else{
         return null;
       }
     }
     case 'stat': {
-      const statValue = statusObj.stats.find(s => s.id === when.stat);
+      const statValue = moodSwingData.stats.find(s => s.id === when.stat);
       if(statValue === null){
-        // console.error(`evaluateWhen(): stat "${when.stat}" does not exist for pet`);
+        console.error(`evaluateWhen(): stat "${when.stat}" does not exist for pet`);
         return null;
       }
 
@@ -287,20 +289,15 @@ export const evaluateWhen = (when, statusObj) => {
       if(statResult){
         return when;
       }else{
-        console.log(`....evaluateWhen(): stat "${when.stat}" evaluated false for pet`);
-      }
-
-      if(statusObj.stats === when.activity){
-        return when;
-      }else{
+        // console.log(`....evaluateWhen(): stat "${when.stat}" evaluated false for pet`);
         return null;
       }
     }
     case 'status': {
       if(when.isDead === true){
-        return statusObj.status.isDead === true ? when : null;
+        return moodSwingData.status.isDead === true ? when : null;
       }else if(when.isDead === false){
-        return statusObj.status.isDead === false ? when : null;
+        return moodSwingData.status.isDead === false ? when : null;
       }else{
         console.warn(`evaluateWhen(): status is missing "isDead" attribute`);
         return null;
@@ -313,8 +310,9 @@ export const evaluateWhen = (when, statusObj) => {
   }
 }
 
-export const checkMoodSwing = (moodSwings, moodSwingData) => {
+export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
   let behavior = null;
+  // console.log('checkMoodSwingForBehavior', moodSwingData);
   //- check each swing
   for(let i = 0; i < moodSwings.length; i++){
     const m = moodSwings[i];
@@ -331,29 +329,20 @@ export const checkMoodSwing = (moodSwings, moodSwingData) => {
     }
 
     if(whenResult){
-      // console.log('COMPLETED SWING WITH', m, whenResult);
       behavior = m.then;
       break;
     }else{
-      // console.log('AAABBORRTTEDDD SWING on', m);
       behavior = 'NO_BEHAVIOR'
     }
   };
   
-
-  // console.error('done with ', behavior);
-    //- each swing
-
-
-    //- return with the then
-  
-  //- return with nothing?
   return behavior || 'PLACEHOLDER';
 }
 
 export const selectCurrentPetBehavior = createSelector(
-  [selectActivePet, selectActiveDeltaStats, selectActivePetActivity],
-  (activePet, stats, activity) => {
+  [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, getForcedBehavior],
+  (activePet, stats, activities, forcedBehavior) => {
+    // console.log('selectCurrentPetBehavior');
     if(!activePet || !activePet.id){
       return 'PET NOT FOUND';
     }
@@ -361,20 +350,24 @@ export const selectCurrentPetBehavior = createSelector(
     if(!petDef){
       return 'PET DEFINTION NOT FOUND';
     }
-    const status = {
-      isDead: activePet && !activePet.isAlive || false
+
+    if(forcedBehavior){
+      return forcedBehavior;
+    }else{
+      const status = {
+        isDead: activePet && !activePet.isAlive || false
+      }
+  
+      // console.log('pet is ', activePet);
+      const newBehavior = checkMoodSwingForBehavior(petDef.moodSwings, {
+        status: status,
+        stats: stats,
+        activities: activities
+      });
+  
+      // console.warn('newBehavior is ', newBehavior);
+      return newBehavior;
     }
-
-
-    // console.log('pet is ', activePet);
-    const newActivity = checkMoodSwing(petDef.moodSwings, {
-      status: status,
-      stats: stats,
-      activity: activity
-    });
-
-    console.log('newActivity is ', newActivity);
-    return newActivity;
   }
 );
 
@@ -384,17 +377,15 @@ export const selectActivePetAnimation = createSelector(
     if(!activePet|| !sprites) return null;
     const aData = activePet.data;
 
-    console.log('AP', activePet)
+    // console.log('AP', activePet);
 
-    const activity = behavior;
-    // const activity = activePet.activity;
-    const activityObj = aData.activities[activity] || aData.activities.DEFAULT;
-    if(!activityObj){
-      console.error(`Error getting activity ${activity}`);
+    const statusObj = aData.statuses[behavior] || aData.statuses.DEFAULT;
+    if(!statusObj){
+      console.error(`Error getting behavior ${behavior}`);
       return null;
     }
-    const animIdx = Math.floor(Math.random() * activityObj.animations.length)
-    const animationLabel = activityObj.animations[animIdx];
+    const animIdx = Math.floor(Math.random() * statusObj.animations.length)
+    const animationLabel = statusObj.animations[animIdx];
 
     const foundGraphic = aData.graphics[animationLabel];
     if(foundGraphic){

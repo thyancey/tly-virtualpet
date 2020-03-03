@@ -12,10 +12,11 @@ import { themeGet } from 'themes/';
 import { clamp } from 'util/tools';
 
 import {
-  setActivity
+  addActivity,
+  removeActivity
 } from '../../store/actions/pet';
 import { 
-  selectActivePetActivity,
+  selectActivePetActivities,
   selectActivePetAnimation,
   selectActiveSceneFloorOffset,
   selectCurrentPetBehavior
@@ -92,7 +93,10 @@ class Pet extends Component {
 
   jumpPet(amount){
     if(this.state.isOnGround){
+      
       this.vY -= amount;
+    }else{
+      this.props.addActivity('JUMPING');
     }
   }
 
@@ -114,15 +118,13 @@ class Pet extends Component {
   }
 
   stopWalking(){
-    if(this.props.activity !== 'IDLE'){
-      this.props.setActivity('IDLE');
+    if(this.props.activities.indexOf('WALKING') > -1){
+      this.props.removeActivity('WALKING');
     }
   }
 
   startWalking(){
-    if(this.props.activity !== 'WALK'){
-      this.props.setActivity('WALK');
-    }
+    this.props.addActivity('WALKING');
 
     //- TODO, use debounce, but none of the npm modules worked for some reason
     this.startIdleTimer();
@@ -256,21 +258,27 @@ class Pet extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    global.activePet = this;
+    // console.log('update', prevState, this.state);
+    // global.activePet = this;
     if(prevProps.activePetId !== this.props.activePetId){
       this.resetPetPosition();
     }
     if(prevProps.containerWidth !== this.props.containerWidth || prevProps.containerHeight !== this.props.containerHeight){
       this.recalcMaxBounds();
     }
+    if(!prevState.isOnGround && this.state.isOnGround){
+      this.props.removeActivity('JUMPING');
+    }
   }
 
   render(){
     // console.log('R: Pet');
     // console.log('behavior:', this.props.behavior);
-    const { animation, containerWidth, containerHeight } = this.props;
+    const { animation, containerWidth, containerHeight, activities } = this.props;
     //- some error happened
     if(!animation) return null;
+
+    // console.log('activities', activities);
 
     let drawCommand = null;
     if(animation.type){
@@ -292,14 +300,14 @@ class Pet extends Component {
 
 const mapStateToProps = (state) => ({
   behavior: selectCurrentPetBehavior(state),
-  activity: selectActivePetActivity(state),
+  activities: selectActivePetActivities(state),
   animation: selectActivePetAnimation(state),
   floorOffset: selectActiveSceneFloorOffset(state)
 });
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(
-    { setActivity },
+    { addActivity, removeActivity },
     dispatch
   )
 );
