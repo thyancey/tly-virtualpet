@@ -6,6 +6,145 @@
       "animal": "Hot Dog",
       "name": "Hot Doug",
       "scene": "magnadoodle",
+      "thumbnail": "./pets/hot-doug_thumbnail.jpg",
+      "statuses": {
+        "DEFAULT": { "animations": [ "hd_idle" ] },
+        "IDLE": { "animations": [ "hd_idle" ] },
+        "EAT": { "animations": [ "hd_eat" ] },
+        "WALK": { "animations": [ "hd_walk" ] },
+        "LIL_IDLE": { "animations": [ "hd_lil_idle" ] },
+        "LIL_WALK": { "animations": [ "hd_lil_walk" ] },
+        "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ] },
+        "DEAD": { "animations": [ "hd_dead" ] }
+      },
+      "moodSwings":[
+        {
+          "when":[
+            { "type":"status", "isDead": true }
+          ],
+          "then": "DEAD"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" },
+            { "type": "activity", "activity": "EATING" }
+          ],
+          "then": "EAT"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "LIL_WALK"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" }
+          ],
+          "then": "LIL_IDLE"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_20%" },
+            { "type":"stat", "stat":"meatyness", "value": "<_40%" }
+          ],
+          "then": "LIL_EMERGE"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
+            { "type": "activity", "activity": "EATING" }
+          ],
+          "then": "EAT"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK"
+        },
+        {
+          "when":[
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" }
+          ],
+          "then": "IDLE"
+        }
+      ],
+      "stats_initial":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "2",
+            "perSecond": "0",
+            "max": "10"
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "300",
+            "perSecond": "0",
+            "max": "500"
+          },
+          { 
+            "id":"meatyness",
+            "label":"MEATYNESS",
+            "value": "50",
+            "perSecond": "-1",
+            "max": "100",
+            "fullIsGood": true,
+            "doesKill": true
+          }
+        ]
+      },
+      "graphics":{
+        "hd_idle":{
+          "sprite": "HotDoug",
+          "speed": "50",
+          "frames": [ 0, 13 ]
+        },
+        "hd_eat":{
+          "sprite": "HotDoug",
+          "speed": "20",
+          "frames": [ 18, 17, 11, 17, 11, 18 ]
+        },
+        "hd_walk":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 2, 4, 3, 2, 0 ]
+        },
+        "hd_lil_idle":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 7 ]
+        },
+        "hd_lil_walk":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 7, 8, 9, 8, 7 ]
+        },
+        "hd_lil_emerge":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 9, 10, 4, 14 ]
+        },
+        "hd_dead":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 12 ]
+        }
+      }
+    },
+    {
+      "id": "hotdoug2",
+      "type": "magnadoodle",
+      "animal": "Hot Dog",
+      "name": "Hot Doug 2",
+      "scene": "magnadoodle",
+      "thumbnail": "./pets/hot-doug_thumbnail.jpg",
       "statuses": {
         "DEFAULT": { "animations": [ "hd_idle" ] },
         "IDLE": { "animations": [ "hd_idle" ] },
@@ -143,6 +282,7 @@
       "animal": "Raccoon",
       "name": "Rizzo",
       "scene": "outside",
+      "thumbnail": "./pets/raccoon_thumbnail.jpg",
       "statuses": {
         "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
         "IDLE": { "animations": [ "Raccoon_Idle1" ] },

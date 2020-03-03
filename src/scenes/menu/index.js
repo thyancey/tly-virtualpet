@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import { themeGet, getColor, shadeColor } from 'themes/';
+import { themeGet, getColor, shadeColor, getBreakpoint } from 'themes/';
 
 import { Button } from 'components/button';
 
@@ -19,14 +19,21 @@ const $Menu = styled.div`
   height:100%;
 `;
 
+
 const $MainPanel = styled.div`
   position:fixed;
   top:0rem;
   bottom:0;
-  width:90%;
 
-  padding-top: 10rem;
-  padding-bottom: 4rem;
+
+  @media ${getBreakpoint.mobile_tiny}{
+    max-width: calc(100% - 15rem);
+  }
+  @media ${getBreakpoint.tablet}{
+    max-width: calc(50%);
+  }
+  width:100%;
+
   padding-right:0;
   
 
@@ -36,7 +43,7 @@ const $MainPanel = styled.div`
       transition:right .2s ease-in;
     `: 
     css`
-      right:-90%;
+      right:-100%;
       transition:right .3s ease-in;
     `
   }
@@ -44,15 +51,7 @@ const $MainPanel = styled.div`
 const $PanelContainer = styled.div`
   width:100%;
   height:100%;
-  position:relative;
-  border-radius: 2rem 0 0 2rem;
-  background-color: ${themeGet('color', 'black')};
   padding: 2rem;
-
-  border: 1rem solid white;
-  border-right:0;
-
-  box-shadow: ${themeGet('shadow', 'z3')}
 `;
 
 const $ResetButton = styled.div`
@@ -70,6 +69,36 @@ const $ResetButton = styled.div`
     }
   }
 `
+const $MenuButton = styled.div`
+  margin:1rem;
+  top:1rem;
+  right:1rem;
+  z-index:2;
+  right:100%;
+  position:absolute;
+
+  button{
+    padding:1.5rem 2rem;
+    margin:0;
+  }
+`;
+
+const $PanelBg = styled.div`
+  width:100%;
+  height:100%;
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  /* border-radius: 10px 0 0 10px; */
+
+  z-index:-1;
+  background-color: ${themeGet('color', 'white')};
+  border-left: .5rem solid white;
+  box-shadow: ${themeGet('shadow', 'z3')};
+  opacity:1;
+`
 
 class Menu extends Component {
   render(){
@@ -77,12 +106,16 @@ class Menu extends Component {
     return(
       <$Menu id="menu" >
         <$MainPanel id="main-panel" isOpen={this.props.isOpen}>
+          <$MenuButton>
+            <Button text={'menu'} onClick={() => this.props.onToggleMenu()}/>
+          </$MenuButton>
           <$PanelContainer>
-            <PetSelection onSelectPet={() => this.props.onToggleMenu()} />
+            <PetSelection onSelectPet={() => {}} />
             <$ResetButton>
               <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} />
             </$ResetButton>
           </$PanelContainer>
+          <$PanelBg/>
         </$MainPanel>
       </$Menu>
     );

@@ -14,6 +14,7 @@ import {
 } from 'store/selectors';
 
 import { Button } from 'components/button';
+import DropMenu from 'components/ui/dropmenu';
 
 import { setActivePetType, setActivePetId } from 'store/actions';
 
@@ -21,19 +22,12 @@ import { setActivePetType, setActivePetId } from 'store/actions';
 require('themes/app.scss');
 
 
-const $PanelPadding = styled.div`
-  width:100%;
-  height:100%;
-  position:relative;
-`;
-
-
 const $PetSelection = styled.div`
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+
+  h2{
+    color: ${themeGet('color', 'black')};
+    text-shadow: .25px .25px 1.5px ${themeGet('color', 'black')};
+  }
 `;
 
 const $TypeList = styled.ul`
@@ -44,6 +38,7 @@ const $TypeList = styled.ul`
 
   >li{
     display: inline-block;
+    width:100%;
   }
 `
 
@@ -69,7 +64,6 @@ class PetSelection extends Component {
   }
 
   render(){
-    console.log('R: PetSelection');
     const { 
       taxonomy,
       activePetType, 
@@ -79,27 +73,24 @@ class PetSelection extends Component {
     } = this.props;
 
     return(
-      <$PanelPadding>
-        <$PetSelection>
-          <h2>{'Select a pet'}</h2>
+      <$PetSelection>
+        <h2>{'Select a pet'}</h2>
 
-          <$TypeList>
-            { taxonomy.map((c, i) => (
-              <li key={i}>
-                <Button text={c.type} isActive={c.type === activePetType} onClick={() => setActivePetType(c.type)}/>
-              </li>
-            ))}
-          </$TypeList>
-          <$ObjectsList>
-            { activeObjects.map((o, i) => (
-              <li key={i}>
-                <Button text={`${o.name} the ${o.animal}`} isActive={o.id === activePetId} onClick={() => this.onSelectPet(o.id)}/>
-              </li>
-            ))}
-          </$ObjectsList>
-        </$PetSelection>
-        
-      </$PanelPadding>
+        <$TypeList>
+          { taxonomy.map((c, i) => (
+            <li key={i}>
+              <DropMenu 
+                text={c.type} 
+                isActive={c.type === activePetType} 
+                onClick={() => setActivePetType(c.type)}
+                onItemClick={(payload, e) => this.onSelectPet(payload)}
+                activeId={activePetId}
+                items={activeObjects.map(aO => ({ ...aO, text:aO.name, subText:aO.animal }))}
+                />
+            </li>
+          ))}
+        </$TypeList>
+      </$PetSelection>
     );
   }
 }

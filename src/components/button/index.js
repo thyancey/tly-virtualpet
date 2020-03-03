@@ -19,12 +19,6 @@ const $Button = styled.button`
   text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
   background-color: ${themeGet('color', 'blue')};
 
-  
-  /* background-color:transparent; */
-  /* color:${themeGet('color', 'black')}; */
-  /* text-shadow: .5px .5px 1.5px ${themeGet('color', 'white')}; */
-  /* ${mixin_textStroke('1.5px', '.5px', themeGet('color', 'white'))} */
-
   border: .2rem solid rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) rgba(255, 255, 255, 0.2);
   border-radius: 1rem;

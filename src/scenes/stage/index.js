@@ -53,7 +53,7 @@ margin:1rem;
 
 const $MenuButton = styled.div`
   margin:1rem;
-  z-index:2;
+  z-index:1;
   button{
     padding:1.5rem 2rem;
     margin:0;

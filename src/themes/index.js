@@ -71,8 +71,32 @@ const store = {
     headerHeight: '7.5rem',
     menuWidth: '12rem'
   },
-  mixins:{}
+  mixins:{},
+  breakpoints:{
+    mobile_tiny: '300px',
+    mobile_medium: '400px',
+    mobile_large: '500px',
+    tablet: '768px',
+    desktop: '1024px'
+  }
 }
+
+/* https://jsramblings.com/how-to-use-media-queries-with-styled-components/ */
+const breakpoints = {
+  mobile_tiny: '300px',
+  mobile_medium: '400px',
+  mobile_large: '500px',
+  tablet: '768px',
+  desktop: '1024px'
+}
+
+export const getBreakpoint = {
+  mobile_tiny: `(min-width: ${breakpoints.mobile_tiny})`,
+  mobile_medium: `(min-width: ${breakpoints.mobile_medium})`,
+  mobile_large: `(min-width: ${breakpoints.mobile_large})`,
+  tablet: `(min-width: ${breakpoints.tablet})`,
+  desktop: `(min-width: ${breakpoints.desktop})`
+};
 
 
 /* from pablo on https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors */
