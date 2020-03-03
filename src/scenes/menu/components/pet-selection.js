@@ -42,20 +42,6 @@ const $TypeList = styled.ul`
   }
 `
 
-const $ObjectsList = styled.ul`
-
-  padding: 0;
-  margin: 0;
-  list-style:none;
-
-  >li{
-    margin:.5rem;
-
-    color: ${themeGet('color', 'white')}
-  }
-`
-
-
 class PetSelection extends Component {
 
   onSelectPet(id){

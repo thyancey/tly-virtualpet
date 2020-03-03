@@ -112,7 +112,7 @@ class Menu extends Component {
           <$PanelContainer>
             <PetSelection onSelectPet={() => {}} />
             <$ResetButton>
-              <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} />
+              <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} style={{backgroundColor: getColor('red')}} />
             </$ResetButton>
           </$PanelContainer>
           <$PanelBg/>

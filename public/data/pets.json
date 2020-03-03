@@ -142,18 +142,18 @@
       "id": "hotdoug2",
       "type": "magnadoodle",
       "animal": "Hot Dog",
-      "name": "Hot Doug 2",
+      "name": "Hot Doug with Overlay",
       "scene": "magnadoodle",
       "thumbnail": "./pets/hot-doug_thumbnail.jpg",
       "statuses": {
-        "DEFAULT": { "animations": [ "hd_idle" ] },
-        "IDLE": { "animations": [ "hd_idle" ] },
-        "EAT": { "animations": [ "hd_eat" ] },
-        "WALK": { "animations": [ "hd_walk" ] },
-        "LIL_IDLE": { "animations": [ "hd_lil_idle" ] },
-        "LIL_WALK": { "animations": [ "hd_lil_walk" ] },
-        "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ] },
-        "DEAD": { "animations": [ "hd_dead" ] }
+        "DEFAULT": { "animations": [ "hd_idle" ], "overlay": "example" },
+        "IDLE": { "animations": [ "hd_idle" ], "overlay": "example" },
+        "EAT": { "animations": [ "hd_eat" ], "overlay": "example" },
+        "WALK": { "animations": [ "hd_walk" ], "overlay": "example" },
+        "LIL_IDLE": { "animations": [ "hd_lil_idle" ], "overlay": "example" },
+        "LIL_WALK": { "animations": [ "hd_lil_walk" ], "overlay": "example" },
+        "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ], "overlay": "example" },
+        "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" }
       },
       "moodSwings":[
         {
@@ -402,11 +402,14 @@
       }
     }
   ],
+  
   "sprites":{
     "HotDoug":{
       "type": "Sprite_Animated",
       "imageUrl": "./pets/hot-doug.png",
-      "overlayUrl": "./pets/hot-doug-overlay-examples.png",
+      "overlays": {
+        "example": "./pets/hot-doug-overlay-examples.png"
+      },
       "spriteInfo":{
         "scale": 1,
         "orientation": -1,

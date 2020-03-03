@@ -54,6 +54,8 @@ export default class AnimationCanvas extends Component {
           img: img
         });
       };
+    }else{
+      this.setState({ imageUrl: null })
     }
     
     if(overlayUrl){
@@ -65,11 +67,17 @@ export default class AnimationCanvas extends Component {
           overlayImg: img
         });
       };
+    }else{
+      this.setState({ overlayImg: null })
     }
   }
 
   componentDidUpdate(prevProps){
     const { imageUrl, overlayUrl } = this.props.animation;
+    if(this.props.petId && prevProps.petId !== this.props.petId){
+      console.log('imageUrl', imageUrl)
+      console.log('overlayUrl', overlayUrl)
+    }
     if(imageUrl){
       if(prevProps.animation.imageUrl !== imageUrl || prevProps.animation.overlayUrl !== overlayUrl){
         this.updateImage(imageUrl, overlayUrl);

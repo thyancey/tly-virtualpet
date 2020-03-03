@@ -19,7 +19,6 @@ const $DropMenu = styled.div`
   background-color: ${themeGet('color', 'blue')};
   color: ${themeGet('color', 'white')};
   text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
-  /* ${mixin_clearBubble()} */
 
   border: .2rem solid rgba(255, 255, 255, 0.2);
   border-radius:1rem;
@@ -34,77 +33,12 @@ const $DropMenu = styled.div`
     transition: background-color .1s ease-out, transform .1s ease-out;
   }
 
-  /* color: ${themeGet('color', 'white')};
-  text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
-  background-color: ${themeGet('color', 'blue')};
-
-  border: .2rem solid rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) rgba(255, 255, 255, 0.2);
-  border-radius: 1rem;
-  box-shadow: .1rem .1rem .5rem black;
-
-  transition: background-color .1s ease-out;
-
-  &:hover{
-    background-color: ${shadeColor('blue', 10)};
-    text-shadow: 1.5px 1.5px 1.5px ${themeGet('color', 'black')};
-    transform: translate(-1px, -1px);
-    
-    transition: background-color .1s ease-out, transform .1s ease-out;
-  } */
-  
   &:active{
     background-color: ${shadeColor('blue', -10)};
     transform: translate(.5px, 1px);
     
     transition: background-color .1s ease-out, transform .1s ease-out;
   }
-
-  ${p => p.isActive && css`
-    ${'' /* background-color: ${themeGet('color', 'green')};
-    text-shadow: 1.5px 1.5px 1.5px ${themeGet('color', 'black')};
-    transform: translate(-1px, -1px);
-    
-    transition: background-color .1s ease-out, transform .1s ease-out; */}
-  `} 
-
-
-
-  /* color: ${themeGet('color', 'white')};
-  text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
-  background-color: ${themeGet('color', 'blue')};
-
-  border: .2rem solid rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) rgba(255, 255, 255, 0.2);
-  border-radius: 1rem;
-  box-shadow: .1rem .1rem .5rem black;
-
-  transition: background-color .1s ease-out;
-
-  &:hover{
-    background-color: ${shadeColor('blue', 10)};
-    text-shadow: 1.5px 1.5px 1.5px ${themeGet('color', 'black')};
-    transform: translate(-1px, -1px);
-    
-    transition: background-color .1s ease-out, transform .1s ease-out;
-  }
-  
-  &:active{
-    background-color: ${shadeColor('blue', -10)};
-    transform: translate(.5px, 1px);
-    
-    transition: background-color .1s ease-out, transform .1s ease-out;
-  }
-
-  ${p => p.isActive && css`
-    color: ${themeGet('color', 'yellow')};
-    text-shadow: 1px 1px 1.5px ${themeGet('color', 'black')};
-    background-color: ${themeGet('color', 'green')};
-
-    &:hover{
-      background-color: ${shadeColor('green', 10)};
-    }
-  `} */
 `;
 
 
@@ -131,13 +65,9 @@ const $DropItem = styled.div`
   flex-direction: row;
 
   >*{
-    /* display:inline-block; */
-    /* vertical-align:middle; */
     :first-child{
-      /* max-width:30%; */
     }
     :last-child{
-      /* max-width:100%; */
       flex:1;
     }
   }

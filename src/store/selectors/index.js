@@ -57,6 +57,14 @@ export const selectActivePets = createSelector(
   }
 );
 
+
+export const selectActivePetId = createSelector(
+  [getActivePetId],
+  (activePetId = null) => {
+    return activePetId;
+  }
+);
+
 export const selectActivePetData = createSelector(
   [getActivePetId, getPets],
   (activePetId, allPets) => {
@@ -80,14 +88,6 @@ export const selectActivePet = createSelector(
       ...activePet,
       data: activePetData
     }
-  }
-);
-
-export const selectActivePetId = createSelector(
-  [getActivePet],
-  (activePet) => {
-    if(!activePet) return null;
-    return activePet.id
   }
 );
 
@@ -127,7 +127,7 @@ const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
   }
 }
 
-const createSpriteObj = (label, graphic, sprite) => {
+const createSpriteObj = (label, overlayLabel, graphic, sprite) => {
   sprite.spriteInfo = sprite.spriteInfo || {};
 
   let faceDirection;
@@ -149,10 +149,12 @@ const createSpriteObj = (label, graphic, sprite) => {
     orientation = 1;
   }
 
+  const overlayUrl = overlayLabel && sprite.overlays && sprite.overlays[overlayLabel] || null;
+
   return {
     type: sprite.type,
     imageUrl: sprite.imageUrl,
-    overlayUrl: sprite.overlayUrl,
+    overlayUrl: overlayUrl,
     label: label,
     spriteInfo:{
       speed: graphic.speed || sprite.spriteInfo.speed || 1,
@@ -385,13 +387,14 @@ export const selectActivePetAnimation = createSelector(
     }
     const animIdx = Math.floor(Math.random() * statusObj.animations.length)
     const animationLabel = statusObj.animations[animIdx];
+    const overlayLabel = statusObj.overlay || null;
 
     const foundGraphic = aData.graphics[animationLabel];
     if(foundGraphic){
       const sprite = sprites[foundGraphic.sprite];
 
       if(animationLabel && foundGraphic && sprite){
-        const spriteObj = createSpriteObj(animationLabel, foundGraphic, sprite);
+        const spriteObj = createSpriteObj(animationLabel, overlayLabel, foundGraphic, sprite);
         return spriteObj;
       }else{
         console.error(`Error getting spriteObj for ${animationLabel}`);

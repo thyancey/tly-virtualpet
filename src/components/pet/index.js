@@ -16,6 +16,7 @@ import {
   removeActivity
 } from '../../store/actions/pet';
 import { 
+  selectActivePetId,
   selectActivePetActivities,
   selectActivePetAnimation,
   selectActiveSceneFloorOffset,
@@ -236,7 +237,6 @@ class Pet extends Component {
   recalcMaxBounds(resetPetPosition){
     const spriteInfo = this.props.animation && this.props.animation.spriteInfo || null;
     if(spriteInfo){
-      console.log('see ', spriteInfo)
       const spriteScale = spriteInfo.scale * global.spriteScale;
       const spriteSize = spriteInfo.cells.map(s => s * spriteScale);
 
@@ -275,11 +275,10 @@ class Pet extends Component {
   render(){
     // console.log('R: Pet');
     // console.log('behavior:', this.props.behavior);
-    const { animation, containerWidth, containerHeight, activities } = this.props;
+    const { animation, containerWidth, containerHeight, petId } = this.props;
     //- some error happened
     if(!animation) return null;
 
-    // console.log('activities', activities);
 
     let drawCommand = null;
     if(animation.type){
@@ -292,7 +291,7 @@ class Pet extends Component {
 
     return (
       <$PetContainer>
-        <AnimationCanvas containerWidth={containerWidth} containerHeight={containerHeight} animation={animation} drawCommand={drawCommand} />
+        <AnimationCanvas petId={petId} containerWidth={containerWidth} containerHeight={containerHeight} animation={animation} drawCommand={drawCommand} />
       </$PetContainer>
     );
   }
@@ -300,6 +299,7 @@ class Pet extends Component {
 
 
 const mapStateToProps = (state) => ({
+  petId: selectActivePetId(state),
   behavior: selectCurrentPetBehavior(state),
   activities: selectActivePetActivities(state),
   animation: selectActivePetAnimation(state),
