@@ -152,8 +152,12 @@
         "WALK": { "animations": [ "hd_walk" ], "overlay": "example" },
         "LIL_IDLE": { "animations": [ "hd_lil_idle" ], "overlay": "example" },
         "LIL_WALK": { "animations": [ "hd_lil_walk" ], "overlay": "example" },
-        "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ], "overlay": "example" },
-        "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" }
+        "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" },
+        "IDLE_DYING": { "animations": [ "hd_idle" ], "overlay": "green" },
+        "EAT_DYING": { "animations": [ "hd_eat" ], "overlay": "green" },
+        "WALK_DYING": { "animations": [ "hd_walk" ], "overlay": "green" },
+        "LIL_IDLE_DYING": { "animations": [ "hd_lil_idle" ], "overlay": "green" },
+        "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
       },
       "moodSwings":[
         {
@@ -164,10 +168,11 @@
         },
         {
           "when":[
+            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
             { "type":"stat", "stat":"meatyness", "value": "<_20%" },
-            { "type": "activity", "activity": "EATING" }
+            { "type": "activity", "activity": "WALKING" }
           ],
-          "then": "EAT"
+          "then": "LIL_WALK_DYING"
         },
         {
           "when":[
@@ -178,16 +183,24 @@
         },
         {
           "when":[
+            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
+            { "type":"stat", "stat":"meatyness", "value": "<_20%" }
+          ],
+          "then": "LIL_IDLE_DYING"
+        },
+        {
+          "when":[
             { "type":"stat", "stat":"meatyness", "value": "<_20%" }
           ],
           "then": "LIL_IDLE"
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": ">=_20%" },
-            { "type":"stat", "stat":"meatyness", "value": "<_40%" }
+            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
+            { "type": "activity", "activity": "EATING" }
           ],
-          "then": "LIL_EMERGE"
+          "then": "EAT_DYING"
         },
         {
           "when":[
@@ -198,6 +211,14 @@
         },
         {
           "when":[
+            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
+            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK_DYING"
+        },
+        {
+          "when":[
             { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "WALKING" }
           ],
@@ -205,8 +226,12 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": ">=_40%" }
+            { "type":"stat", "stat":"shelflife", "value": "<_30%" }
           ],
+          "then": "IDLE_DYING"
+        },
+        {
+          "when":[],
           "then": "IDLE"
         }
       ],
@@ -228,13 +253,22 @@
             "max": "500"
           },
           { 
+            "id":"shelflife",
+            "label":"Shelf Life",
+            "value": "100",
+            "perSecond": "-1",
+            "max": "100",
+            "fullIsGood": true,
+            "doesKill": true
+          },
+          { 
             "id":"meatyness",
             "label":"MEATYNESS",
             "value": "50",
             "perSecond": "-1",
             "max": "100",
             "fullIsGood": true,
-            "doesKill": true
+            "doesKill": false
           }
         ]
       },
@@ -408,7 +442,8 @@
       "type": "Sprite_Animated",
       "imageUrl": "./pets/hot-doug.png",
       "overlays": {
-        "example": "./pets/hot-doug-overlay-examples.png"
+        "example": "./pets/hot-doug-overlay-examples.png",
+        "green": "./pets/hot-doug-overlay-green.png"
       },
       "spriteInfo":{
         "scale": 1,

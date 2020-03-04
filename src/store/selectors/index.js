@@ -320,13 +320,17 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
     const m = moodSwings[i];
 
     let whenResult = null;
-    for(let w = 0; w < m.when.length; w++){
-
-      //- if any when is false, skip this swing
-      whenResult = evaluateWhen(m.when[w], moodSwingData);
-
-      if(!whenResult){
-        break;
+    if(!m.when || m.when.length === 0){
+      whenResult = true;
+    }else{
+      for(let w = 0; w < m.when.length; w++){
+  
+        //- if any when is false, skip this swing
+        whenResult = evaluateWhen(m.when[w], moodSwingData);
+  
+        if(!whenResult){
+          break;
+        }
       }
     }
 

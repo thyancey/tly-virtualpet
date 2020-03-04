@@ -340,6 +340,7 @@ export const deleteAllData = () => {
 
 global.petStore = {
   getAllData: () => store,
+  deleteAllData: () => deleteAllData(),
   getPets: () => getPets(),
   getPetStoreData: (itemType) => getPetStoreData(itemType),
   getPetDefinition: (id) => getPetDefinition(id),
