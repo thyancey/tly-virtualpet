@@ -183,7 +183,7 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
+            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] },
             { "type":"stat", "stat":"meatyness", "value": "<_20%" }
           ],
           "then": "LIL_IDLE_DYING"
@@ -196,7 +196,7 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
+            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] },
             { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "EATING" }
           ],
@@ -211,7 +211,7 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"shelflife", "value": "<_30%" },
+            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] },
             { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "WALKING" }
           ],
@@ -226,7 +226,7 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"shelflife", "value": "<_30%" }
+            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] }
           ],
           "then": "IDLE_DYING"
         },
@@ -243,14 +243,20 @@
             "type": "number",
             "value": "2",
             "perSecond": "0",
-            "max": "10"
+            "max": "10",
+            "modifiers":[
+              { "when": ">=_10", "then": "MODIFIER_EVOLVE" }
+            ]
           },
           {
             "id": "xp",
             "type": "number",
             "value": "300",
             "perSecond": "0",
-            "max": "500"
+            "max": "500",
+            "modifiers":[
+              { "when": "<_90%", "then": "MODIFIER_POWERUP" }
+            ]
           },
           { 
             "id":"shelflife",
@@ -259,16 +265,24 @@
             "perSecond": "-1",
             "max": "100",
             "fullIsGood": true,
-            "doesKill": true
+            "doesKill": true,
+            "modifiers":[
+              { "when": "<_20%", "then": "MODIFIER_OLD" },
+              { "when": ">_80%", "then": "MODIFIER_FRESH" }
+            ]
           },
           { 
             "id":"meatyness",
             "label":"MEATYNESS",
             "value": "50",
             "perSecond": "-1",
-            "max": "100",
+            "max": "150",
             "fullIsGood": true,
-            "doesKill": false
+            "doesKill": false,
+            "modifiers":[
+              { "when": "<=_30%", "then": "MODIFIER_TINY" },
+              { "when": ">=_70%", "then": "MODIFIER_LARGE" }
+            ]
           }
         ]
       },

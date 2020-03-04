@@ -62,7 +62,6 @@ export const gatherTaxonomy = (pets) => {
 }
 
 export const getPetTypes = () => {
-  console.error('getPetTypes')
 
   let allPetTypes = [];
   store.pets.forEach(p => {
@@ -114,15 +113,16 @@ export const parseMoodSwings = (moodSwings) => {
   return moodSwings || [];
 }
 
+
 export const setPetDefinitions = petList => {
   //- grab cookie, if cookie, get list of saved pet stats
   let savedData = getCookieObj('tly_virtualpet');
-  console.log('savedData', savedData);
   if(savedData && (!savedData.schemaVersion || savedData.schemaVersion < SAVE_SCHEMA_VERSION)){
     console.warn(`Schema version ${savedData.schemaVersion} is behind version ${SAVE_SCHEMA_VERSION}, resetting all your data, sorry bubs`);
     deleteCookie('tly_virtualpet');
     savedData = null;
   }
+  
 
   if(!savedData){
     savedData = getDefaultSavedData();
@@ -142,7 +142,7 @@ export const setPetDefinitions = petList => {
     const moodSwings = parseMoodSwings(p.moodSwings);
 
     const savedPet = savedData.pets.find(savedPet => savedPet.id === p.id);
-    const definedStats = p.stats_initial.stats.map(stat => formatStatObj(stat));
+    const definedStats = p.stats_initial.stats;
     let initialStats = [];
 
     /* if cookie stats, use them here instead */
@@ -157,7 +157,7 @@ export const setPetDefinitions = petList => {
     p.stats_saved = {
       timestamp: savedData.timestamp || new Date().getTime(),
       isAlive: savedData.isAlive,
-      stats: initialStats
+      stats: initialStats.map(s => formatSavedStatObj(s))
     }
     setPetDefinition(p.id, p);
 
@@ -181,7 +181,7 @@ const mergeStats = (origArray, newArray, overwrite) => {
     const matchingStatIdx = retArray.findIndex(oStat => oStat.id === newStat.id);
     if(matchingStatIdx > -1){
       if(overwrite){
-        retArray[matchingStatIdx] = newStat;
+        retArray[matchingStatIdx] = { ... retArray[matchingStatIdx], ...newStat };
       }else{
         //- not unique, dont add it
       }
@@ -221,29 +221,48 @@ export const getStatRules = (petId) => {
   return petDef.stats_initial.stats.map(s => ({
     doesKill: s.doesKill || false,
     fullIsGood: s.fullIsGood,
-    max: s.max
+    max: s.max,
+    modifiers: s.modifiers || []
   }));
 }
 
-export const getPetDeltaStats = (petId, timestamp) => {
-  // console.log('getPetDeltaStats', petId, timestamp)
-  const petDef = getPetDefinition(petId);
 
-  return getDeltaStats(petDef.stats_saved, timestamp);
+export const fancyUpSavedStats = (initialStats, savedStats, timestamp) => {
+  const mergedStats = initialStats.stats.map(iS => {
+    const savedStat = savedStats.stats.find(sS => sS.id === iS.id);
+    return {...iS, ...savedStat}
+  });
+
+
+  return {
+    timestamp: savedStats.timestamp || timestamp,
+    stats: mergedStats.map(mS => formatStatObj(mS))
+  }
+
+
+}
+
+export const getPetDeltaStats = (petId, timestamp) => {
+  const petDef = getPetDefinition(petId);
+  const mergedStats = fancyUpSavedStats(petDef.stats_initial, petDef.stats_saved, timestamp)
+
+  return getDeltaStats(mergedStats, timestamp);
 }
 
 export const getDeltaStats = (statsObj, timestamp) =>{
   const oldStats = statsObj.stats || [];
   const timeDiff = (timestamp - statsObj.timestamp) / 1000;
 
-  return oldStats.map(s => ({
-    ...s,
-    value: s.value,
-    max: s.max,
-    current: Math.round(clamp(s.value + (s.perSecond * timeDiff), 0, s.max))
-  }));
+  return oldStats.map(s => {
+    return {
+      ...s,
+      value: s.value,
+      max: s.max,
+      current: Math.round(clamp(s.value + (s.perSecond * timeDiff), 0, s.max)),
+      modifiers: s.modifiers
+    }
+  });
 }
-
 
 export const killThisPet = petId => {
   console.error('KILL THIS PET ', petId)
@@ -251,8 +270,6 @@ export const killThisPet = petId => {
   petDef.isAlive = false;
   setPetDefinition(petId, petDef, true);
 }
-
-
 
 export const augmentPetStat = (petId, statId, augmentValue) => {
   const now = new Date().getTime();
@@ -265,17 +282,16 @@ export const augmentPetStat = (petId, statId, augmentValue) => {
 }
 
 
-
-
 /* SAVING */
 export const saveStats = (petId, stats, timestamp) => {
+  // console.log('SAVING', petId, timestamp);
   const petDef = getPetDefinition(petId);
   // console.log(petDef)
   // console.error('saving isAlive as ', petDef.isAlive)
   petDef.stats_saved = {
     timestamp: timestamp,
     isAlive: petDef.isAlive,
-    stats: stats.map(s => ({ ...s, value: s.current }))
+    stats: stats.map(s => (formatSavedStatObj({ ...s, value: s.current})))
   }
   setPetDefinition(petId, petDef, true);
 }
@@ -292,6 +308,22 @@ export const saveAllPetStatsToCookie = () => {
   });
 }
 
+export const formatSavedStatObj = stat => {
+
+  //- TODO, only NEED to save id and value, however other stuff depends on (and shouldnt depend on) these being in the cookie
+
+  return {
+    id: stat.id,
+    value: stat.value,
+    type: stat.type,
+    label: stat.label,
+    perSecond: stat.perSecond,
+    max: stat.max,
+    fullIsGood: stat.fullIsGood,
+    doesKill: stat.doesKill
+  }
+} 
+
 
 export const saveAllPetStatsToCookieNow = () => {
   store.pets.forEach(p => {
@@ -302,7 +334,7 @@ export const saveAllPetStatsToCookieNow = () => {
     p.stats_saved = {
       timestamp: now,
       isAlive: p.isAlive,
-      stats: stats.map(s => ({ ...s, value: s.current }))
+      stats: stats.map(s => (formatSavedStatObj({ ...s, value: s.current})))
     }
     setPetDefinition(p.id, p);
   });
@@ -315,7 +347,8 @@ export const saveAllPetStatsToCookieNow = () => {
 /* RESETTING */
 export const resetPetState = petId => {
   const petDef = getPetDefinition(petId);
-  const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
+  const definedStats = petDef.stats_initial.stats;
+  // const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
 
   petDef.isAlive = true;
   setPetDefinition(petId, petDef)
@@ -327,7 +360,6 @@ export const resetPetState = petId => {
     stats: definedStats
   }, now);
 
-  console.log('resetPetState-> ', statsObj)
   saveStats(petId, statsObj, new Date().getTime());
 }
 

@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getPetDeltaStats, getStatRules, getTaxonomy } from 'util/pet-store';
+import { getPets, getSprites, getPetDeltaStats, getStatRules, getTaxonomy  } from 'util/pet-store';
 import { getSceneDefinition } from 'util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
 
@@ -97,9 +97,7 @@ export const selectActiveScene = createSelector(
     if(!activePetData) return null;
 
     const sceneId = activePetData.scene;
-    console.log('sceneId', sceneId);
     const scene = getSceneDefinition(sceneId);
-    console.log('scene', scene);
     if(scene){
       return scene;
     }else{
@@ -180,17 +178,17 @@ export const selectActivePetActivities = createSelector(
   }
 );
 
-
 export const selectActiveDeltaStats = createSelector(
   [selectActivePet, getPing],
   (activePet, ping) => {
     if(!activePet) return null;
 
-    const statRules =  getStatRules(activePet.id);
+    const statRules = getStatRules(activePet.id);
 
-    return getDeltaStatsArray(activePet, statRules);
+    const ds = getDeltaStatsArray(activePet, statRules);
+    return ds;
   }
-)
+);
 
 export const selectActiveSceneStyles = createSelector(
   [selectActiveScene],
@@ -201,22 +199,66 @@ export const selectActiveSceneStyles = createSelector(
 )
 
 
+export const selectActiveModifiers = createSelector(
+  [selectActivePet, selectActiveDeltaStats],
+  (activePet, deltaStats) => {
+    if(!activePet || !deltaStats) return [];
+
+    const statRules = getStatRules(activePet.id);
+
+    let activeModifiers = [];
+    deltaStats.forEach(stat => {
+      if(!stat.modifiers || stat.modifiers.length === 0) return;
+      const deltaStatActiveModifiers = getActiveModifiers(stat.modifiers, stat);
+      deltaStatActiveModifiers.forEach(dsam => {
+        if(activeModifiers.indexOf(dsam) === -1) activeModifiers.push(dsam);
+      })
+    });
+  
+    return activeModifiers;
+  }
+);
+
+const evaluateModifier = (whenObj, statObj) => {
+  if(evaluateCondition(whenObj.when, statObj)){
+    return whenObj.then;
+  }else{
+    return null;
+  }
+
+}
+
+const getActiveModifiers = (whenModifiers, statObj) => {
+
+  let matchedModifiers = [];
+  for(let i = 0; i < whenModifiers.length; i++){
+    const result = evaluateModifier(whenModifiers[i], statObj)
+    if(result && matchedModifiers.indexOf(result) === -1) matchedModifiers.push(result);
+  }
+
+  return matchedModifiers;
+}
+
 const getDeltaStatsArray = (activePet, statRules) => {
   if(!activePet || !activePet.id) return [];
 
   const deltaStats = getPetDeltaStats(activePet.id, new Date().getTime());
-
-  return deltaStats.map((stat, idx) => ({
-    id: stat.id,
-    type: stat.type,
-    label: stat.label || stat.id,
-    cur: stat.current,
-    max: stat.max,
-    percent: (stat.current / stat.max) * 100,
-    fullIsGood: statRules[idx].fullIsGood,
-    doesKill: statRules[idx].doesKill,
-    fillType: 'fill'
-  }));
+  return deltaStats.map((stat, idx) => {
+    const statPercent = (stat.current / stat.max) * 100;
+    
+    return {
+      id: stat.id,
+      type: stat.type,
+      label: stat.label || stat.id,
+      cur: stat.current,
+      max: stat.max,
+      percent: statPercent,
+      fullIsGood: statRules[idx].fullIsGood,
+      doesKill: statRules[idx].doesKill,
+      fillType: 'fill',
+      modifiers: stat.modifiers || []
+    }
+  });
 } 
 
 export const VALID_EXPRESSIONS = [ '=', '<', '<=', '>', '>=' ];
@@ -244,8 +286,8 @@ export const evaluateExpression = (expression, value, criteria) => {
   }
 }
 
-export const evaluateStat = (stat, value, statValue) => {
-  const valueTokens = value.split('_');
+export const evaluateCondition = (expressionString, statValue) => {
+  const valueTokens = expressionString.split('_');
 
   const valueExpression = valueTokens[0];
   const valueCriteria = valueTokens[1];
@@ -262,17 +304,38 @@ export const evaluateStat = (stat, value, statValue) => {
   }
 
   if(!valueExpression){
-    console.error('evaluateSet(), valueExpression is not defined! ', value)
+    console.error('evaluateSet(), valueExpression is not defined! ', expressionString)
   }
   const expression = evaluateExpression(valueExpression, checkValue, criteria);
   // console.log('foundExpression:', expression);
   return expression;
 }
 
+export const evaluateModifiers = (whenModifiers, currentModifiers) => {
+  let modifiersMatched = [];
+
+  for(let i = 0; i < whenModifiers.length; i++){
+    if(currentModifiers.indexOf(whenModifiers[i]) === -1){
+      break;
+    }else{
+      modifiersMatched.push(whenModifiers[i]);
+    }
+  }
+
+  return modifiersMatched.length === whenModifiers.length;
+}
+
 export const evaluateWhen = (when, moodSwingData) => {
   // console.log('evaluateWhen()', when, moodSwingData);
 
   switch(when.type){
+    case 'modifiers': {
+      if(evaluateModifiers(when.modifiers, moodSwingData.activeModifiers)){
+        return when;
+      }else{
+        return null;
+      }
+    }
     case 'activity': {
       if(moodSwingData.activities.indexOf(when.activity) > -1){
         return when;
@@ -287,7 +350,7 @@ export const evaluateWhen = (when, moodSwingData) => {
         return null;
       }
 
-      const statResult = evaluateStat(when.stat, when.value, statValue);
+      const statResult = evaluateCondition(when.value, statValue);
       if(statResult){
         return when;
       }else{
@@ -346,8 +409,8 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
 }
 
 export const selectCurrentPetBehavior = createSelector(
-  [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, getForcedBehavior],
-  (activePet, stats, activities, forcedBehavior) => {
+  [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveModifiers, getForcedBehavior],
+  (activePet, deltaStats, activities, activeModifiers, forcedBehavior) => {
     // console.log('selectCurrentPetBehavior');
     if(!activePet || !activePet.id){
       return 'PET NOT FOUND';
@@ -364,11 +427,11 @@ export const selectCurrentPetBehavior = createSelector(
         isDead: activePet && !activePet.isAlive || false
       }
   
-      // console.log('pet is ', activePet);
       const newBehavior = checkMoodSwingForBehavior(petDef.moodSwings, {
         status: status,
-        stats: stats,
-        activities: activities
+        stats: deltaStats,
+        activities: activities,
+        activeModifiers: activeModifiers
       });
   
       // console.warn('newBehavior is ', newBehavior);

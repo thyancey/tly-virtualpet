@@ -187,7 +187,6 @@ class PetStats extends Component {
     const isAlive = activePet.isAlive;
     if(isAlive) this.checkForDead(deltaStats);
 
-
     return (
       <$PetStats>
         {deltaStats.map((s, i) => {

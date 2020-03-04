@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { ping } from 'store/actions';
 
-const STAT_PING_RATE = 800;
+const STAT_PING_RATE = 1000;
 
 require('themes/app.scss');
 
