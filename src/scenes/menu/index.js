@@ -110,7 +110,7 @@ class Menu extends Component {
             <Button text={'menu'} onClick={() => this.props.onToggleMenu()}/>
           </$MenuButton>
           <$PanelContainer>
-            <PetSelection onSelectPet={() => {}} />
+            <PetSelection onSelectPet={() => this.props.onToggleMenu(false)} />
             <$ResetButton>
               <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} style={{backgroundColor: getColor('red')}} />
             </$ResetButton>

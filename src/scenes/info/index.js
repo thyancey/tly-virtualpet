@@ -7,7 +7,7 @@ import { themeGet, getColor, mixin_clearBubble } from 'themes/';
 
 import ProgressBar from './components/progress-bar';
 
-import { LilButton, Button } from 'components/button';
+import { LilButton, Button, NotAButton } from 'components/button';
 
 
 import {
@@ -24,7 +24,9 @@ import {
   selectActiveDeltaStats,
   selectActiveSceneStyles,
   selectCurrentPetBehavior,
-  selectActivePetActivities
+  getForcedBehavior,
+  selectActivePetActivities,
+  selectActiveMoods
 } from 'store/selectors';
 
 
@@ -173,7 +175,9 @@ class PetStats extends Component {
       behavior,
       deltaStats,
       forceBehavior,
+      forcedBehavior,
       sceneStyles,
+      moods,
       activities
     } = this.props;
     if(!activePet) return null;
@@ -186,15 +190,16 @@ class PetStats extends Component {
 
     const isAlive = activePet.isAlive;
     if(isAlive) this.checkForDead(deltaStats);
+    const allMoods = Object.keys(petData.moods).map(mKey => ({ id: mKey, label: petData.moods[mKey].label || mKey }));
 
     return (
       <$PetStats>
         {deltaStats.map((s, i) => {
           if(s.type === 'number'){
-            return null;
-            {/* return (
+            {/* return null; */}
+            return (
               <StatDisplay key={i} statObj={s} />
-            ); */}
+            );
           }else{
             return (
               <ProgressBar key={i} sceneStyles={sceneStyles} statObj={s} label={s.label} augmentAction={(id, val) => this.updateStat(id, val)}/>
@@ -207,15 +212,26 @@ class PetStats extends Component {
         </$InfoButton>
         <$Info showInfo={this.state.isInfoOpen}>
           <p>{'Activities'}</p>
-          <LilButton isActive={activities.indexOf('WALKING') > -1} text={'WALKING'} />
-          <LilButton isActive={activities.indexOf('JUMPING') > -1} text={'JUMPING'} />
-          <LilButton isActive={activities.indexOf('DUCKING') > -1} text={'DUCKING'} />
-          <LilButton isActive={activities.indexOf('EATING') > -1} text={'EATING'} />
+            <NotAButton isActive={activities.indexOf('WALKING') > -1} text={'WALKING'} />
+            <NotAButton isActive={activities.indexOf('JUMPING') > -1} text={'JUMPING'} />
+            <NotAButton isActive={activities.indexOf('DUCKING') > -1} text={'DUCKING'} />
+            <NotAButton isActive={activities.indexOf('EATING') > -1} text={'EATING'} />
           <hr/>
-          <p>{'Status'}</p>
-          {statusIds.map((aId, idx) => (
-            <LilButton key={idx} isActive={behavior === aId} text={aId} onClick={() => forceBehavior(aId)} />
-          ))}
+          <p>{'Moods'}</p>
+            {allMoods.map((mood, idx) => (
+              <NotAButton key={idx} isActive={moods.indexOf(mood.id) > -1} text={mood.label} onClick={() => {}} />
+            ))}
+          <hr/>
+          <p>{'Behaviors (click to toggle override)'}</p>
+            {statusIds.map((aId, idx) => 
+              {
+                return (forcedBehavior === aId) ? (
+                  <LilButton key={idx} isActive={behavior === aId} text={aId} onClick={() => forceBehavior(aId)} style={{ backgroundColor: getColor('purple') }}/>
+                ):(
+                  <LilButton key={idx} isActive={behavior === aId} text={aId} onClick={() => forceBehavior(aId)} />
+                )
+              }
+            )}
           <hr/>
 
           <div>
@@ -239,6 +255,8 @@ const mapStateToProps = (state) => ({
   deltaStats: selectActiveDeltaStats(state),
   sceneStyles: selectActiveSceneStyles(state),
   behavior: selectCurrentPetBehavior(state),
+  forcedBehavior: getForcedBehavior(state),
+  moods: selectActiveMoods(state),
   activities: selectActivePetActivities(state)
 })
 

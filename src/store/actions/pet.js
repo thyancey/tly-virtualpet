@@ -1,7 +1,6 @@
 import { createAction } from 'redux-actions';
 
 export const incrementXp = createAction('INCREMENT_XP');
-export const setMood = createAction('SET_MOOD');
 export const addActivity = createAction('ADD_ACTIVITY');
 export const removeActivity = createAction('REMOVE_ACTIVITY');
 export const forceBehavior = createAction('FORCE_BEHAVIOR');

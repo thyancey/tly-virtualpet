@@ -2,9 +2,40 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { themeGet, mixin_textStroke, shadeColor } from 'themes/';
 
-const thickness = '2px';
-const spread = '2px';
-const color = 'black';
+const $NotAButton = styled.div`
+  color: ${themeGet('color', 'grey')};
+  text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
+  /* background-color: ${themeGet('color', 'grey')}; */
+  /* border-radius: 1rem; */
+  /* border: .2rem solid rgba(255, 255, 255, 0.2); */
+
+  display:inline-block;
+
+
+  
+  border: .2rem solid rgba(255, 255, 255, 0.2);
+  border-radius:1rem;
+  border-color:  rgba(0, 0, 0, .2) rgba(255, 255, 255, .2) rgba(255, 255, 255, .2) rgba(0, 0, 0, .2);
+  box-shadow: -.1rem -.1rem .5rem black;
+  background-color: ${themeGet('color', 'black')};
+
+
+  
+  ${p => p.isActive && css`
+    color: ${themeGet('color', 'grey')};
+    text-shadow: .5px .5px .75px ${themeGet('color', 'black')};
+    background-color: ${themeGet('color', 'yellow')};
+  `}
+
+  
+  padding: .5rem 1.5rem;
+  margin: .5rem;
+  font-size: 2rem;
+  font-weight: 600;
+
+  span{
+  }
+`
 
 const $Button = styled.button`
   cursor:pointer;
@@ -81,5 +112,13 @@ export const LilButton = ({ text, isActive, onClick, style }) => {
     <$LilButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
       <span>{ text }</span>
     </$LilButton>
+  );
+}
+
+export const NotAButton = ({ text, isActive, onClick, style }) => {
+  return (
+    <$NotAButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+      <span>{ text }</span>
+    </$NotAButton>
   );
 }

@@ -17,6 +17,8 @@
         "LIL_EMERGE": { "animations": [ "hd_lil_emerge" ] },
         "DEAD": { "animations": [ "hd_dead" ] }
       },
+      "moods":{
+      },
       "moodSwings":[
         {
           "when":[
@@ -46,29 +48,18 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": ">=_20%" },
-            { "type":"stat", "stat":"meatyness", "value": "<_40%" }
-          ],
-          "then": "LIL_EMERGE"
-        },
-        {
-          "when":[
-            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "EATING" }
           ],
           "then": "EAT"
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "WALKING" }
           ],
           "then": "WALK"
         },
         {
-          "when":[
-            { "type":"stat", "stat":"meatyness", "value": ">=_40%" }
-          ],
+          "when":[],
           "then": "IDLE"
         }
       ],
@@ -159,6 +150,14 @@
         "LIL_IDLE_DYING": { "animations": [ "hd_lil_idle" ], "overlay": "green" },
         "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
       },
+      "moods":{
+        "MOOD_EVOLVE": { "label": "Evolve"},
+        "MOOD_POWERUP": { "label": "Power UP!"},
+        "MOOD_OLD": { "label": "Old and stinky"},
+        "MOOD_FRESH": { "label": "FRESH"},
+        "MOOD_TINY": { "label": "Vienna Sausage"},
+        "MOOD_LARGE": { "label": "chonky"}
+      },
       "moodSwings":[
         {
           "when":[
@@ -183,7 +182,7 @@
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] },
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
             { "type":"stat", "stat":"meatyness", "value": "<_20%" }
           ],
           "then": "LIL_IDLE_DYING"
@@ -196,7 +195,7 @@
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] },
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
             { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "EATING" }
           ],
@@ -211,7 +210,7 @@
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] },
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
             { "type":"stat", "stat":"meatyness", "value": ">=_40%" },
             { "type": "activity", "activity": "WALKING" }
           ],
@@ -226,7 +225,7 @@
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_OLD" ] }
+            { "type":"moods", "moods": [ "MOOD_OLD" ] }
           ],
           "then": "IDLE_DYING"
         },
@@ -244,8 +243,8 @@
             "value": "2",
             "perSecond": "0",
             "max": "10",
-            "modifiers":[
-              { "when": ">=_10", "then": "MODIFIER_EVOLVE" }
+            "moods":[
+              { "when": ">=_10", "then": "MOOD_EVOLVE" }
             ]
           },
           {
@@ -254,8 +253,8 @@
             "value": "300",
             "perSecond": "0",
             "max": "500",
-            "modifiers":[
-              { "when": "<_90%", "then": "MODIFIER_POWERUP" }
+            "moods":[
+              { "when": "<_90%", "then": "MOOD_POWERUP" }
             ]
           },
           { 
@@ -266,9 +265,9 @@
             "max": "100",
             "fullIsGood": true,
             "doesKill": true,
-            "modifiers":[
-              { "when": "<_20%", "then": "MODIFIER_OLD" },
-              { "when": ">_80%", "then": "MODIFIER_FRESH" }
+            "moods":[
+              { "when": "<_20%", "then": "MOOD_OLD" },
+              { "when": ">_80%", "then": "MOOD_FRESH" }
             ]
           },
           { 
@@ -279,9 +278,9 @@
             "max": "150",
             "fullIsGood": true,
             "doesKill": false,
-            "modifiers":[
-              { "when": "<=_30%", "then": "MODIFIER_TINY" },
-              { "when": ">=_70%", "then": "MODIFIER_LARGE" }
+            "moods":[
+              { "when": "<=_30%", "then": "MOOD_TINY" },
+              { "when": ">=_70%", "then": "MOOD_LARGE" }
             ]
           }
         ]
@@ -338,8 +337,16 @@
         "DEAD": { "animations": [ "dead" ] },
         "WALK": { "animations": [ "walk" ] },
         "RUN": { "animations": [ "run" ] },
+        "DUCK": { "animations": [ "duck" ] },
         "ANGRY": { "animations": [ "angry" ] },
         "DYING": { "animations": [ "dying" ] }
+      },
+      "moods":{
+        "MOOD_POWERUP":  { "label": "Power UP"},
+        "MOOD_FULL":  { "label": "Full"},
+        "MOOD_HUNGRY":  { "label": "Hungry"},
+        "MOOD_EXPOSED":  { "label": "Exposed"},
+        "MOOD_SNEAKY": { "label": "Sneaky"}
       },
       "moodSwings":[
         {
@@ -350,7 +357,7 @@
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_SNEAKY" ] },
+            { "type":"moods", "moods": [ "MOOD_SNEAKY" ] },
             { "type": "activity", "activity": "WALKING" }
           ],
           "then": "RUN"
@@ -363,19 +370,25 @@
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_HUNGRY", "MODIFIER_EXPOSED" ] }
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "DUCK"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] }
           ],
           "then": "ANGRY"
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_HUNGRY" ] }
+            { "type":"moods", "moods": [ "MOOD_HUNGRY" ] }
           ],
           "then": "IDLE_SAD"
         },
         {
           "when":[
-            { "type":"modifiers", "modifiers": [ "MODIFIER_EXPOSED" ] }
+            { "type":"moods", "moods": [ "MOOD_EXPOSED" ] }
           ],
           "then": "IDLE_SAD"
         },
@@ -393,9 +406,7 @@
             "value": "2",
             "perSecond": "0",
             "max": "10",
-            "modifiers":[
-              { "when": ">=_10", "then": "MODIFIER_EVOLVE" }
-            ]
+            "moods":[]
           },
           {
             "id": "xp",
@@ -403,8 +414,8 @@
             "value": "300",
             "perSecond": "0",
             "max": "500",
-            "modifiers":[
-              { "when": ">_90%", "then": "MODIFIER_POWERUP" }
+            "moods":[
+              { "when": ">=_100%", "then": "MOOD_POWERUP" }
             ]
           },
           { 
@@ -415,9 +426,9 @@
             "max": "67",
             "fullIsGood": false,
             "doesKill": true,
-            "modifiers":[
-              { "when": "<_35%", "then": "MODIFIER_FULL" },
-              { "when": ">_75%", "then": "MODIFIER_HUNGRY" }
+            "moods":[
+              { "when": "<_35%", "then": "MOOD_FULL" },
+              { "when": ">_75%", "then": "MOOD_HUNGRY" }
             ]
           },
           { 
@@ -428,9 +439,9 @@
             "max": "126",
             "fullIsGood": true,
             "doesKill": false,
-            "modifiers":[
-              { "when": "<_30%", "then": "MODIFIER_EXPOSED" },
-              { "when": ">_80%", "then": "MODIFIER_SNEAKY" }
+            "moods":[
+              { "when": "<_30%", "then": "MOOD_EXPOSED" },
+              { "when": ">_80%", "then": "MOOD_SNEAKY" }
             ]
           }
         ]
@@ -461,6 +472,11 @@
           "speed": "15",
           "frames": [ 6, 7 ]
         },
+        "duck":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 11 ]
+        },
         "angry":{
           "sprite": "Neenya",
           "speed": "15",
@@ -489,6 +505,7 @@
         "WALK": { "animations": [ "Raccoon_Walk1" ] },
         "DEAD": { "animations": [ "Raccoon_Dead1" ] }
       },
+      "moods":{},
       "moodSwings":[
         {
           "when":[

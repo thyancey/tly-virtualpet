@@ -2,7 +2,6 @@ import {
   setActivePetId
 } from '../actions';
 import { 
-  setMood,
   addActivity,
   removeActivity,
   forceBehavior,
@@ -58,14 +57,6 @@ export default handleActions({
   [augmentStat.toString()]: (state, action) => {
     augmentPetStat(state.id, action.payload.id, action.payload.value);
     return state;
-  },
-
-  [setMood.toString()]: (state, action) => {
-    console.error('setMood')
-    return {
-      ...state,
-      mood: action.payload
-    }
   },
 
   [addActivity.toString()]: (state, action) => {

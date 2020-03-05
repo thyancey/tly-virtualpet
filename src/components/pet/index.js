@@ -101,6 +101,19 @@ class Pet extends Component {
     }
   }
 
+  
+  startDucking(){
+    this.props.addActivity('DUCKING');
+
+    //- TODO, use debounce, but none of the npm modules worked for some reason
+    this.startIdleTimer();
+  }
+  stopDucking(){
+    if(this.props.activities.indexOf('DUCKING') > -1){
+      this.props.removeActivity('DUCKING');
+    }
+  }
+
   movePet(x, y){
     this.vY += y;
     this.vX += x;
@@ -135,6 +148,7 @@ class Pet extends Component {
     this.killIdleTimer();
     this.idleTimer = global.setTimeout(() => {
       this.stopWalking()
+      this.stopDucking()
     }, 200)
   }
 
@@ -158,7 +172,7 @@ class Pet extends Component {
           this.jumpPet(20);
           break;
         case 'ArrowDown':
-          this.movePet(0, 1);
+          this.startDucking();
           break;
         default:
       }

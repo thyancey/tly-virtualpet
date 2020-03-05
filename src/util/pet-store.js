@@ -1,8 +1,7 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
 import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
-import { parse } from 'query-string';
 
-const SAVE_SCHEMA_VERSION = 3;
+const SAVE_SCHEMA_VERSION = 4;
 
 const store = {
   pets:[],
@@ -222,7 +221,7 @@ export const getStatRules = (petId) => {
     doesKill: s.doesKill || false,
     fullIsGood: s.fullIsGood,
     max: s.max,
-    modifiers: s.modifiers || []
+    moods: s.moods || []
   }));
 }
 
@@ -259,7 +258,7 @@ export const getDeltaStats = (statsObj, timestamp) =>{
       value: s.value,
       max: s.max,
       current: Math.round(clamp(s.value + (s.perSecond * timeDiff), 0, s.max)),
-      modifiers: s.modifiers
+      moods: s.moods
     }
   });
 }
@@ -346,21 +345,29 @@ export const saveAllPetStatsToCookieNow = () => {
 
 /* RESETTING */
 export const resetPetState = petId => {
+  const now = new Date().getTime();
   const petDef = getPetDefinition(petId);
   const definedStats = petDef.stats_initial.stats;
   // const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
+  console.log('def', petDef)
+  console.log('defined', definedStats)
 
   petDef.isAlive = true;
-  setPetDefinition(petId, petDef)
-
-  const now = new Date().getTime();
-  const statsObj = getDeltaStats({
+  petDef.stats_saved = {
     timestamp: now,
     isAlive: true,
-    stats: definedStats
-  }, now);
+    stats: definedStats.map(s => formatSavedStatObj(s))
+  }
+  setPetDefinition(petId, petDef)
 
-  saveStats(petId, statsObj, new Date().getTime());
+  // const statsObj = getDeltaStats({
+  //   timestamp: now,
+  //   isAlive: true,
+  //   stats: definedStats.map(s => formatSavedStatObj(s))
+  // }, now);
+
+  console.log('new petDef', petDef)
+  // saveStats(petId, statsObj, new Date().getTime());
 }
 
 export const deleteAllData = () => {

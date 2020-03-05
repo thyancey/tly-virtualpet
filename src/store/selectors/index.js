@@ -199,23 +199,21 @@ export const selectActiveSceneStyles = createSelector(
 )
 
 
-export const selectActiveModifiers = createSelector(
+export const selectActiveMoods = createSelector(
   [selectActivePet, selectActiveDeltaStats],
   (activePet, deltaStats) => {
     if(!activePet || !deltaStats) return [];
 
-    const statRules = getStatRules(activePet.id);
-
-    let activeModifiers = [];
+    let activeMoods = [];
     deltaStats.forEach(stat => {
-      if(!stat.modifiers || stat.modifiers.length === 0) return;
-      const deltaStatActiveModifiers = getActiveModifiers(stat.modifiers, stat);
-      deltaStatActiveModifiers.forEach(dsam => {
-        if(activeModifiers.indexOf(dsam) === -1) activeModifiers.push(dsam);
+      if(!stat.moods || stat.moods.length === 0) return;
+      const deltaStatActiveMoods = getActiveMoods(stat.moods, stat);
+      deltaStatActiveMoods.forEach(dsam => {
+        if(activeMoods.indexOf(dsam) === -1) activeMoods.push(dsam);
       })
     });
   
-    return activeModifiers;
+    return activeMoods;
   }
 );
 
@@ -228,15 +226,15 @@ const evaluateModifier = (whenObj, statObj) => {
 
 }
 
-const getActiveModifiers = (whenModifiers, statObj) => {
+const getActiveMoods = (whenMoods, statObj) => {
 
-  let matchedModifiers = [];
-  for(let i = 0; i < whenModifiers.length; i++){
-    const result = evaluateModifier(whenModifiers[i], statObj)
-    if(result && matchedModifiers.indexOf(result) === -1) matchedModifiers.push(result);
+  let matchedMoods = [];
+  for(let i = 0; i < whenMoods.length; i++){
+    const result = evaluateModifier(whenMoods[i], statObj)
+    if(result && matchedMoods.indexOf(result) === -1) matchedMoods.push(result);
   }
 
-  return matchedModifiers;
+  return matchedMoods;
 }
 
 const getDeltaStatsArray = (activePet, statRules) => {
@@ -256,7 +254,7 @@ const getDeltaStatsArray = (activePet, statRules) => {
       fullIsGood: statRules[idx].fullIsGood,
       doesKill: statRules[idx].doesKill,
       fillType: 'fill',
-      modifiers: stat.modifiers || []
+      moods: stat.moods || []
     }
   });
 } 
@@ -311,26 +309,26 @@ export const evaluateCondition = (expressionString, statValue) => {
   return expression;
 }
 
-export const evaluateModifiers = (whenModifiers, currentModifiers) => {
-  let modifiersMatched = [];
+export const evaluateMoods = (whenMoods, currentMoods) => {
+  let moodsMatched = [];
 
-  for(let i = 0; i < whenModifiers.length; i++){
-    if(currentModifiers.indexOf(whenModifiers[i]) === -1){
+  for(let i = 0; i < whenMoods.length; i++){
+    if(currentMoods.indexOf(whenMoods[i]) === -1){
       break;
     }else{
-      modifiersMatched.push(whenModifiers[i]);
+      moodsMatched.push(whenMoods[i]);
     }
   }
 
-  return modifiersMatched.length === whenModifiers.length;
+  return moodsMatched.length === whenMoods.length;
 }
 
 export const evaluateWhen = (when, moodSwingData) => {
   // console.log('evaluateWhen()', when, moodSwingData);
 
   switch(when.type){
-    case 'modifiers': {
-      if(evaluateModifiers(when.modifiers, moodSwingData.activeModifiers)){
+    case 'moods': {
+      if(evaluateMoods(when.moods, moodSwingData.activeMoods)){
         return when;
       }else{
         return null;
@@ -409,8 +407,8 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
 }
 
 export const selectCurrentPetBehavior = createSelector(
-  [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveModifiers, getForcedBehavior],
-  (activePet, deltaStats, activities, activeModifiers, forcedBehavior) => {
+  [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveMoods, getForcedBehavior],
+  (activePet, deltaStats, activities, activeMoods, forcedBehavior) => {
     // console.log('selectCurrentPetBehavior');
     if(!activePet || !activePet.id){
       return 'PET NOT FOUND';
@@ -431,7 +429,7 @@ export const selectCurrentPetBehavior = createSelector(
         status: status,
         stats: deltaStats,
         activities: activities,
-        activeModifiers: activeModifiers
+        activeMoods: activeMoods
       });
   
       // console.warn('newBehavior is ', newBehavior);
