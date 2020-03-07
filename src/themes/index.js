@@ -64,6 +64,7 @@ const store = {
     purple: '#6b1ff3'
   },
   shadow:{
+    z1: '-0.1rem 0.1rem .25rem .1rem rgba(0,0,0,0.16)',
     z2: '-0.1rem 0.1rem .25rem .1rem rgba(0,0,0,0.36)',
     z3: '-.2rem .5rem 1rem .2rem rgba(0,0,0,.36)'
   },

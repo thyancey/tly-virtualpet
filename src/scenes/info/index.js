@@ -202,7 +202,7 @@ class PetStats extends Component {
             );
           }else{
             return (
-              <ProgressBar key={i} sceneStyles={sceneStyles} statObj={s} label={s.label} augmentAction={(id, val) => this.updateStat(id, val)}/>
+              <ProgressBar key={i} sceneStyles={sceneStyles} statObj={s} moods={moods} label={s.label} augmentAction={(id, val) => this.updateStat(id, val)}/>
             );
           }
         })}

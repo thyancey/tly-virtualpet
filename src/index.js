@@ -3,15 +3,17 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
 import store, { history } from './store'
-import App from './scenes/app'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
 import theme from 'themes/'
 import routes from './routes'
 
+import Logger, { init as initLogger } from './util/logger';
 
 const target = document.querySelector('#root')
+
 global.store = store;
-global.historyz = history;
+initLogger(0);
+global.logger = Logger;
 
 render(
   <Provider store={store}>

@@ -1,8 +1,9 @@
 
 import { createSelector } from 'reselect';
 import { getPets, getSprites, getPetDeltaStats, getStatRules, getTaxonomy  } from 'util/pet-store';
-import { getSceneDefinition } from 'util/item-store';
+import { getSceneDefinition } from '../../util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
+import { evaluateCondition } from '../../util/tools';
 
 export const getLoaded = state => state.data.loaded || false;
 export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
@@ -206,8 +207,8 @@ export const selectActiveMoods = createSelector(
 
     let activeMoods = [];
     deltaStats.forEach(stat => {
-      if(!stat.moods || stat.moods.length === 0) return;
-      const deltaStatActiveMoods = getActiveMoods(stat.moods, stat);
+      if(!stat.effects || stat.effects.length === 0) return;
+      const deltaStatActiveMoods = getActiveMoods(stat.effects, stat);
       deltaStatActiveMoods.forEach(dsam => {
         if(activeMoods.indexOf(dsam) === -1) activeMoods.push(dsam);
       })
@@ -237,12 +238,28 @@ const getActiveMoods = (whenMoods, statObj) => {
   return matchedMoods;
 }
 
+const getFullStatEffectObj = (moods, stat) => {
+  // console.log(stat, moods);
+  const effects = stat.effects || [];
+  return effects.map(effect => ({
+    when: effect.when,
+    then: effect.then,
+    mood: {
+      id: effect.then,
+      ...moods[effect.then]
+    }
+  }));
+}
+
 const getDeltaStatsArray = (activePet, statRules) => {
   if(!activePet || !activePet.id) return [];
 
   const deltaStats = getPetDeltaStats(activePet.id, new Date().getTime());
+
   return deltaStats.map((stat, idx) => {
     const statPercent = (stat.current / stat.max) * 100;
+
+    // console.log('ac', activePet)
     
     return {
       id: stat.id,
@@ -254,60 +271,11 @@ const getDeltaStatsArray = (activePet, statRules) => {
       fullIsGood: statRules[idx].fullIsGood,
       doesKill: statRules[idx].doesKill,
       fillType: 'fill',
-      moods: stat.moods || []
+      effects: getFullStatEffectObj(activePet.data.moods, stat)
     }
   });
 } 
 
-export const VALID_EXPRESSIONS = [ '=', '<', '<=', '>', '>=' ];
-
-export const evaluateExpression = (expression, value, criteria) => {
-  if(VALID_EXPRESSIONS.indexOf(expression) === -1){
-    console.error(`evaluateExpression(): invalid expression "${expression}" from valueString "${value}"`);
-    return false;
-  }
-
-  // console.log('evaluateExpression()', expression, value, criteria);
-
-  switch(expression){
-    case '=':
-      return value === criteria;
-    case '<':
-      return value < criteria;
-    case '<=':
-      return value <= criteria;
-    case '>':
-      return value > criteria;
-    case '>=':
-      return value >= criteria;
-    default: return false;
-  }
-}
-
-export const evaluateCondition = (expressionString, statValue) => {
-  const valueTokens = expressionString.split('_');
-
-  const valueExpression = valueTokens[0];
-  const valueCriteria = valueTokens[1];
-  
-  const percentageSplit = valueCriteria.split('%');
-
-  let checkValue;
-  let criteria = percentageSplit[0];
-
-  if(percentageSplit.length > 1){
-    checkValue = statValue.percent;
-  }else{
-    checkValue = statValue.cur;
-  }
-
-  if(!valueExpression){
-    console.error('evaluateSet(), valueExpression is not defined! ', expressionString)
-  }
-  const expression = evaluateExpression(valueExpression, checkValue, criteria);
-  // console.log('foundExpression:', expression);
-  return expression;
-}
 
 export const evaluateMoods = (whenMoods, currentMoods) => {
   let moodsMatched = [];

@@ -28,21 +28,21 @@
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": "<_20%" },
+            { "type":"mood", "mood":"MOOD_TINY" },
             { "type": "activity", "activity": "EATING" }
           ],
           "then": "EAT"
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": "<_20%" },
+            { "type":"mood", "mood":"MOOD_TINY" },
             { "type": "activity", "activity": "WALKING" }
           ],
           "then": "LIL_WALK"
         },
         {
           "when":[
-            { "type":"stat", "stat":"meatyness", "value": "<_20%" }
+            { "type":"mood", "mood":"MOOD_TINY" }
           ],
           "then": "LIL_IDLE"
         },
@@ -151,12 +151,12 @@
         "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
       },
       "moods":{
-        "MOOD_EVOLVE": { "label": "Evolve"},
-        "MOOD_POWERUP": { "label": "Power UP!"},
-        "MOOD_OLD": { "label": "Old and stinky"},
-        "MOOD_FRESH": { "label": "FRESH"},
-        "MOOD_TINY": { "label": "Vienna Sausage"},
-        "MOOD_LARGE": { "label": "chonky"}
+        "MOOD_EVOLVE": { "label": "Evolve", "moodType": 1 },
+        "MOOD_POWERUP": { "label": "Power UP!", "moodType": 1},
+        "MOOD_OLD": { "label": "old and stinky", "moodType": -1},
+        "MOOD_FRESH": { "label": "FRESH", "moodType": 1},
+        "MOOD_TINY": { "label": "like a Vienna Sausage", "moodType": 0},
+        "MOOD_LARGE": { "label": "chonky", "moodType": 0}
       },
       "moodSwings":[
         {
@@ -243,7 +243,7 @@
             "value": "2",
             "perSecond": "0",
             "max": "10",
-            "moods":[
+            "effects":[
               { "when": ">=_10", "then": "MOOD_EVOLVE" }
             ]
           },
@@ -253,7 +253,7 @@
             "value": "300",
             "perSecond": "0",
             "max": "500",
-            "moods":[
+            "effects":[
               { "when": "<_90%", "then": "MOOD_POWERUP" }
             ]
           },
@@ -265,8 +265,8 @@
             "max": "100",
             "fullIsGood": true,
             "doesKill": true,
-            "moods":[
-              { "when": "<_20%", "then": "MOOD_OLD" },
+            "effects":[
+              { "when": "<_33%", "then": "MOOD_OLD" },
               { "when": ">_80%", "then": "MOOD_FRESH" }
             ]
           },
@@ -278,7 +278,7 @@
             "max": "150",
             "fullIsGood": true,
             "doesKill": false,
-            "moods":[
+            "effects":[
               { "when": "<=_30%", "then": "MOOD_TINY" },
               { "when": ">=_70%", "then": "MOOD_LARGE" }
             ]
@@ -342,11 +342,11 @@
         "DYING": { "animations": [ "dying" ] }
       },
       "moods":{
-        "MOOD_POWERUP":  { "label": "Power UP"},
-        "MOOD_FULL":  { "label": "Full"},
-        "MOOD_HUNGRY":  { "label": "Hungry"},
-        "MOOD_EXPOSED":  { "label": "Exposed"},
-        "MOOD_SNEAKY": { "label": "Sneaky"}
+        "MOOD_POWERUP":  { "label": "Power UP", "moodType": 1 },
+        "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+        "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 },
+        "MOOD_EXPOSED":  { "label": "Exposed", "moodType": -1 },
+        "MOOD_SNEAKY": { "label": "Sneaky", "moodType": 1 }
       },
       "moodSwings":[
         {
@@ -406,7 +406,7 @@
             "value": "2",
             "perSecond": "0",
             "max": "10",
-            "moods":[]
+            "effects":[]
           },
           {
             "id": "xp",
@@ -414,7 +414,7 @@
             "value": "300",
             "perSecond": "0",
             "max": "500",
-            "moods":[
+            "effects":[
               { "when": ">=_100%", "then": "MOOD_POWERUP" }
             ]
           },
@@ -426,7 +426,7 @@
             "max": "67",
             "fullIsGood": false,
             "doesKill": true,
-            "moods":[
+            "effects":[
               { "when": "<_35%", "then": "MOOD_FULL" },
               { "when": ">_75%", "then": "MOOD_HUNGRY" }
             ]
@@ -439,9 +439,9 @@
             "max": "126",
             "fullIsGood": true,
             "doesKill": false,
-            "moods":[
+            "effects":[
               { "when": "<_30%", "then": "MOOD_EXPOSED" },
-              { "when": ">_80%", "then": "MOOD_SNEAKY" }
+              { "when": ">_50%", "then": "MOOD_SNEAKY" }
             ]
           }
         ]

@@ -106,3 +106,91 @@ export const changeQueryObj = (key, value, searchString) => {
     window.history.pushState({path:newurl},'',newurl);
   }
 }
+
+
+
+
+
+export const VALID_CONDITIONS = [ '=', '<', '<=', '>', '>=' ];
+
+export const evaluateExpression = (condition, criteria, value) => {
+  if(VALID_CONDITIONS.indexOf(condition) === -1){
+    console.error(`evaluateExpression(): invalid condition "${condition}" from valueString "${value}"`);
+    return false;
+  }
+
+  // console.log('evaluateExpression()', condition, value, criteria);
+
+  switch(condition){
+    case '=':
+      return value === criteria;
+    case '<':
+      return value < criteria;
+    case '<=':
+      return value <= criteria;
+    case '>':
+      return value > criteria;
+    case '>=':
+      return value >= criteria;
+    default: return false;
+  }
+}
+
+export const getConditionDirection = condition => {
+  switch(condition){
+    case '=':
+      return 0;
+    case '<':
+      return -1;
+    case '<=':
+      return -1;
+    case '>':
+      return 1;
+    case '>=':
+      return 1;
+    default: return 0;
+  }
+}
+
+/*
+  //- convert <=_20% into:
+  {
+    condition: '<=',
+    criteria: '20',
+    isPercent: true
+  }
+*/
+export const parseExpressionString = expressionString => {
+  const valueTokens = expressionString.split('_');
+  const condition = valueTokens[0];
+  const valueCriteria = valueTokens[1];
+
+  const percentageSplit = valueCriteria.split('%');
+  let criteria = percentageSplit[0];
+
+
+  return {
+    condition: condition,
+    criteria: Number(criteria),
+    isPercent: percentageSplit.length > 1,
+    direction: getConditionDirection(condition)
+  }
+}
+
+export const evaluateCondition = (expressionString, statValue) => {
+  const expression = parseExpressionString(expressionString);
+
+  let checkValue;
+  if(expression.isPercent){
+    checkValue = statValue.percent;
+  }else{
+    checkValue = statValue.cur;
+  }
+
+  if(!expression.condition){
+    console.error('evaluateSet(), condition is not defined! ', expressionString);
+  }
+  const expressionResult = evaluateExpression(expression.condition, expression.criteria, checkValue);
+  // console.log('foundExpression:', expressionString, expressionResult);
+  return expressionResult;
+}
