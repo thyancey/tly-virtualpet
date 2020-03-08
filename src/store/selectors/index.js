@@ -107,12 +107,43 @@ export const selectActiveScene = createSelector(
   }
 );
 
+
+export const selectActiveCage = createSelector(
+  [selectActivePetData],
+  (activePetData) => {
+    if(!activePetData) return null;
+
+    const sceneId = activePetData.scene;
+    const scene = getSceneDefinition(sceneId);
+    if(scene && scene.cage){
+      return scene.cage;
+    }else{
+      return null;
+    }
+  }
+);
+
+export const selectActiveSceneType = createSelector(
+  [selectActivePetData],
+  (activePetData) => {
+    if(!activePetData) return null;
+
+    const sceneId = activePetData.scene;
+    const scene = getSceneDefinition(sceneId);
+    if(scene && scene.type){
+      return scene.type;
+    }else{
+      return null;
+    }
+  }
+);
+
 export const selectActiveSceneFloorOffset = createSelector(
   [selectActiveScene],
   (activeScene) => {
     if(!activeScene) return null;
 
-    return activeScene.floor.offset || 0;
+    return activeScene.cage.floor || 0;
   }
 );
 
@@ -164,7 +195,8 @@ const createSpriteObj = (label, overlayLabel, graphic, sprite) => {
       frames: getFallbackValue(graphic.frames, sprite.spriteInfo.frames),
       frame: getFallbackValue(graphic.frame, sprite.spriteInfo.frame),
       grid: sprite.spriteInfo.grid,
-      cells: sprite.spriteInfo.cells
+      cells: sprite.spriteInfo.cells,
+      hitboxOffset: sprite.spriteInfo.hitboxOffset || [0, 0]
     }
   };
 }

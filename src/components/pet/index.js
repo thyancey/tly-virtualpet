@@ -19,19 +19,29 @@ import {
   selectActivePetId,
   selectActivePetActivities,
   selectActivePetAnimation,
-  selectActiveSceneFloorOffset,
-  selectCurrentPetBehavior
+  selectCurrentPetBehavior,
+  selectActiveCage,
+  selectActiveSceneType
 } from '../../store/selectors';
 
-const $PetContainer = styled.div`
-  position:relative;
-  height: 100%;
-`;
 
 const FRAME_RATE = 1;
 const DRAG_Y = .99;
 const DRAG_X = .8;
 const FALL_Y = 1;
+
+
+const $PetContainer = styled.div`
+  position:absolute;
+  width:0;
+  height:0;
+`;
+
+const $Centerer = styled.div`
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+`
 
 class Pet extends Component {
   constructor(props){
@@ -59,6 +69,11 @@ class Pet extends Component {
       minX: 0,
       maxX: 0,
       isOnGround: false,
+      cssX: '0px',
+      cssY: '0px',
+      adjustedWidth: 0,
+      adjustedHeight: 0,
+      adjustedRotation: 0,
       direction: 1
     }
     global.document.addEventListener('keyup', this.onKeyUp);
@@ -250,14 +265,65 @@ class Pet extends Component {
   //- recalc pet position when window changes size, when pets change, etc
   recalcMaxBounds(resetPetPosition){
     const spriteInfo = this.props.animation && this.props.animation.spriteInfo || null;
-    if(spriteInfo){
+    const cageObj = this.props.activeCage;
+    const sceneType = this.props.activeSceneType;
+
+    if(spriteInfo && cageObj){
       const spriteScale = spriteInfo.scale * global.spriteScale;
       const spriteSize = spriteInfo.cells.map(s => s * spriteScale);
 
-      const stateObj = {
-        maxX: (this.props.containerWidth - spriteSize[0]),
-        maxY: (this.props.containerHeight - spriteSize[1] + this.props.floorOffset)
+
+      // const containerWidth = cageObj.width;
+      // const containerHeight = cageObj.height;
+      const containerWidth = this.props.containerWidth;
+      const containerHeight = this.props.containerHeight;
+
+      let adjustedWidth;
+      let adjustedHeight;
+      
+      if(isNaN(cageObj.width) && cageObj.width.indexOf('%') > -1){
+        adjustedWidth = (Number(cageObj.width.split('%')[0]) / 100) * containerWidth;
+      }else{
+        adjustedWidth =  cageObj.width;
       }
+
+      if(isNaN(cageObj.height) && cageObj.height.indexOf('%') > -1){
+        adjustedHeight = (Number(cageObj.height.split('%')[0]) / 100) * containerHeight;
+      }else{
+        adjustedHeight =  cageObj.height;
+      }
+      
+      let cssX;
+      let cssY;
+      if(sceneType === 'responsive'){
+        let adjustedX = cageObj.x + (adjustedWidth / 2);
+        let adjustedY = cageObj.y + (adjustedHeight / 2);
+
+        cssX = `${adjustedX}px`;
+        cssY = `${adjustedY}px`;
+      }else if(sceneType === 'static'){
+        cssX = `calc(50% + ${cageObj.xCenter}px)`;
+        cssY = `calc(50% + ${cageObj.yCenter}px)`;
+      }else{
+        cssX = `${cageObj.x}px`;
+        cssY = `${cageObj.y}px`;
+      }
+
+      let thisWidth = sceneType === 'responsive' ? containerWidth : cageObj.width;
+      let thisHeight = sceneType === 'responsive' ? containerHeight : cageObj.height;
+
+      const stateObj = {
+        minX: 0 - spriteInfo.hitboxOffset[0],
+        minY: 0 - spriteInfo.hitboxOffset[1],
+        maxX: (thisWidth - spriteSize[0] + spriteInfo.hitboxOffset[0]),
+        maxY: (thisHeight - spriteSize[1] + this.props.activeCage.floor + spriteInfo.hitboxOffset[1]),
+        cssX: cssX,
+        cssY: cssY,
+        adjustedWidth: adjustedWidth,
+        adjustedHeight: adjustedHeight,
+        adjustedRotation: this.props.activeCage.rotation
+      }
+
       if(resetPetPosition){
         stateObj.posX = stateObj.maxX / 2
       }
@@ -287,25 +353,41 @@ class Pet extends Component {
   }
 
   render(){
-    // console.log('R: Pet');
-    // console.log('behavior:', this.props.behavior);
-    const { animation, containerWidth, containerHeight, petId } = this.props;
+    const { animation, petId } = this.props;
     //- some error happened
-    if(!animation) return null;
 
+    if(!animation ) return null;
+
+    let width = this.state.adjustedWidth;
+    let height = this.state.adjustedHeight;
 
     let drawCommand = null;
     if(animation.type){
       if(animation.spriteInfo.faceDirection){
-        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], this.state.direction * (animation.spriteInfo.orientation || 1));
+        drawCommand = this.getDrawCommand(animation.type, [ width, height], [ this.state.posX, this.state.posY ], this.state.direction * (animation.spriteInfo.orientation || 1));
       }else{
-        drawCommand = this.getDrawCommand(animation.type, [ containerWidth, containerHeight], [ this.state.posX, this.state.posY ], animation.spriteInfo.orientation || 1);
+        drawCommand = this.getDrawCommand(animation.type, [ width, height], [ this.state.posX, this.state.posY ], animation.spriteInfo.orientation || 1);
       }
     }
 
     return (
-      <$PetContainer>
-        <AnimationCanvas petId={petId} containerWidth={containerWidth} containerHeight={containerHeight} animation={animation} drawCommand={drawCommand} />
+      <$PetContainer style={{
+        left: `${this.state.cssX}`, 
+        top: `${this.state.cssY}`, 
+        transform: `rotate(${this.state.adjustedRotation}deg)`
+      }} >
+        <$Centerer style={{
+          width: width, 
+          height: height
+        }} >
+          <AnimationCanvas 
+            petId={petId} 
+            containerWidth={width} 
+            containerHeight={height} 
+            animation={animation} 
+            drawCommand={drawCommand} 
+          />
+        </$Centerer>
       </$PetContainer>
     );
   }
@@ -317,7 +399,8 @@ const mapStateToProps = (state) => ({
   behavior: selectCurrentPetBehavior(state),
   activities: selectActivePetActivities(state),
   animation: selectActivePetAnimation(state),
-  floorOffset: selectActiveSceneFloorOffset(state)
+  activeCage: selectActiveCage(state),
+  activeSceneType: selectActiveSceneType(state)
 });
 
 const mapDispatchToProps = dispatch => (

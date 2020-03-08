@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Canvas from './canvas';
+import styled from 'styled-components';
 
 /*
  based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
@@ -91,16 +92,17 @@ export default class AnimationCanvas extends Component {
   }
 
   render() {
-    // console.log('overlayImg', this.state.overlayImg);
-    // console.log('R: CanvasIndex');
-    return <Canvas 
-              tick={this.state.tick} 
-              canvasWidth={this.props.containerWidth} 
-              canvasHeight={this.props.containerHeight}
-              sprite={this.state.img}
-              overlaySprite={this.state.overlayImg}
-              spriteInfo={this.props.animation.spriteInfo}
-              direction={this.props.direction}
-              drawCommand={ this.props.drawCommand } />;
+    return (
+      <Canvas 
+        tick={this.state.tick} 
+        canvasWidth={this.props.containerWidth} 
+        canvasHeight={this.props.containerHeight}
+        sprite={this.state.img}
+        overlaySprite={this.state.overlayImg}
+        spriteInfo={this.props.animation.spriteInfo}
+        direction={this.props.direction}
+        drawCommand={ this.props.drawCommand } />
+    );
+
   }
 }

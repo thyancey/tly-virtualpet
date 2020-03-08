@@ -21,7 +21,6 @@ const $Cage = styled.div`
   height:100%;
 
   color: ${themeGet('color', 'blue')};
-  /* border: .5rem dashed ${themeGet('color', 'black')}; */
 
   h2{
     color: ${themeGet('color', 'white')};
@@ -58,7 +57,7 @@ class Cage extends Component {
 
   updateCanvasDims(){
     if(this.containerRef.current){
-      global.spriteScale = clamp((this.containerRef.current.offsetWidth / 1000), .4, 1);
+      // global.spriteScale = clamp((this.containerRef.current.offsetWidth / 1000), .4, 1);
       this.setState({
         containerWidth: this.containerRef.current.offsetWidth,
         containerHeight: this.containerRef.current.offsetHeight
@@ -67,11 +66,9 @@ class Cage extends Component {
   }
 
   render(){
-    // console.log('R: Cage', this.props);
     const { 
       activePetId
     } = this.props;
-
 
     if(!activePetId){
       return null;
@@ -81,7 +78,8 @@ class Cage extends Component {
           <Pet 
             activePetId={activePetId} 
             containerWidth={this.state.containerWidth}
-            containerHeight={this.state.containerHeight} />
+            containerHeight={this.state.containerHeight}
+            />
           <Scene />
         </$Cage>
       );

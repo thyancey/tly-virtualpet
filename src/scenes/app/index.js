@@ -56,7 +56,8 @@ class App extends Component {
   }
 
   onExitPage(){
-    saveAllPetStatsToCookieNow();
+    if(this.props.loadingComplete) saveAllPetStatsToCookieNow();
+    
   }
 
   componentDidUpdate(prevProps, prevState){

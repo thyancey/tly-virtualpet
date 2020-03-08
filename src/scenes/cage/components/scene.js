@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -22,11 +22,23 @@ const $Scene = styled.div`
     height: 100%;
   }
 
-  .background-image{
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-  }
+  ${p => p.type === 'responsive' && css`
+    .background-image{
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+    }
+  `}
+  
+  ${p => p.type === 'static' && css`
+    .background-image{
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-position:50% 50%;
+    }
+  `}
+
 `
 
 const $SceneFloor = styled.div`
@@ -64,18 +76,18 @@ class Scene extends Component {
       const bgImage = activeScene.background.imageUrl ? activeScene.background.imageUrl : null;
       const floorImage = activeScene.floor.imageUrl ? activeScene.floor.imageUrl : null;
       const bgPosition = activeScene.background.backgroundPosition ? activeScene.background.backgroundPosition : '0';
-
+      const type = activeScene.type;
       /*
         TODO, using styled components with background-image was causing flickering for some reason (not because of re-render)
         so for now, just made them non-styled components
       */
       return(
-        <$Scene>
+        <$Scene type={type}>
           <$SceneFloor height={activeScene.floor.height} color={activeScene.floor.color} >
             <div className={'footer-image'} style={{ backgroundImage: `url(${floorImage})`}} />
           </$SceneFloor>
           <$SceneBackground style={{ backgroundColor: activeScene.background.color }} >
-            <div className={'background-image'} style={{ backgroundImage: `url(${bgImage})`, backgroundPosition: bgPosition }} />
+            <div className={'background-image'} style={{ backgroundImage: `url(${bgImage})` }} />
           </$SceneBackground>
         </$Scene>
       );

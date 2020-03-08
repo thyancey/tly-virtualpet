@@ -210,8 +210,15 @@ class EffectMarker extends Component {
 
   renderMessage(effect, statLabel, doesKill, fullIsGood, direction){
     const retMessages = []
-    retMessages.push(<span key="1">{`when: ${effect.when}, I feel a little `}<strong>{`${effect.mood.label}`}</strong></span>);
-
+    retMessages.push(
+    <span key="1">
+      {'when '}
+      <strong>{statLabel}</strong>
+      {' is '}
+      <strong>{effect.when}</strong>
+      {', I feel '}
+      <strong>{`${effect.mood.label}`}</strong>
+    </span>);
     if(doesKill){
       if(fullIsGood && direction === -1){
         retMessages.push(<span key="2">{`if i dont have enough `}<strong>{statLabel}</strong>{` i'll die!`}</span>);
