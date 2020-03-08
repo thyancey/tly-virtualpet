@@ -196,15 +196,19 @@
       "scene": "outside",
       "thumbnail": "./pets/neenya_thumbnail.jpg",
       "statuses": {
-        "DEFAULT": { "animations": [ "idle_01" ] },
-        "IDLE": { "animations": [ "idle_01" ] },
-        "IDLE_SAD": { "animations": [ "idle_sad" ] },
-        "DEAD": { "animations": [ "dead" ] },
-        "WALK": { "animations": [ "walk" ] },
-        "RUN": { "animations": [ "run" ] },
-        "DUCK": { "animations": [ "duck" ] },
-        "ANGRY": { "animations": [ "angry" ] },
-        "DYING": { "animations": [ "dying" ] }
+        "DEFAULT": { "animations": [ "idle_01" ], "overlay": "happy" },
+        "IDLE_HAPPY": { "animations": [ "idle_01" ], "overlay": "happy" },
+        "IDLE_SAD": { "animations": [ "idle_sad" ], "overlay": "sad" },
+        "DEAD_HAPPY": { "animations": [ "dead" ], "overlay": "happy" },
+        "DEAD_SAD": { "animations": [ "dead" ], "overlay": "sad" },
+        "WALK_HAPPY": { "animations": [ "walk" ], "overlay": "happy" },
+        "WALK_SAD": { "animations": [ "walk" ], "overlay": "sad" },
+        "RUN_HAPPY": { "animations": [ "run" ], "overlay": "happy"  },
+        "RUN_SAD": { "animations": [ "run" ], "overlay": "sad"  },
+        "DUCK": { "animations": [ "duck" ], "overlay": "happy"  },
+        "ANGRY": { "animations": [ "angry" ], "overlay": "happy"  },
+        "DYING_HAPPY": { "animations": [ "dying" ], "overlay": "happy"  },
+        "DYING_SAD": { "animations": [ "dying" ], "overlay": "sad"  }
       },
       "moods":{
         "MOOD_POWERUP":  { "label": "Power UP", "moodType": 1 },
@@ -225,13 +229,20 @@
             { "type":"moods", "moods": [ "MOOD_SNEAKY" ] },
             { "type": "activity", "activity": "WALKING" }
           ],
-          "then": "RUN"
+          "then": "RUN_HAPPY"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK_SAD"
         },
         {
           "when":[
             { "type": "activity", "activity": "WALKING" }
           ],
-          "then": "WALK"
+          "then": "WALK_HAPPY"
         },
         {
           "when":[
@@ -247,7 +258,7 @@
         },
         {
           "when":[
-            { "type":"moods", "moods": [ "MOOD_HUNGRY" ] }
+            { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] }
           ],
           "then": "IDLE_SAD"
         },
@@ -259,7 +270,7 @@
         },
         {
           "when":[],
-          "then": "IDLE"
+          "then": "IDLE_HAPPY"
         }
       ],
       "stats_initial":{
@@ -515,7 +526,11 @@
     },
     "Neenya":{
       "type": "Sprite_Animated",
-      "imageUrl": "./pets/neenya.png",
+      "imageUrl": "./pets/neenya-body.png",
+      "overlays": {
+        "sad": "./pets/neenya-sad.png",
+        "happy": "./pets/neenya-happy.png"
+      },
       "spriteInfo":{
         "scale": 1,
         "grid": [ 3, 5 ],
