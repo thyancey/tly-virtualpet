@@ -101,7 +101,8 @@ export default class AnimationCanvas extends Component {
         overlaySprite={this.state.overlayImg}
         spriteInfo={this.props.animation.spriteInfo}
         direction={this.props.direction}
-        drawCommand={ this.props.drawCommand } />
+        onStageClick={this.props.onStageClick}
+        drawCommands={ this.props.drawCommands } />
     );
 
   }

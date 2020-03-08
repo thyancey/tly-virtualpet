@@ -15,13 +15,19 @@ export default class Canvas extends Component {
   }
 
   componentDidUpdate() {
-    this.props.drawCommand && this.props.drawCommand(this.ctx, { ...this.props });
-    // this.props.drawCommand && this.props.drawCommand(this.ctx, this.height, this.width, { ...this.props });
-    
+    this.props.drawCommands.forEach(dC => {
+      dC(this.ctx, { ...this.props });
+    })
   }
 
   render() {
     // console.log('R: Canvas');
-    return <PureCanvas contextRef={this.saveContext} canvasWidth={this.props.canvasWidth} canvasHeight={this.props.canvasHeight}/>;
+    return (
+      <PureCanvas 
+        contextRef={this.saveContext} 
+        canvasWidth={this.props.canvasWidth} 
+        canvasHeight={this.props.canvasHeight}
+        onStageClick={this.props.onStageClick} />
+    );
   }
 }

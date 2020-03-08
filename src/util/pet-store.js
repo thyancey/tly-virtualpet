@@ -345,12 +345,11 @@ export const saveAllPetStatsToCookieNow = () => {
 
 /* RESETTING */
 export const resetPetState = petId => {
+  console.log(`resetting pet "${petId}"`);
+
   const now = new Date().getTime();
   const petDef = getPetDefinition(petId);
   const definedStats = petDef.stats_initial.stats;
-  // const definedStats = petDef.stats_initial.stats.map(stat => formatStatObj(stat));
-  console.log('def', petDef)
-  console.log('defined', definedStats)
 
   petDef.isAlive = true;
   petDef.stats_saved = {
@@ -359,15 +358,6 @@ export const resetPetState = petId => {
     stats: definedStats.map(s => formatSavedStatObj(s))
   }
   setPetDefinition(petId, petDef)
-
-  // const statsObj = getDeltaStats({
-  //   timestamp: now,
-  //   isAlive: true,
-  //   stats: definedStats.map(s => formatSavedStatObj(s))
-  // }, now);
-
-  console.log('new petDef', petDef)
-  // saveStats(petId, statsObj, new Date().getTime());
 }
 
 export const deleteAllData = () => {

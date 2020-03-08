@@ -12,6 +12,7 @@ export default class PureCanvas extends Component {
     // console.log('R: PureCanvas');
     return (
       <canvas
+        onClick={this.props.onStageClick}
         width={this.props.canvasWidth}
         height={this.props.canvasHeight}
         ref={node =>

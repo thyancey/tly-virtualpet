@@ -7,7 +7,8 @@ import {
   forceBehavior,
   augmentStat,
   resetPet,
-  killPet
+  killPet,
+  clickPet
 } from '../actions/pet';
 
 import { handleActions } from 'redux-actions'; 
@@ -114,6 +115,31 @@ export default handleActions({
       mood: 'DEAD',
       activities: []
     }
+  },
+
+  [clickPet.toString()]: (state, action) => {
+    const petId = action.payload;
+
+    if(state.isAlive){
+      killThisPet(action.payload);
+  
+      return {
+        ...state,
+        isAlive: false,
+        mood: 'DEAD',
+        activities: []
+      }
+    }else{
+      resetPetState(petId);
+  
+      return {
+        ...state,
+        isAlive: true,
+        mood: null,
+        activities: []
+      }
+    }
+
   }
 
   

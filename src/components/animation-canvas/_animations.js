@@ -3,6 +3,24 @@ export const getAnimation = animationLabel => {
 }
 
 const A = {
+  DebugDraw: (ctx, bounds, coords, props) => {
+    ctx.save();
+    ctx.beginPath();
+    const CIRCLE_SIZE = 20;
+
+    // console.log('doing ', coords[0])
+    ctx.arc(coords[0], coords[1], CIRCLE_SIZE, 0, 2 * Math.PI);
+    // ctx.arc(0, 0, CIRCLE_SIZE, 0, 2 * Math.PI);
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#000000';
+
+    ctx.stroke();
+    
+    ctx.restore();
+  },
   SpinSquare: (ctx, bounds, pos, direction, props) => {
     ctx.save();
     ctx.beginPath();

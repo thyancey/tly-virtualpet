@@ -13,7 +13,8 @@ import { clamp } from 'util/tools';
 
 import {
   addActivity,
-  removeActivity
+  removeActivity,
+  clickPet
 } from '../../store/actions/pet';
 import { 
   selectActivePetId,
@@ -24,7 +25,8 @@ import {
   selectActiveSceneType
 } from '../../store/selectors';
 
-
+const ENABLE_DEBUG_CLICKS = true;
+const MAX_DEBUG_CLICKS = 10;
 const FRAME_RATE = 1;
 const DRAG_Y = .99;
 const DRAG_X = .8;
@@ -62,6 +64,7 @@ class Pet extends Component {
 
     this.state = {
       // tick: 0,
+      petSize: [0, 0],
       posX: 0,
       posY: 0,
       minY: 0,
@@ -74,7 +77,8 @@ class Pet extends Component {
       adjustedWidth: 0,
       adjustedHeight: 0,
       adjustedRotation: 0,
-      direction: 1
+      direction: 1,
+      debugDraws: []
     }
     global.document.addEventListener('keyup', this.onKeyUp);
     global.document.addEventListener('keydown', this.onKeyDown);
@@ -312,11 +316,17 @@ class Pet extends Component {
       let thisWidth = sceneType === 'responsive' ? containerWidth : cageObj.width;
       let thisHeight = sceneType === 'responsive' ? containerHeight : cageObj.height;
 
+      const petSize = [
+        spriteSize[0] + spriteInfo.hitboxOffset[0],
+        spriteSize[1] + spriteInfo.hitboxOffset[1]
+      ]
+
       const stateObj = {
+        petSize: petSize,
         minX: 0 - spriteInfo.hitboxOffset[0],
         minY: 0 - spriteInfo.hitboxOffset[1],
-        maxX: (thisWidth - spriteSize[0] + spriteInfo.hitboxOffset[0]),
-        maxY: (thisHeight - spriteSize[1] + this.props.activeCage.floor + spriteInfo.hitboxOffset[1]),
+        maxX: (thisWidth - petSize[0]),
+        maxY: (thisHeight - petSize[1] + this.props.activeCage.floor),
         cssX: cssX,
         cssY: cssY,
         adjustedWidth: adjustedWidth,
@@ -343,12 +353,40 @@ class Pet extends Component {
     // global.activePet = this;
     if(prevProps.activePetId !== this.props.activePetId){
       this.resetPetPosition();
+      this.setState({ debugDraws: [] })
     }
     if(prevProps.containerWidth !== this.props.containerWidth || prevProps.containerHeight !== this.props.containerHeight){
       this.recalcMaxBounds();
     }
     if(!prevState.isOnGround && this.state.isOnGround){
       this.props.removeActivity('JUMPING');
+    }
+  }
+
+  checkForPetClicked(x, y){
+    const petBox = [
+      [ this.state.posX, this.state.posY ],
+      [ this.state.posX + this.state.petSize[0], this.state.posY + this.state.petSize[1]]
+    ];
+
+    if(x > petBox[0][0] && x < petBox[1][0] && y > petBox[0][1] && y < petBox[1][1]){
+      this.props.clickPet(this.props.petId);
+    }
+  }
+
+  onStageClick(e){
+    if(ENABLE_DEBUG_CLICKS){
+      console.log('CLICK at ', [ e.clientX, e.clientY ]);
+      const debugDraws = this.state.debugDraws;
+      debugDraws.push([ e.clientX, e.clientY] );
+      if(debugDraws.length > MAX_DEBUG_CLICKS){
+        debugDraws.splice(0, debugDraws.length - MAX_DEBUG_CLICKS);
+      }
+      this.setState({debugDraws: debugDraws});
+    }
+
+    if(this.props.activeSceneType === 'responsive'){
+      this.checkForPetClicked(e.clientX, e.clientY);
     }
   }
 
@@ -361,14 +399,18 @@ class Pet extends Component {
     let width = this.state.adjustedWidth;
     let height = this.state.adjustedHeight;
 
-    let drawCommand = null;
+    let drawCommands = [];
     if(animation.type){
       if(animation.spriteInfo.faceDirection){
-        drawCommand = this.getDrawCommand(animation.type, [ width, height], [ this.state.posX, this.state.posY ], this.state.direction * (animation.spriteInfo.orientation || 1));
+        drawCommands.push(this.getDrawCommand(animation.type, [ width, height], [ this.state.posX, this.state.posY ], this.state.direction * (animation.spriteInfo.orientation || 1)));
       }else{
-        drawCommand = this.getDrawCommand(animation.type, [ width, height], [ this.state.posX, this.state.posY ], animation.spriteInfo.orientation || 1);
+        drawCommands.push(this.getDrawCommand(animation.type, [ width, height], [ this.state.posX, this.state.posY ], animation.spriteInfo.orientation || 1));
       }
     }
+
+    this.state.debugDraws.forEach(dD => {
+      drawCommands.push(this.getDrawCommand('DebugDraw', [ width, height], [ dD[0], dD[1] ]));
+    })
 
     return (
       <$PetContainer style={{
@@ -385,7 +427,8 @@ class Pet extends Component {
             containerWidth={width} 
             containerHeight={height} 
             animation={animation} 
-            drawCommand={drawCommand} 
+            drawCommands={drawCommands} 
+            onStageClick={e => this.onStageClick(e)}
           />
         </$Centerer>
       </$PetContainer>
@@ -405,7 +448,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(
-    { addActivity, removeActivity },
+    { addActivity, removeActivity, clickPet },
     dispatch
   )
 );
