@@ -78,9 +78,24 @@
         {
           "when":[
             { "type":"moods", "moods": [ "MOOD_OLD" ] },
+            { "type": "activity", "activity": "WALKING" },
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_WALK_DYING"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
             { "type": "activity", "activity": "WALKING" }
           ],
           "then": "WALK_DYING"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "WALKING" },
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_WALK"
         },
         {
           "when":[
@@ -90,9 +105,22 @@
         },
         {
           "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_IDLE_DYING"
+        },
+        {
+          "when":[
             { "type":"moods", "moods": [ "MOOD_OLD" ] }
           ],
           "then": "IDLE_DYING"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_IDLE"
         },
         {
           "when":[],
