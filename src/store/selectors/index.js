@@ -444,7 +444,7 @@ export const selectActivePetAnimation = createSelector(
     if(!activePet|| !sprites) return null;
     
     const aData = activePet.data;
-    const statusObj = aData.statuses[behavior] || aData.statuses.DEFAULT;
+    const statusObj = aData.behaviors[behavior] || aData.behaviors.DEFAULT;
 
     if(!statusObj){
       console.error(`Error getting behavior ${behavior}`);

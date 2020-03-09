@@ -129,10 +129,10 @@ export const setPetDefinitions = petList => {
 
 
   store.pets = petList.map(p => {
-    let defaultStatus = p.statuses.DEFAULT;
-    if(!defaultStatus){
+    let defaultBehavior = p.behaviors.DEFAULT;
+    if(!defaultBehavior){
       try{
-        defaultStatus = p.statuses[Object.keys(p.statuses)[0]];
+        defaultBehavior = p.behaviors[Object.keys(p.behaviors)[0]];
       }catch(e){
         console.error(`could not autodeclare default status for pet "${p.id}"`);
       }
@@ -162,9 +162,9 @@ export const setPetDefinitions = petList => {
 
     return {
       ...p,
-      statuses:{
-        ...p.statuses,
-        DEFAULT: defaultStatus
+      behaviors:{
+        ...p.behaviors,
+        DEFAULT: defaultBehavior
       },
       moodSwings:moodSwings
     }

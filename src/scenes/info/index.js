@@ -34,6 +34,11 @@ const $PetStats = styled.div`
   padding: 1rem;
   position:relative;
   ${mixin_clearBubble()}
+
+  >*{
+    /* allows canvas clicks behind menu elements */
+    pointer-events: all;
+  }
 `
 
 const $StatDisplay = styled.div`
@@ -105,11 +110,14 @@ const $Info = styled.div`
   padding: 1rem;
   margin: .5rem;
   font-weight: bold;
+  width:100%;
 
   ${p => !p.showInfo && css`
+    width:0;
     max-height:0;
     opacity:0;
-    transition: max-height .5s ease-in-out, opacity .2s;
+    transition: max-height .5s ease-in-out, opacity .2s, width .5s;
+    transition-delay: 0s, 0s, .5s;
   `}
 `
 
@@ -184,7 +192,7 @@ class PetStats extends Component {
 
     const petData = activePet.data;
 
-    const statusIds = Object.keys(petData.statuses);
+    const behaviorIds = Object.keys(petData.behaviors);
 
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
 
@@ -223,7 +231,7 @@ class PetStats extends Component {
             ))}
           <hr/>
           <p>{'Behaviors (click to toggle override)'}</p>
-            {statusIds.map((aId, idx) => 
+            {behaviorIds.map((aId, idx) => 
               {
                 return (forcedBehavior === aId) ? (
                   <LilButton key={idx} isActive={behavior === aId} text={aId} onClick={() => forceBehavior(aId)} style={{ backgroundColor: getColor('purple') }}/>

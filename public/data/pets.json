@@ -7,7 +7,7 @@
       "name": "Hot Doug",
       "scene": "magnadoodle",
       "thumbnail": "./pets/hot-doug_thumbnail.jpg",
-      "statuses": {
+      "behaviors": {
         "DEFAULT": { "animations": [ "hd_idle" ], "overlay": "example" },
         "IDLE": { "animations": [ "hd_idle" ], "overlay": "example" },
         "EAT": { "animations": [ "hd_eat" ], "overlay": "example" },
@@ -195,7 +195,7 @@
       "name": "Neenya",
       "scene": "outside",
       "thumbnail": "./pets/neenya_thumbnail.jpg",
-      "statuses": {
+      "behaviors": {
         "DEFAULT": { "animations": [ "idle_01" ], "overlay": "happy" },
         "IDLE_HAPPY": { "animations": [ "idle_01" ], "overlay": "happy" },
         "IDLE_SAD": { "animations": [ "idle_sad" ], "overlay": "sad" },
@@ -371,7 +371,7 @@
       "name": "Rizzo",
       "scene": "outside",
       "thumbnail": "./pets/raccoon_thumbnail.jpg",
-      "statuses": {
+      "behaviors": {
         "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
         "IDLE": { "animations": [ "Raccoon_Idle1" ] },
         "SAD": { "animations": [ "Raccoon_Still" ] },

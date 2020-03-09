@@ -39,6 +39,8 @@ const $NotAButton = styled.div`
 
 const $Button = styled.button`
   cursor:pointer;
+
+  pointer-events: all;
   outline:0;
   
   border:none;
@@ -67,10 +69,13 @@ const $Button = styled.button`
   }
   
   &:active{
-    background-color: ${shadeColor('blue', -10)};
-    transform: translate(.5px, 1px);
+    /* down state wasnt resetting on buttons that slid out */
+
     
-    transition: background-color .1s ease-out, transform .1s ease-out;
+    /* background-color: ${shadeColor('blue', -10)}; */
+    /* transform: translate(.5px, 1px); */
+    
+    /* transition: background-color .1s ease-out, transform .1s ease-out; */
   }
 
   ${p => p.isActive && css`

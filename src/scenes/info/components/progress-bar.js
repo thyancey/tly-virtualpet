@@ -63,6 +63,9 @@ const $Label = styled.div`
 `
 
 const $BarGroup = styled.div`
+  /* allows canvas clicks behind menu elements */
+  /* pointer-events: all; */
+  
   position:relative;
   display:flex;
   flex-direction:column;

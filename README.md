@@ -1,5 +1,6 @@
 
-# !! This project is WIP !! 
+## !! This project is WIP !! The information in this readme may also be out of date
+
 # Overview
 
 Like a tom-a-gotchye. Working towards a world where anyone can make a virtual pet out of anything
@@ -17,15 +18,31 @@ npm run build
 
 
 
-# Pet Behavior
-Pets determine their **Behavior** by interpreting their current [Activities](#activities) and [Mood Swing](#mood-swings) criteria
+# Behavior Loop
 
-Once a **Behavior** is known, it can be used to look up a [Status](#statuses) and get an [Animation](#animations)
+## Inputs
+[Time](#time) is used to to calculate [Stats](#stats), based on their rate and min/max values
 
-**Behaviors** also may restrict other [Activities](#activities) from occuring
+[Items](#items) and [Scenes](#scenes) may directly affect [Stats](#stats), or affect the rate at which [Stats](#stats) change
+
+[External Actions](#externalactions) trigger [Unique Events](#uniqueevents), which affect [Moods](#moods) (ex, "feelin slapped"), and [Stats](#stats) (ex, comfort +1/s) 
+
+[Time](#time) can also trigger [External Actions](#externalactions) (ex, birthday, holidays)
 
 
-[Statuses](#statuses) and **Behaviors** Are almost the same, however the difference is that a [Status](#statuses) is a definition what should happen, where as a **Behavior** represents the current state of what is happening.
+
+## Current Status
+Pets determine their [Behavior](#behaviors) by interpreting their current [Activities](#activities) and [Moods](#moods) via [Mood Swings](#moodswings) criteria
+
+Once a [Behavior](#behaviors) is known, it can be used to render an [Animation](#animations) and drive any [Pet AI](#petai)
+
+[Pet AI](#petai) will determine which [Activities](#activities) may happen next
+
+
+## Diagram
+*items in faded dotted box not implemented yet*
+
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vTc_eIy9JXmXmmsghKjMFIsd6sT0125p37zkdk2KOQYZ_rxAdOQ01sf6MZcosYGUC-9Mj2nOD9_bUAh/pub?w=1158&amp;h=673">
 
 
 
@@ -53,7 +70,7 @@ WALKING, JUMPING, EATING
 ---
 
 ## Mood Swings
-Rule sets for cause and effect based on current activities, stats, and statuses
+Rule sets for cause and effect based on current activities, stats, and behaviors
 ```javascript
   {
     "when":[
@@ -67,7 +84,7 @@ Rule sets for cause and effect based on current activities, stats, and statuses
 ### When Statements
 types:
 * stat
-  * stat *id of the stat to check*
+  * moods *array of mood ids to check*
   * value *expression of stat value, see stat values below*
 * activity
   * acitivity *id of the activity that must be active*
@@ -102,9 +119,9 @@ unit | value
 % | use percentages
 
 ---
-## Statuses
+## behaviors
 
-dictate an animation to play. Statuses are triggered via [Mood Swings](#mood-swings)
+dictate an animation to play. behaviors are triggered via [Mood Swings](#mood-swings)
 ```javascript
   "WALK_HURT": { "animations": [ "example_walk_hurt_01", "example_walk_hurt_02" ] }
 ```
@@ -112,7 +129,6 @@ dictate an animation to play. Statuses are triggered via [Mood Swings](#mood-swi
 ---
 ## Stats
 display values and conditions for how stats are altered, and 
-(TODO, remove?) how they affect the pet
 
 See more info about stats at [Delta Stats](#Delta-Stats)
 ```javascript
@@ -123,7 +139,10 @@ See more info about stats at [Delta Stats](#Delta-Stats)
     "perSecond": "-1",
     "max": "100",
     "fullIsGood": true,
-    "doesKill": true
+    "doesKill": true,
+    "effects":[
+      { "when": "<_35%", "then": "MOOD_HURT" }
+    }
   }
 ```
 

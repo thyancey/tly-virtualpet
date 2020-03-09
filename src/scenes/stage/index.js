@@ -34,6 +34,9 @@ const $CageContainer = styled.div`
 const $Stuff = styled.div`
   display:flex;
   flex-direction:row;
+
+  /* allow canvas clicks under menu elements */
+  pointer-events:none;
 `;
 
 const $MenuContainer = styled.div`
@@ -46,7 +49,7 @@ const $MenuContainer = styled.div`
 `;
 
 const $InfoContainer = styled.div`
-margin:1rem;
+  margin:1rem;
   flex:1;
   z-index:1;
 `;
