@@ -1,7 +1,4 @@
 {
-  "customTitle": "Animals",
-  "customValue": 300,
-  "customArray": [],
   "pets":[ 
     { "id": "neenya", "url": "data/pets/neenya" },
     { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },

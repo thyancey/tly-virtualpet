@@ -5,20 +5,54 @@
   "name": "Hot Doug",
   "scene": "magnadoodle",
   "thumbnail": "hot-doug_thumbnail.jpg",
-  "behaviors": {
-    "DEFAULT": { "animations": [ "hd_idle" ], "overlay": "example" },
-    "IDLE": { "animations": [ "hd_idle" ], "overlay": "example" },
-    "EAT": { "animations": [ "hd_eat" ], "overlay": "example" },
-    "WALK": { "animations": [ "hd_walk" ], "overlay": "example" },
-    "LIL_IDLE": { "animations": [ "hd_lil_idle" ], "overlay": "example" },
-    "LIL_WALK": { "animations": [ "hd_lil_walk" ], "overlay": "example" },
-    "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" },
-    "IDLE_DYING": { "animations": [ "hd_idle" ], "overlay": "green" },
-    "EAT_DYING": { "animations": [ "hd_eat" ], "overlay": "green" },
-    "WALK_DYING": { "animations": [ "hd_walk" ], "overlay": "green" },
-    "LIL_IDLE_DYING": { "animations": [ "hd_lil_idle" ], "overlay": "green" },
-    "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
-  },
+  "stats":[
+    {
+      "id": "level",
+      "type": "number",
+      "value": "2",
+      "perSecond": "0",
+      "max": "10",
+      "effects":[
+        { "when": ">=_10", "then": "MOOD_EVOLVE" }
+      ]
+    },
+    {
+      "id": "xp",
+      "type": "number",
+      "value": "300",
+      "perSecond": "0",
+      "max": "500",
+      "effects":[
+        { "when": "<_90%", "then": "MOOD_POWERUP" }
+      ]
+    },
+    { 
+      "id":"shelflife",
+      "label":"Shelf Life",
+      "value": "100",
+      "perSecond": "-1",
+      "max": "100",
+      "fullIsGood": true,
+      "doesKill": true,
+      "effects":[
+        { "when": "<_33%", "then": "MOOD_OLD" },
+        { "when": ">_80%", "then": "MOOD_FRESH" }
+      ]
+    },
+    { 
+      "id":"meatyness",
+      "label":"MEATYNESS",
+      "value": "50",
+      "perSecond": "-1",
+      "max": "150",
+      "fullIsGood": true,
+      "doesKill": false,
+      "effects":[
+        { "when": "<=_30%", "then": "MOOD_TINY" },
+        { "when": ">=_70%", "then": "MOOD_LARGE" }
+      ]
+    }
+  ],
   "moods":{
     "MOOD_EVOLVE": { "label": "Evolve", "moodType": 1 },
     "MOOD_POWERUP": { "label": "Power UP!", "moodType": 1},
@@ -125,58 +159,21 @@
       "then": "IDLE"
     }
   ],
-  "statz":{
-    "timestamp": null,
-    "stats": [
-      {
-        "id": "level",
-        "type": "number",
-        "value": "2",
-        "perSecond": "0",
-        "max": "10",
-        "effects":[
-          { "when": ">=_10", "then": "MOOD_EVOLVE" }
-        ]
-      },
-      {
-        "id": "xp",
-        "type": "number",
-        "value": "300",
-        "perSecond": "0",
-        "max": "500",
-        "effects":[
-          { "when": "<_90%", "then": "MOOD_POWERUP" }
-        ]
-      },
-      { 
-        "id":"shelflife",
-        "label":"Shelf Life",
-        "value": "100",
-        "perSecond": "-1",
-        "max": "100",
-        "fullIsGood": true,
-        "doesKill": true,
-        "effects":[
-          { "when": "<_33%", "then": "MOOD_OLD" },
-          { "when": ">_80%", "then": "MOOD_FRESH" }
-        ]
-      },
-      { 
-        "id":"meatyness",
-        "label":"MEATYNESS",
-        "value": "50",
-        "perSecond": "-1",
-        "max": "150",
-        "fullIsGood": true,
-        "doesKill": false,
-        "effects":[
-          { "when": "<=_30%", "then": "MOOD_TINY" },
-          { "when": ">=_70%", "then": "MOOD_LARGE" }
-        ]
-      }
-    ]
+  "behaviors": {
+    "DEFAULT": { "animations": [ "hd_idle" ], "overlay": "example" },
+    "IDLE": { "animations": [ "hd_idle" ], "overlay": "example" },
+    "EAT": { "animations": [ "hd_eat" ], "overlay": "example" },
+    "WALK": { "animations": [ "hd_walk" ], "overlay": "example" },
+    "LIL_IDLE": { "animations": [ "hd_lil_idle" ], "overlay": "example" },
+    "LIL_WALK": { "animations": [ "hd_lil_walk" ], "overlay": "example" },
+    "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" },
+    "IDLE_DYING": { "animations": [ "hd_idle" ], "overlay": "green" },
+    "EAT_DYING": { "animations": [ "hd_eat" ], "overlay": "green" },
+    "WALK_DYING": { "animations": [ "hd_walk" ], "overlay": "green" },
+    "LIL_IDLE_DYING": { "animations": [ "hd_lil_idle" ], "overlay": "green" },
+    "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
   },
-  "graphics":{
+  "animations":{
     "hd_idle":{
       "sprite": "HotDoug",
       "speed": "50",

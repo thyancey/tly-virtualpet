@@ -11,7 +11,6 @@ export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
 export const getDataLoadComplete= state => state.data.loadingComplete || 0;
 export const getManifestLoadComplete= state => state.data.manifestLoadComplete || 0;
 
-export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
 export const getActivePetId = state => state.activePet.id || null;
@@ -33,31 +32,6 @@ export const selectIsLoadingComplete = createSelector(
     return loaded && manifestLoaded || false;
   }
 );
-
-export const selectCustomLabels = createSelector(
-  [getCustomData],
-  (customData = {}) => {
-    return {
-      title: customData.customTitle,
-      subTitle: customData.customValue
-    }
-  }
-);
-
-export const selectCustomArray = createSelector(
-  [getCustomData],
-  (customData = {}) => {
-    return customData.customArray || []
-  }
-);
-
-export const selectCustomValue = createSelector(
-  [getCustomData],
-  (data) => {
-    return data.customValue;
-  }
-);
-
 
 export const selectActivePets = createSelector(
   [getActivePetType, getPets],
@@ -469,12 +443,12 @@ export const selectActivePetAnimation = createSelector(
     const animationLabel = statusObj.animations[animIdx];
     const overlayLabel = statusObj.overlay || null;
 
-    const foundGraphic = aData.graphics[animationLabel];
-    if(foundGraphic){
-      const sprite = sprites[foundGraphic.sprite];
+    const foundAnimation = aData.animations[animationLabel];
+    if(foundAnimation){
+      const sprite = sprites[foundAnimation.sprite];
 
-      if(animationLabel && foundGraphic && sprite){
-        const spriteObj = createSpriteObj(animationLabel, overlayLabel, foundGraphic, sprite, `${aData.dir}/assets`);
+      if(animationLabel && foundAnimation && sprite){
+        const spriteObj = createSpriteObj(animationLabel, overlayLabel, foundAnimation, sprite, `${aData.dir}/assets`);
         return spriteObj;
       }else{
         console.error(`Error getting spriteObj for ${animationLabel}`);

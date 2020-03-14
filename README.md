@@ -39,7 +39,26 @@ Once a [Behavior](#behaviors) is known, it can be used to render an [Animation](
 [Pet AI](#petai) will determine which [Activities](#activities) may happen next
 
 
-## Diagram
+## Manifest
+The manifest defines which pets and (todo: scenes, items) to include.
+
+
+*manifest entries for pet definitions*
+```
+{
+  "pets":[ 
+    { "id": "neenya", "url": "data/pets/neenya" },
+    { "id": "hotdoug", "url": "data/pets/hot-doug" }
+  ]
+}
+```
+
+## Pet Definition
+Each pet has a defined folder/file structure, and must be included in the [Manifest](#manifest) in order to appear.
+Every pet defintion *must* contain a ./data.jsonc file in a specificed format
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vRRSNPSSD_AEmkX8-vqk-OmGefqYvBavgudHKB1ei4Z8T1uOWCKm-5P0V61NHcJMe6i2LSS6nxOkX8W/pub?w=1158&amp;h=673">
+
+## Pet Behavior Flowchart
 *items in faded dotted box not implemented yet*
 
 <img src="https://docs.google.com/drawings/d/e/2PACX-1vTc_eIy9JXmXmmsghKjMFIsd6sT0125p37zkdk2KOQYZ_rxAdOQ01sf6MZcosYGUC-9Mj2nOD9_bUAh/pub?w=1158&amp;h=673">

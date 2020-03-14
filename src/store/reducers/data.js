@@ -13,7 +13,7 @@ import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
 import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'util/item-store';
 
 //- customData in store is from an external json file at public/data.json
-const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects', 'pets' ];
+const VALID_KEYS = [ 'pets' ];
 const RESTRICT_KEYS = false;
 
 const REQUIRED_EXTRAS = [ 'items', 'scenes' ];

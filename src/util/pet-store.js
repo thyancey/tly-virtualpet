@@ -1,7 +1,7 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
 import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
 
-const SAVE_SCHEMA_VERSION = 4;
+const SAVE_SCHEMA_VERSION = 5;
 
 const store = {
   pets:[],
@@ -114,7 +114,7 @@ export const parsePetData = (p, savedPet, savedData, manifest) => {
 
   const moodSwings = parseMoodSwings(p.moodSwings);
 
-  const definedStats = p.statz.stats;
+  const definedStats = p.stats;
   let initialStats = [];
 
   /* if cookie stats, use them here instead */
@@ -226,7 +226,7 @@ export const getStatRules = (petId) => {
   const petDef = getPetDefinition(petId);
   if(!petDef) return [];
 
-  return petDef.statz.stats.map(s => ({
+  return petDef.stats.map(s => ({
     doesKill: s.doesKill || false,
     fullIsGood: s.fullIsGood,
     max: s.max,
@@ -236,7 +236,7 @@ export const getStatRules = (petId) => {
 
 
 export const fancyUpSavedStats = (initialStats, savedStats, timestamp) => {
-  const mergedStats = initialStats.stats.map(iS => {
+  const mergedStats = initialStats.map(iS => {
     const savedStat = savedStats.stats.find(sS => sS.id === iS.id);
     return {...iS, ...savedStat}
   });
@@ -252,7 +252,7 @@ export const fancyUpSavedStats = (initialStats, savedStats, timestamp) => {
 
 export const getPetDeltaStats = (petId, timestamp) => {
   const petDef = getPetDefinition(petId);
-  const mergedStats = fancyUpSavedStats(petDef.statz, petDef.stats_saved, timestamp)
+  const mergedStats = fancyUpSavedStats(petDef.stats, petDef.stats_saved, timestamp)
 
   return getDeltaStats(mergedStats, timestamp);
 }
@@ -357,7 +357,7 @@ export const resetPetState = petId => {
 
   const now = new Date().getTime();
   const petDef = getPetDefinition(petId);
-  const definedStats = petDef.statz.stats;
+  const definedStats = petDef.stats;
 
   petDef.isAlive = true;
   petDef.stats_saved = {
