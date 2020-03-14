@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { setCustomData, setOtherData } from 'store/actions';
 import fetchy from 'node-fetch';
+import { jsonc } from 'jsonc';
+
+import { setOtherData, setManifest } from 'store/actions';
 
 
 let dataLocation = './data';
@@ -19,23 +21,23 @@ class LoadHelper extends Component {
   }
 
   setDefaultData(){
-    this.props.setCustomData({
-      "tests":[
-        {
-            "title": "123"
-        },
-        {
-            "title": "234"
-        }
-      ]
-    });
+    // this.props.setCustomData({
+    //   "tests":[
+    //     {
+    //         "title": "123"
+    //     },
+    //     {
+    //         "title": "234"
+    //     }
+    //   ]
+    // });
   }
 
   loadAllData(){
-    this.loadStoreData();
-    this.loadOtherData('pets', 'pets.json');
-    this.loadOtherData('scenes', 'scenes.json');
-    this.loadOtherData('items', 'items.json');
+    this.loadOtherData('manifest', '_manifest.jsonc');
+    this.loadOtherData('pets', 'pets.jsonc');
+    this.loadOtherData('scenes', 'scenes.jsonc');
+    this.loadOtherData('items', 'items.jsonc');
   }
 
   loadOtherData(type, location){
@@ -43,46 +45,30 @@ class LoadHelper extends Component {
    ;
     console.log(`reading ${type} data from '${url}'`);
 
-    fetchy(url).then(response => {
-      return response.json();
-    }, 
-    err => {
-      console.error(`Error fretching ${type} data from ${url}`, err);
-    }) //- bad url responds with 200/ok? so this doesnt get thrown
-      .then(json => {
-        console.log(`${type} data was read successfully`, json);
-        this.props.setOtherData({ type: type, data: json });
-        return true;
-      }, 
-      err => {
-        console.error(`Error parsing ${type} data (or the url was bad), skipping`, err);
-      });
-  }
-
-  loadStoreData(){
-    const url = `${dataLocation}/data.json`;
-    console.log(`reading app data from '${url}'`);
-
-    fetchy(url).then(response => {
-                      return response.json();
-                    }, 
-                    err => {
-                      console.error('Error fretching url', err);
-                      // this.setDefaultData();
-                    }) //- bad url responds with 200/ok? so this doesnt get thrown
-              .then(json => {
-                      console.log('data was read successfully')
-                      this.props.setCustomData(json);
-                      return true;
-                    }, 
-                    err => {
-                      console.error('Error parsing store JSON (or the url was bad)', err);
-                      // this.setDefaultData();
-                    })
-              .catch(e => {
-                console.error('Error parsing store JSON (or the url was bad)', e);
-                // this.setDefaultData();
-              });
+    fetchy(url)
+      .then(res => res.text())
+      .then(
+        text => {
+          return jsonc.parse(text);
+        }, 
+        err => {
+          console.error(`Error fretching ${type} data from ${url}`, err);
+        }
+      ) //- bad url responds with 200/ok? so this doesnt get thrown
+      .then(
+        json => {
+          console.log(`${type} data was read successfully`, json);
+          if(type === 'manifest'){
+            this.props.setManifest(json);
+          }else{
+            this.props.setOtherData({ type: type, data: json });
+          }
+          return true;
+        }, 
+        err => {
+          console.error(`Error parsing ${type} data (or the url was bad), skipping`, err && err.stack || err);
+        }
+      );
   }
 
 
@@ -96,7 +82,7 @@ const mapStateToProps = ({ data }, props) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { setCustomData, setOtherData  },
+    { setOtherData, setManifest  },
     dispatch
   )
 

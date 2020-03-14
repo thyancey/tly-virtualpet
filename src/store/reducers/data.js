@@ -1,6 +1,6 @@
 import { 
-  setCustomData,
   setOtherData,
+  setManifest,
   setActivePetType,
   setActivePetId,
   ping
@@ -12,7 +12,7 @@ import { setPetDefinitions, setSpriteDefinitions, getPetDefinition } from 'util/
 import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'util/item-store';
 
 //- customData in store is from an external json file at public/data.json
-const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects' ];
+const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects', 'pets' ];
 const RESTRICT_KEYS = false;
 
 const REQUIRED_EXTRAS = [ 'pets', 'items', 'scenes' ];
@@ -30,10 +30,9 @@ const initialState = {
 }
 
 export default handleActions({
-  [setCustomData.toString()]: (state, action) => {
+  [setManifest.toString()]: (state, action) => {
     const cleanObj = {};
     const parsedData = action.payload;
-    // console.log('setCustomData', action.payload);
     for(let key in parsedData){
       if(VALID_KEYS.indexOf(key) === -1){
         console.warn(`key supplied in /data.json "${key}" is not a valid key`);
@@ -43,10 +42,10 @@ export default handleActions({
         cleanObj[key] = parsedData[key];
       }
     }
-
+  
     return {
       ...state,
-      customData: cleanObj,
+      manifest: cleanObj,
       loaded: true
     }
   },
@@ -58,6 +57,7 @@ export default handleActions({
       extrasLoaded += 1;
     }
     
+    console.log('type', action.payload.type)
     if(action.payload.type === 'pets'){
       setPetDefinitions(action.payload.data.pets);
       setSpriteDefinitions(action.payload.data.sprites);
