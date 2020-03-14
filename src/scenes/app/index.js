@@ -67,6 +67,7 @@ class App extends Component {
   }
 
   onLoadComplete(){
+    console.log('Load complete.');
     this.loadDeeplinkedPet();
   }
 

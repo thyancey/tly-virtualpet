@@ -149,7 +149,7 @@ export default class DropMenu extends Component {
         <$MenuLabel>{ text }</$MenuLabel>
         <$DropItems>
           {isActive && items.map((i, idx) => (
-            <DropItem key={idx} isActive={i.id === activeId} thumbnail={i.thumbnail} text={i.text} subText={i.subText} onClick={e => this.onItemClicked(i.id, e)} />
+            <DropItem key={idx} isActive={i.id === activeId} thumbnail={`${i.dir}/assets/${i.thumbnail}`} text={i.text} subText={i.subText} onClick={e => this.onItemClicked(i.id, e)} />
           ))}
         </$DropItems>
       </$DropMenu>
@@ -164,8 +164,8 @@ export const DropItem = ({ text, subText, isActive, onClick, style, thumbnail })
       <$ImgContainer>
         <ReactImageFallback
           src={thumbnail}
-          fallbackImage={'./pets/unknown_thumbnail.png'}
-          initialImage={'./pets/unknown_thumbnail.png'}
+          fallbackImage={'ui/unknown_thumbnail.jpg'}
+          initialImage={'ui/unknown_thumbnail.jpg'}
           alt={text} />
       </$ImgContainer>
       <$DropItemLabel>

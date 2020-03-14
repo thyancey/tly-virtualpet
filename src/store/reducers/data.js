@@ -1,6 +1,7 @@
 import { 
   setOtherData,
   setManifest,
+  storeManifestItem,
   setActivePetType,
   setActivePetId,
   ping
@@ -8,14 +9,14 @@ import {
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
-import { setPetDefinitions, setSpriteDefinitions, getPetDefinition } from 'util/pet-store';
+import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
 import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'util/item-store';
 
 //- customData in store is from an external json file at public/data.json
 const VALID_KEYS = [ 'customTitle', 'customValue', 'customArray', 'customObjects', 'pets' ];
 const RESTRICT_KEYS = false;
 
-const REQUIRED_EXTRAS = [ 'pets', 'items', 'scenes' ];
+const REQUIRED_EXTRAS = [ 'items', 'scenes' ];
  
 const initialState = {
   loaded: false,
@@ -26,42 +27,87 @@ const initialState = {
   counter: 0,
   activePetType: null,
   activePetId: null,
-  ping: 0
+  ping: 0,
+  manifest:{},
+  manifestLoadComplete: false,
+  nextManifestItem: null
 }
 
 export default handleActions({
   [setManifest.toString()]: (state, action) => {
-    const cleanObj = {};
+    const cleanManifestObj = {};
     const parsedData = action.payload;
     for(let key in parsedData){
       if(VALID_KEYS.indexOf(key) === -1){
         console.warn(`key supplied in /data.json "${key}" is not a valid key`);
-        if(!RESTRICT_KEYS) cleanObj[key] = parsedData[key];
+        if(!RESTRICT_KEYS) cleanManifestObj[key] = parsedData[key];
       }
       else{
-        cleanObj[key] = parsedData[key];
+        cleanManifestObj[key] = parsedData[key];
       }
     }
-  
+
+    const manifestNext = cleanManifestObj.pets && cleanManifestObj.pets[0];
+    let nextManifestItem = null;
+    if(manifestNext){
+      nextManifestItem = {
+        type: 'pets',
+        idx: 0,
+        id: manifestNext.id,
+        url: manifestNext.url
+      }
+    }
+
     return {
       ...state,
-      manifest: cleanObj,
+      manifest: cleanManifestObj,
+      nextManifestItem: nextManifestItem,
       loaded: true
+    }
+  },
+
+  [storeManifestItem.toString()]: (state, action) => {
+    const { manifest, data} = action.payload;
+    
+    if(manifest.type === 'pets'){
+      setFromPetManifest(data, manifest)
+    }
+
+    const nextManifestIdx = manifest.idx + 1;
+    const manifestNext = state.manifest.pets[nextManifestIdx] || null;
+
+    if(manifestNext){
+      return {
+        ...state,
+        nextManifestItem: {
+          type: 'pets',
+          idx: nextManifestIdx,
+          id: manifestNext.id,
+          url: manifestNext.url
+        },
+        manifestLoadComplete: false
+      }
+
+    }else{
+      console.log('-------------------------');
+      console.log('All manifest items loaded.');
+      return {
+        ...state,
+        nextManifestItem: null,
+        manifestLoadComplete: true
+      }
     }
   },
 
   [setOtherData.toString()]: (state, action) => {
     let extrasLoaded = state.extrasLoaded;
+    console.log(`setOtherData: "${action.payload.type}"`);
 
     if(REQUIRED_EXTRAS.indexOf(action.payload.type) > -1){
       extrasLoaded += 1;
     }
     
-    console.log('type', action.payload.type)
-    if(action.payload.type === 'pets'){
-      setPetDefinitions(action.payload.data.pets);
-      setSpriteDefinitions(action.payload.data.sprites);
-    } else if(action.payload.type === 'scenes'){
+    if(action.payload.type === 'scenes'){
       setStyleDefinitions(action.payload.data.styles || []);
       setSceneDefinitions(action.payload.data.scenes || []);
     } else if(action.payload.type === 'items'){
@@ -83,6 +129,7 @@ export default handleActions({
   },
 
   [setActivePetType.toString()]: (state, action) => {
+    console.log('setActivePetType', action.payload)
     return {
       ...state,
       activePetType: action.payload

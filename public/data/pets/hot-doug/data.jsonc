@@ -1,0 +1,233 @@
+{
+  "id": "hotdoug",
+  "type": "samples",
+  "animal": "Hot Dog",
+  "name": "Hot Doug",
+  "scene": "magnadoodle",
+  "thumbnail": "hot-doug_thumbnail.jpg",
+  "behaviors": {
+    "DEFAULT": { "animations": [ "hd_idle" ], "overlay": "example" },
+    "IDLE": { "animations": [ "hd_idle" ], "overlay": "example" },
+    "EAT": { "animations": [ "hd_eat" ], "overlay": "example" },
+    "WALK": { "animations": [ "hd_walk" ], "overlay": "example" },
+    "LIL_IDLE": { "animations": [ "hd_lil_idle" ], "overlay": "example" },
+    "LIL_WALK": { "animations": [ "hd_lil_walk" ], "overlay": "example" },
+    "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" },
+    "IDLE_DYING": { "animations": [ "hd_idle" ], "overlay": "green" },
+    "EAT_DYING": { "animations": [ "hd_eat" ], "overlay": "green" },
+    "WALK_DYING": { "animations": [ "hd_walk" ], "overlay": "green" },
+    "LIL_IDLE_DYING": { "animations": [ "hd_lil_idle" ], "overlay": "green" },
+    "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
+  },
+  "moods":{
+    "MOOD_EVOLVE": { "label": "Evolve", "moodType": 1 },
+    "MOOD_POWERUP": { "label": "Power UP!", "moodType": 1},
+    "MOOD_OLD": { "label": "old and stinky", "moodType": -1},
+    "MOOD_FRESH": { "label": "FRESH", "moodType": 1},
+    "MOOD_TINY": { "label": "like a Vienna Sausage", "moodType": 0},
+    "MOOD_LARGE": { "label": "awful chonky", "moodType": 0}
+  },
+  "moodSwings":[
+    {
+      "when":[
+        { "type":"status", "isDead": true }
+      ],
+      "then": "DEAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_TINY", "MOOD_OLD" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "LIL_WALK_DYING"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_TINY" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "LIL_WALK"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_TINY", "MOOD_OLD" ] }
+      ],
+      "then": "LIL_IDLE_DYING"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_TINY" ] }
+      ],
+      "then": "LIL_IDLE"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_OLD" ] },
+        { "type": "activity", "activity": "EATING" }
+      ],
+      "then": "EAT_DYING"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "EATING" }
+      ],
+      "then": "EAT"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_OLD" ] },
+        { "type": "activity", "activity": "WALKING" },
+        { "type": "activity", "activity": "DUCKING" }
+      ],
+      "then": "LIL_WALK_DYING"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_OLD" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK_DYING"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" },
+        { "type": "activity", "activity": "DUCKING" }
+      ],
+      "then": "LIL_WALK"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_OLD" ] },
+        { "type": "activity", "activity": "DUCKING" }
+      ],
+      "then": "LIL_IDLE_DYING"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_OLD" ] }
+      ],
+      "then": "IDLE_DYING"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "DUCKING" }
+      ],
+      "then": "LIL_IDLE"
+    },
+    {
+      "when":[],
+      "then": "IDLE"
+    }
+  ],
+  "statz":{
+    "timestamp": null,
+    "stats": [
+      {
+        "id": "level",
+        "type": "number",
+        "value": "2",
+        "perSecond": "0",
+        "max": "10",
+        "effects":[
+          { "when": ">=_10", "then": "MOOD_EVOLVE" }
+        ]
+      },
+      {
+        "id": "xp",
+        "type": "number",
+        "value": "300",
+        "perSecond": "0",
+        "max": "500",
+        "effects":[
+          { "when": "<_90%", "then": "MOOD_POWERUP" }
+        ]
+      },
+      { 
+        "id":"shelflife",
+        "label":"Shelf Life",
+        "value": "100",
+        "perSecond": "-1",
+        "max": "100",
+        "fullIsGood": true,
+        "doesKill": true,
+        "effects":[
+          { "when": "<_33%", "then": "MOOD_OLD" },
+          { "when": ">_80%", "then": "MOOD_FRESH" }
+        ]
+      },
+      { 
+        "id":"meatyness",
+        "label":"MEATYNESS",
+        "value": "50",
+        "perSecond": "-1",
+        "max": "150",
+        "fullIsGood": true,
+        "doesKill": false,
+        "effects":[
+          { "when": "<=_30%", "then": "MOOD_TINY" },
+          { "when": ">=_70%", "then": "MOOD_LARGE" }
+        ]
+      }
+    ]
+  },
+  "graphics":{
+    "hd_idle":{
+      "sprite": "HotDoug",
+      "speed": "50",
+      "frames": [ 0, 13 ]
+    },
+    "hd_eat":{
+      "sprite": "HotDoug",
+      "speed": "20",
+      "frames": [ 18, 17, 11, 17, 11, 18 ]
+    },
+    "hd_walk":{
+      "sprite": "HotDoug",
+      "speed": "30",
+      "frames": [ 2, 4, 3, 2, 0 ]
+    },
+    "hd_lil_idle":{
+      "sprite": "HotDoug",
+      "speed": "30",
+      "frames": [ 6, 7 ]
+    },
+    "hd_lil_walk":{
+      "sprite": "HotDoug",
+      "speed": "30",
+      "frames": [ 6, 7, 8, 9, 8, 7 ]
+    },
+    "hd_lil_emerge":{
+      "sprite": "HotDoug",
+      "speed": "30",
+      "frames": [ 6, 9, 10, 4, 14 ]
+    },
+    "hd_dead":{
+      "sprite": "HotDoug",
+      "speed": "30",
+      "frames": [ 12 ]
+    }
+  },
+  "sprites":{
+    "HotDoug":{
+      "type": "Sprite_Animated",
+      "imageUrl": "hot-doug.png",
+      "overlays": {
+        "example": "hot-doug-overlay-examples.png",
+        "green": "hot-doug-overlay-green.png"
+      },
+      "spriteInfo":{
+        "scale": ".8",
+        "orientation": -1,
+        "grid": [ 6, 4 ],
+        "cells": [ 400, 533 ],
+        "hitboxOffset": [ 60, 0 ] 
+      }
+    }
+  }
+}

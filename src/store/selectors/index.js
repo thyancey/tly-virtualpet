@@ -1,13 +1,16 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getSprites, getPetDeltaStats, getStatRules, getTaxonomy  } from 'util/pet-store';
+import { getPets, getPetDeltaStats, getStatRules, getTaxonomy  } from 'util/pet-store';
 import { getSceneDefinition } from '../../util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
 import { evaluateCondition } from '../../util/tools';
 
 export const getLoaded = state => state.data.loaded || false;
+export const getNextManifestItem = state => state.data.nextManifestItem || null;
 export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
-export const getLoadingComplete= state => state.data.loadingComplete || 0;
+export const getDataLoadComplete= state => state.data.loadingComplete || 0;
+export const getManifestLoadComplete= state => state.data.manifestLoadComplete || 0;
+
 export const getCustomData = state => state.data.customData || {};
 export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
@@ -17,10 +20,17 @@ export const getActivePetStats = state => state.activePet.stats || null;
 export const getActivePet = state => state.activePet || null;
 export const getPing = state => state.data.ping || 0;
 
+export const selectNextManifestItem = createSelector(
+  [getNextManifestItem],
+  (nextManifestItem = null) => {
+    return nextManifestItem;
+  }
+);
+
 export const selectIsLoadingComplete = createSelector(
-  [getLoadingComplete],
-  (loaded = false) => {
-    return loaded;
+  [getDataLoadComplete, getManifestLoadComplete],
+  (loaded = false, manifestLoaded = false) => {
+    return loaded && manifestLoaded || false;
   }
 );
 
@@ -157,7 +167,7 @@ const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
   }
 }
 
-const createSpriteObj = (label, overlayLabel, graphic, sprite) => {
+const createSpriteObj = (label, overlayLabel, graphic, sprite, assetDir = '') => {
   sprite.spriteInfo = sprite.spriteInfo || {};
 
   let faceDirection;
@@ -179,11 +189,15 @@ const createSpriteObj = (label, overlayLabel, graphic, sprite) => {
     orientation = 1;
   }
 
-  const overlayUrl = overlayLabel && sprite.overlays && sprite.overlays[overlayLabel] || null;
+  const imageUrl = `${assetDir}/${sprite.imageUrl}`;
+  let overlayUrl = overlayLabel && sprite.overlays && sprite.overlays[overlayLabel] || null;
+  if(overlayUrl){
+    overlayUrl = `${assetDir}/${overlayUrl}`;
+  }
 
   return {
     type: sprite.type,
-    imageUrl: sprite.imageUrl,
+    imageUrl: imageUrl,
     overlayUrl: overlayUrl,
     label: label,
     spriteInfo:{
@@ -439,12 +453,13 @@ export const selectCurrentPetBehavior = createSelector(
 );
 
 export const selectActivePetAnimation = createSelector(
-  [selectActivePet, getSprites, selectCurrentPetBehavior],
-  (activePet, sprites, behavior) => {
-    if(!activePet|| !sprites) return null;
-    
+  [selectActivePet, selectCurrentPetBehavior],
+  (activePet, behavior) => {
+    if(!activePet) return null;
+
     const aData = activePet.data;
     const statusObj = aData.behaviors[behavior] || aData.behaviors.DEFAULT;
+    const sprites = aData.sprites;
 
     if(!statusObj){
       console.error(`Error getting behavior ${behavior}`);
@@ -459,7 +474,7 @@ export const selectActivePetAnimation = createSelector(
       const sprite = sprites[foundGraphic.sprite];
 
       if(animationLabel && foundGraphic && sprite){
-        const spriteObj = createSpriteObj(animationLabel, overlayLabel, foundGraphic, sprite);
+        const spriteObj = createSpriteObj(animationLabel, overlayLabel, foundGraphic, sprite, `${aData.dir}/assets`);
         return spriteObj;
       }else{
         console.error(`Error getting spriteObj for ${animationLabel}`);

@@ -18,14 +18,14 @@
       },
       "background":{
         "color": "#1F1258",
-        "imageUrl": "./items/scenes/magnadoodle_bg.jpg"
+        "imageUrl": "./data/scenes/magnadoodle_bg.jpg"
       }
     },
     {
       "id": "outside",
       "floor": {
         "height": "150",
-        "imageUrl": "./items/scenes/floor_grass.png"
+        "imageUrl": "./data/scenes/floor_grass.png"
       },
       "type":"responsive",
       "cage":{
@@ -38,7 +38,7 @@
       },
       "background":{
         "color": "#ffffff",
-        "imageUrl": "./items/scenes/bg_win95.jpg",
+        "imageUrl": "./data/scenes/bg_win95.jpg",
         "backgroundPosition": "50% 0%"
       }
     },{
@@ -67,7 +67,7 @@
       },
       "background":{
         "color": "#000000",
-        "imageUrl": "./items/scenes/bg_beaver.jpg",
+        "imageUrl": "./data/scenes/bg_beaver.jpg",
         "backgroundPosition": "50% 0%"
       }
     }

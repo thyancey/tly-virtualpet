@@ -5,15 +5,11 @@ const SAVE_SCHEMA_VERSION = 4;
 
 const store = {
   pets:[],
-  sprites:[],
   taxonomy: []
 }
 
 export const getPets = () => {
   return store.pets;
-}
-export const getSprites = () => {
-  return store.sprites;
 }
 
 export const getPetDefinition = petId => {
@@ -60,6 +56,22 @@ export const gatherTaxonomy = (pets) => {
   return allPetTypes;
 }
 
+export const addToTaxonomy = (petDef, taxonomy) => {
+  let foundTypeIndex = taxonomy.findIndex(t => t.type === petDef.type);
+  if(foundTypeIndex > -1){
+    const foundType = taxonomy[foundTypeIndex];
+    foundType.pets.push({ id: petDef.id, label: petDef.name });
+    taxonomy[foundTypeIndex] = foundType;
+  }else{
+    taxonomy.push({
+      type: petDef.type,
+      pets:[ { id: petDef.id, label: petDef.name }]
+    });
+  }
+
+  return taxonomy;
+}
+
 export const getPetTypes = () => {
 
   let allPetTypes = [];
@@ -81,13 +93,64 @@ export const getPetTypes = () => {
   return allPetTypes;
 }
 
+export const setFromPetManifest = (petData, manifest) => {
+  const savedData = getSavedData();
+  const savedPet = savedData.pets.find(savedPet => savedPet.id === petData.id);
+  const petDef = parsePetData(petData, savedPet, savedData, manifest);
+  setPetDefinition(petDef.id, petDef);
+
+  store.taxonomy = addToTaxonomy(petDef, store.taxonomy);
+}
+
+export const parsePetData = (p, savedPet, savedData, manifest) => {
+  let defaultBehavior = p.behaviors.DEFAULT;
+  if(!defaultBehavior){
+    try{
+      defaultBehavior = p.behaviors[Object.keys(p.behaviors)[0]];
+    }catch(e){
+      console.error(`could not autodeclare default status for pet "${p.id}"`);
+    }
+  }
+
+  const moodSwings = parseMoodSwings(p.moodSwings);
+
+  const definedStats = p.statz.stats;
+  let initialStats = [];
+
+  /* if cookie stats, use them here instead */
+  if(savedPet){
+    initialStats = mergeStats(definedStats, savedPet.stats, true);
+    p.isAlive = savedPet.isAlive;
+  }else{
+    initialStats = definedStats;
+    p.isAlive = true;
+  }
+
+  p.stats_saved = {
+    timestamp: savedData.timestamp || new Date().getTime(),
+    isAlive: savedData.isAlive,
+    stats: initialStats.map(s => formatSavedStatObj(s))
+  }
+
+  console.log('manifest', manifest)
+
+  return {
+    ...p,
+    dir: manifest.url,
+    behaviors:{
+      ...p.behaviors,
+      DEFAULT: defaultBehavior
+    },
+    moodSwings:moodSwings
+  }
+}
 
 export const setPetDefinition = (petId, petDef, saveAfter) => {
   const petIdx = store.pets.findIndex(p => p.id === petId);
   if(petIdx > -1){
     store.pets[petIdx] = petDef;
   }else{
-    store.pets.push = petDef;
+    store.pets.push(petDef);
   }
 
   if(saveAfter)  saveAllPetStatsToCookie();
@@ -112,65 +175,15 @@ export const parseMoodSwings = (moodSwings) => {
   return moodSwings || [];
 }
 
-
-export const setPetDefinitions = petList => {
-  //- grab cookie, if cookie, get list of saved pet stats
+export const getSavedData = () => {
   let savedData = getCookieObj('tly_virtualpet');
   if(savedData && (!savedData.schemaVersion || savedData.schemaVersion < SAVE_SCHEMA_VERSION)){
     console.warn(`Schema version ${savedData.schemaVersion} is behind version ${SAVE_SCHEMA_VERSION}, resetting all your data, sorry bubs`);
     deleteCookie('tly_virtualpet');
     savedData = null;
   }
-  
 
-  if(!savedData){
-    savedData = getDefaultSavedData();
-  }
-
-
-  store.pets = petList.map(p => {
-    let defaultBehavior = p.behaviors.DEFAULT;
-    if(!defaultBehavior){
-      try{
-        defaultBehavior = p.behaviors[Object.keys(p.behaviors)[0]];
-      }catch(e){
-        console.error(`could not autodeclare default status for pet "${p.id}"`);
-      }
-    }
-
-    const moodSwings = parseMoodSwings(p.moodSwings);
-
-    const savedPet = savedData.pets.find(savedPet => savedPet.id === p.id);
-    const definedStats = p.stats_initial.stats;
-    let initialStats = [];
-
-    /* if cookie stats, use them here instead */
-    if(savedPet){
-      initialStats = mergeStats(definedStats, savedPet.stats, true);
-      p.isAlive = savedPet.isAlive;
-    }else{
-      initialStats = definedStats;
-      p.isAlive = true;
-    }
-
-    p.stats_saved = {
-      timestamp: savedData.timestamp || new Date().getTime(),
-      isAlive: savedData.isAlive,
-      stats: initialStats.map(s => formatSavedStatObj(s))
-    }
-    setPetDefinition(p.id, p);
-
-    return {
-      ...p,
-      behaviors:{
-        ...p.behaviors,
-        DEFAULT: defaultBehavior
-      },
-      moodSwings:moodSwings
-    }
-  });
-
-  store.taxonomy = gatherTaxonomy(store.pets);
+  return savedData || getDefaultSavedData();
 }
 
 const mergeStats = (origArray, newArray, overwrite) => {
@@ -199,10 +212,6 @@ export const getPetStoreData = (itemType) => {
   return store[itemType];
 }
 
-export const setSpriteDefinitions = spriteList => {
-  store.sprites = spriteList;
-}
-
 export const getStartStats = petId => {
   const petDef = getPetDefinition(petId);
   return petDef && petDef.startStats || [];
@@ -217,7 +226,7 @@ export const getStatRules = (petId) => {
   const petDef = getPetDefinition(petId);
   if(!petDef) return [];
 
-  return petDef.stats_initial.stats.map(s => ({
+  return petDef.statz.stats.map(s => ({
     doesKill: s.doesKill || false,
     fullIsGood: s.fullIsGood,
     max: s.max,
@@ -243,7 +252,7 @@ export const fancyUpSavedStats = (initialStats, savedStats, timestamp) => {
 
 export const getPetDeltaStats = (petId, timestamp) => {
   const petDef = getPetDefinition(petId);
-  const mergedStats = fancyUpSavedStats(petDef.stats_initial, petDef.stats_saved, timestamp)
+  const mergedStats = fancyUpSavedStats(petDef.statz, petDef.stats_saved, timestamp)
 
   return getDeltaStats(mergedStats, timestamp);
 }
@@ -342,14 +351,13 @@ export const saveAllPetStatsToCookieNow = () => {
 }
 
 
-
 /* RESETTING */
 export const resetPetState = petId => {
   console.log(`resetting pet "${petId}"`);
 
   const now = new Date().getTime();
   const petDef = getPetDefinition(petId);
-  const definedStats = petDef.stats_initial.stats;
+  const definedStats = petDef.statz.stats;
 
   petDef.isAlive = true;
   petDef.stats_saved = {

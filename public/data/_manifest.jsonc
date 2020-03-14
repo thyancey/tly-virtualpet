@@ -1,10 +1,10 @@
 {
   "customTitle": "Animals",
   "customValue": 300,
-  "customArray": [ "sample", "megupet", "painting", "magnadoodle" ],
+  "customArray": [],
   "pets":[ 
-    { "id": "neenya", "manifest": "./pets/neenya" }
-    // { "id": "rizzo-raccoon", "manifest": "./pets/raccoon-wizard" }
-    // { "id": "hotdoug", "manifest": "./hotdoug" }
+    { "id": "neenya", "url": "data/pets/neenya" },
+    { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
+    { "id": "hotdoug", "url": "data/pets/hot-doug" }
   ]
 }
