@@ -3,20 +3,30 @@ import {
   storeManifestItem,
   setActivePetType,
   setActivePetId,
+  setSettingsValue,
   ping
 } from '../actions';
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
+import { clamp } from 'util/tools';
 import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
 import { setFromSceneManifest } from 'util/item-store';
 import { getNextManifestData, setManifestStages } from 'util/manifest-helper';
 
 const VALID_KEYS = [ 'title', 'stages' ];
 const RESTRICT_KEYS = false;
+const DEFAULT_PING_RATE = 1000;
+const DEFAULT_VOLUME = 50;
+const DEFAULT_ANIMATION_SPEED = 30;
  
 const initialState = {
   loadingComplete: false,
+  settings:{
+    pingRate: DEFAULT_PING_RATE,
+    volume: DEFAULT_VOLUME,
+    animationSpeed: DEFAULT_ANIMATION_SPEED
+  },
   title: 'loading',
   customData: null,
   counter: 0,
@@ -43,6 +53,19 @@ export default handleActions({
         }
       }
     }
+
+    let pingRate = state.settings.pingRate;
+    if(parsedData.pingRate !== undefined){
+      console.error('I SEE PINGRATE', parsedData.pingRate);
+
+      try {
+        if(!isNaN(parsedData.pingRate)){
+          pingRate = clamp(parseInt(parsedData.pingRate), 50, 5000);
+        }
+      }catch(e){
+        console.error('there was a problem parsing pingRate');
+      }
+    }
     
     console.log('----------------');
     console.log('starting manifest');
@@ -53,6 +76,10 @@ export default handleActions({
       ...state,
       nextManifestItem,
       loadingComplete: nextManifestItem === null,
+      settings:{
+        ...state.settings,
+        pingRate
+      },
       customData
     }
   },
@@ -79,6 +106,24 @@ export default handleActions({
     return {
       ...state,
       transitionLabel: action.payload.label
+    }
+  },
+
+  [setSettingsValue.toString()]: (state, action) => {
+    console.log('setSettingsValue', action.payload);
+    const settingsKey = action.payload.id;
+    const storedValue = state.settings[settingsKey];
+
+    if(storedValue !== undefined && storedValue !== action.payload.value){
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          [settingsKey]: action.payload.value
+        }
+      }
+    }else{
+      return state;
     }
   },
 

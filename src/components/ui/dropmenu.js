@@ -11,7 +11,7 @@ const $DropMenu = styled.div`
   padding: 1rem;
   font-size:3rem;
   font-weight: 600;
-  margin-top:2rem;
+  margin-top: 1rem;
   width:100%;
 
   overflow:hidden;

@@ -9,6 +9,8 @@ export const getNextManifestItem = state => state.data.nextManifestItem || null;
 export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
 export const getDataLoadComplete= state => state.data.loadingComplete || 0;
 
+export const getSettings = state => state.data.settings;
+
 export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
 export const getActivePetId = state => state.activePet.id || null;
@@ -16,6 +18,30 @@ export const getForcedBehavior = state => state.activePet.forcedBehavior || null
 export const getActivePetStats = state => state.activePet.stats || null;
 export const getActivePet = state => state.activePet || null;
 export const getPing = state => state.data.ping || 0;
+
+export const selectSettingPingRate = createSelector(
+  [getSettings],
+  (settings) => {
+    if(!settings) return -1;
+    return settings.pingRate;
+  }
+);
+
+export const selectSettingVolume = createSelector(
+  [getSettings],
+  (settings) => {
+    if(!settings) return -1;
+    return settings.volume;
+  }
+);
+
+export const selectSettingAnimationSpeed = createSelector(
+  [getSettings],
+  (settings) => {
+    if(!settings) return -1;
+    return settings.animationSpeed;
+  }
+);
 
 export const selectNextManifestItem = createSelector(
   [getNextManifestItem],

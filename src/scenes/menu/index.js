@@ -5,7 +5,9 @@ import { themeGet, getColor, shadeColor, getBreakpoint } from 'themes/';
 
 import { Button } from 'components/button';
 
-import PetSelection from './components/pet-selection';
+import PanelBase from './components/panel-base';
+import PanelPetSelection from './components/panel-petselection';
+import PanelSettings from './components/panel-settings';
 
 import { deleteAllData } from 'util/pet-store';
 
@@ -24,6 +26,8 @@ const $MainPanel = styled.div`
   position:fixed;
   top:0rem;
   bottom:0;
+  border-left: 1rem solid ${getColor('white')};
+  box-shadow: ${themeGet('shadow', 'z3')};
 
 
   @media ${getBreakpoint.mobile_tiny}{
@@ -51,7 +55,7 @@ const $MainPanel = styled.div`
 const $PanelContainer = styled.div`
   width:100%;
   height:100%;
-  padding: 2rem;
+  /* padding: 2rem; */
 `;
 
 const $ResetButton = styled.div`
@@ -72,9 +76,8 @@ const $ResetButton = styled.div`
 const $MenuButton = styled.div`
   margin:1rem;
   top:1rem;
-  right:1rem;
   z-index:2;
-  right:100%;
+  right:calc(100% + 2rem);
   position:absolute;
 
   button{
@@ -94,9 +97,7 @@ const $PanelBg = styled.div`
   /* border-radius: 10px 0 0 10px; */
 
   z-index:-1;
-  background-color: ${themeGet('color', 'white')};
-  border-left: .5rem solid white;
-  box-shadow: ${themeGet('shadow', 'z3')};
+  background-color: ${shadeColor('black', 0)};
   opacity:1;
 `
 
@@ -110,7 +111,12 @@ class Menu extends Component {
             <Button text={'menu'} onClick={() => this.props.onToggleMenu()}/>
           </$MenuButton>
           <$PanelContainer>
-            <PetSelection onSelectPet={() => this.props.onToggleMenu(false)} />
+            <PanelBase label="Pet Selection">
+              <PanelPetSelection onSelectPet={() => this.props.onToggleMenu(false)} />
+            </PanelBase>
+            <PanelBase label="Settings" >
+              <PanelSettings />
+            </PanelBase>
             <$ResetButton>
               <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} style={{backgroundColor: getColor('red')}} />
             </$ResetButton>

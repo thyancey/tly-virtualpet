@@ -1,5 +1,11 @@
 {
   "title": "custom title here",
+  /*
+    pingRate
+    how often in milliseconds to check behavior/stat loop
+    integer, can be "50" - "5000", but why would you want that
+  */
+  "pingRate": "500",
   "stages":[
     {
       "type": "scenes",

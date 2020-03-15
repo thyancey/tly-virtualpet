@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
+import { themeGet, shadeColor } from 'themes/';
+
+import { 
+  setActivePetType, 
+  setActivePetId 
+} from 'store/actions';
 
 import { 
   getActivePetType,
@@ -13,34 +18,25 @@ import {
   selectActivePets
 } from 'store/selectors';
 
-import { Button } from 'components/button';
 import DropMenu from 'components/ui/dropmenu';
 
-import { setActivePetType, setActivePetId } from 'store/actions';
+const $Body = styled.div`
+  ul{
+    padding:0;
+    margin: 0;
+    list-style:none;
 
+    >li{
+      display: inline-block;
+      width:100%;
 
-require('themes/app.scss');
-
-
-const $PetSelection = styled.div`
-
-  h2{
-    color: ${themeGet('color', 'black')};
-    text-shadow: .25px .25px 1.5px ${themeGet('color', 'black')};
+      &:last-of-type{
+        margin-bottom: 2rem;
+      }
+    }
   }
 `;
 
-const $TypeList = styled.ul`
-
-  padding: 0;
-  margin: 0;
-  list-style:none;
-
-  >li{
-    display: inline-block;
-    width:100%;
-  }
-`
 
 class PetSelection extends Component {
 
@@ -55,15 +51,13 @@ class PetSelection extends Component {
       activePetType, 
       activePetId,
       activeObjects, 
-      setActivePetType
+      setActivePetType,
     } = this.props;
 
     return(
-      <$PetSelection>
-        <h2>{'Select a pet'}</h2>
-
-        <$TypeList>
-          { taxonomy.map((c, i) => (
+      <$Body>
+        <ul>
+          {taxonomy.map((c, i) => (
             <li key={i}>
               <DropMenu 
                 text={c.type} 
@@ -75,8 +69,8 @@ class PetSelection extends Component {
                 />
             </li>
           ))}
-        </$TypeList>
-      </$PetSelection>
+        </ul>
+      </$Body>
     );
   }
 }

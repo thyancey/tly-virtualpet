@@ -5,8 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { ping } from 'store/actions';
-
-const STAT_PING_RATE = 2000;
+import { selectSettingPingRate } from 'store/selectors';
 
 require('themes/app.scss');
 
@@ -26,18 +25,28 @@ class Pinger extends Component {
     this.startStatPinger();
   }
 
-  startStatPinger(){
+  onPing(){
+    this.props.ping();
+
+    if(this.props.pingRate && this.props.pingRate > 0){
+      this.startStatPinger(this.props.pingRate);
+    }else{
+      this.killStatPinger();
+    }
+
+  }
+
+  startStatPinger(pingRate){
     this.killStatPinger();
 
-    this.statPinger = global.setInterval(() => {
-      //- send ping action
-      this.props.ping();
-    }, STAT_PING_RATE);
+    this.statPinger = global.setTimeout(() => {
+      this.onPing();
+    }, this.props.pingRate);
   }
 
   killStatPinger(){
     if(this.statPinger){
-      global.clearTimeout(this.statPinger);
+      global.clearInterval(this.statPinger);
       this.statPinger = null;
     }
   }
@@ -48,6 +57,7 @@ class Pinger extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  pingRate: selectSettingPingRate(state)
 })
 
 const mapDispatchToProps = dispatch =>
