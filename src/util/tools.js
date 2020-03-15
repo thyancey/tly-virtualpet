@@ -34,6 +34,46 @@ export const convertStringsToNumbersInDeepObj = parsedObj => {
   return retObj;
 }
 
+/*
+  given: 
+  ('pickle', 'longer-prefix/', {
+    items: {
+      item2:{
+        pickle: "short.jpg"
+      }
+      pickle: 4
+    }
+  })
+
+  returns: 
+  {
+    items: {
+      item2:{
+        pickle: "longer-prefix/short.jpg"
+      },
+      pickle: "longer-prefix/4"
+    }
+  }
+*/
+
+export const prefixValueInDeepObj = (prefixKey, prefixValue, parsedObj) => {
+  let retObj = {};
+  for(let key in parsedObj){
+    const parsedValue = parsedObj[key];
+    if(isObj(parsedValue)){
+      retObj[key] = prefixValueInDeepObj(prefixKey, prefixValue, parsedValue);
+    }else{
+      if(key === prefixKey){
+        retObj[key] = `${prefixValue}${parsedValue}`;
+      }else{
+        retObj[key] = parsedValue;
+      }
+    }
+  }
+  
+  return retObj;
+}
+
 export const setObjToCookie = (cookieName, obj) => {
   let cookieValue = '';
   try{

@@ -1,7 +1,24 @@
 {
-  "pets":[ 
-    { "id": "neenya", "url": "data/pets/neenya" },
-    { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
-    { "id": "hotdoug", "url": "data/pets/hot-doug" }
+  "title": "some title",
+  "stages":[
+    {
+      "type": "scenes",
+      "items": [
+        { "id": "magnadoodle", "url": "data/scenes/magnadoodle" },
+        { "id": "outside", "url": "data/scenes/outside" }
+      ]
+    },
+    {
+      "type": "items",
+      "items": []
+    },
+    {
+      "type": "pets",
+      "items": [
+        { "id": "neenya", "url": "data/pets/neenya" },
+        { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
+        { "id": "hotdoug", "url": "data/pets/hot-doug" }
+      ]
+    }
   ]
 }

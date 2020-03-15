@@ -1,33 +1,24 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
-import { convertStringsToNumbersInDeepObj } from './tools';
+import { convertStringsToNumbersInDeepObj, prefixValueInDeepObj } from './tools';
 
 const store = {
   items:[],
-  scenes:[],
-  styles: []
+  scenes:[]
 }
 
-export const getDefaultStyle = () => {
-  return store.styles.find(s => s.id === 'default');
+export const setFromSceneManifest = (data, manifest) => {
+  // console.log('setFromSceneManifest', data, manifest);
+  const converted = convertStringsToNumbersInDeepObj(data);
+  const complete = prefixValueInDeepObj('imageUrl', `${manifest.url}/assets/`, converted);
+
+  addSceneDefinition(complete);
 }
 
-export const setItemDefinitions = list => {
-  store.items = list.map(i => convertStringsToNumbersInDeepObj(i));
-}
-export const setStyleDefinitions = list => {
-  store.styles = list.map(i => convertStringsToNumbersInDeepObj(i));
-}
-export const setSceneDefinitions = list => {
-  const scenes = list.map(i => convertStringsToNumbersInDeepObj(i));
-  store.scenes = scenes.map(s => ({
-    ...s,
-    styles: getStyleDefinition(s.style)
-  }))
+export const addSceneDefinition = (newDefinition) => {
+  // console.log('adding new scene definition', newDefinition);
+  store.scenes.push(newDefinition);
 }
 
-export const getStyleDefinition = id => {
-  return store.styles.find(p => p.id === id) || getDefaultStyle();
-}
 export const getSceneDefinition = id => {
   return store.scenes.find(p => p.id === id) || null;
 }

@@ -5,11 +5,9 @@ import { getSceneDefinition } from '../../util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
 import { evaluateCondition } from '../../util/tools';
 
-export const getLoaded = state => state.data.loaded || false;
 export const getNextManifestItem = state => state.data.nextManifestItem || null;
 export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
 export const getDataLoadComplete= state => state.data.loadingComplete || 0;
-export const getManifestLoadComplete= state => state.data.manifestLoadComplete || 0;
 
 export const getActivePetType = state => state.data.activePetType || null;
 export const getCounter = state => state.data.counter;
@@ -27,9 +25,9 @@ export const selectNextManifestItem = createSelector(
 );
 
 export const selectIsLoadingComplete = createSelector(
-  [getDataLoadComplete, getManifestLoadComplete],
-  (loaded = false, manifestLoaded = false) => {
-    return loaded && manifestLoaded || false;
+  [getDataLoadComplete],
+  (loadingComplete = false) => {
+    return loadingComplete || false;
   }
 );
 
@@ -80,6 +78,7 @@ export const selectActiveScene = createSelector(
   [selectActivePetData],
   (activePetData) => {
     if(!activePetData) return null;
+    console.log('selectActiveScene', activePetData);
 
     const sceneId = activePetData.scene;
     const scene = getSceneDefinition(sceneId);
@@ -214,7 +213,10 @@ export const selectActiveDeltaStats = createSelector(
 export const selectActiveSceneStyles = createSelector(
   [selectActiveScene],
   (activeScene) => {
-    if(!activeScene) return null;
+    console.log('selectActiveSceneStyle', activeScene);
+    if(!activeScene) {
+      return null;
+    }
     return activeScene.styles;
   }
 )

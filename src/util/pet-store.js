@@ -132,8 +132,6 @@ export const parsePetData = (p, savedPet, savedData, manifest) => {
     stats: initialStats.map(s => formatSavedStatObj(s))
   }
 
-  console.log('manifest', manifest)
-
   return {
     ...p,
     dir: manifest.url,

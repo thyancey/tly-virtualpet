@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import fetchy from 'node-fetch';
 import { jsonc } from 'jsonc';
 
-import { setOtherData, setManifest, storeManifestItem } from 'store/actions';
+import { setManifest, storeManifestItem } from 'store/actions';
 import { selectNextManifestItem } from 'store/selectors';
-
 
 let dataLocation = './data';
 
@@ -29,18 +28,17 @@ class LoadHelper extends Component {
   }
 
   loadAllData(){
-    this.loadOtherData('manifest', '_manifest.jsonc');
-    this.loadOtherData('scenes', 'scenes.jsonc');
-    this.loadOtherData('items', 'items.jsonc');
+    this.loadManifestData('manifest', '_manifest.jsonc');
   }
 
   loadManifestItem(manifestItemObj){
     if(!manifestItemObj){
       console.error('Loader.loadManifestItem, received null manifestItemObj');
     }
+    // console.log('loadManifestItem', manifestItemObj)
 
     const url =  `${manifestItemObj.url}/data.jsonc`;
-    const manifestLabel = `"${manifestItemObj.id}" (${manifestItemObj.type})`;
+    const manifestLabel = `( [${manifestItemObj.type}]: ${manifestItemObj.id} )`;
     console.log(`reading manifestItem data for ${manifestLabel} from '${url}'`);
 
     fetchy(url)
@@ -64,7 +62,7 @@ class LoadHelper extends Component {
       );
   }
 
-  loadOtherData(type, location){
+  loadManifestData(type, location){
     const url =  `${dataLocation}/${location}`;
     console.log(`reading ${type} data from '${url}'`);
 
@@ -81,11 +79,7 @@ class LoadHelper extends Component {
       .then(
         json => {
           // console.log(`${type} data was read successfully`, json);
-          if(type === 'manifest'){
-            this.props.setManifest(json);
-          }else{
-            this.props.setOtherData({ type: type, data: json });
-          }
+          this.props.setManifest(json);
           return true;
         }, 
         err => {
@@ -106,7 +100,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { setOtherData, setManifest, storeManifestItem  },
+    { setManifest, storeManifestItem  },
     dispatch
   )
 

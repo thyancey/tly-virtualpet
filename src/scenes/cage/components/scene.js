@@ -71,6 +71,7 @@ class Scene extends Component {
 
 
     if(!activeScene){
+      global.alert('ERROR: scene failed to load');
       return null;
     }else{
       const bgImage = activeScene.background.imageUrl ? activeScene.background.imageUrl : null;

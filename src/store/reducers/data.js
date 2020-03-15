@@ -1,5 +1,4 @@
 import { 
-  setOtherData,
   setManifest,
   storeManifestItem,
   setActivePetType,
@@ -10,17 +9,12 @@ import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
 import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
-import { setSceneDefinitions, setStyleDefinitions, setItemDefinitions } from 'util/item-store';
+import { setFromSceneManifest } from 'util/item-store';
 
-//- customData in store is from an external json file at public/data.json
-const VALID_KEYS = [ 'pets' ];
+const VALID_KEYS = [ 'title', 'stages' ];
 const RESTRICT_KEYS = false;
-
-const REQUIRED_EXTRAS = [ 'items', 'scenes' ];
  
 const initialState = {
-  loaded: false,
-  extrasLoaded: 0,
   loadingComplete: false,
   title: 'loading',
   customData: null,
@@ -29,14 +23,63 @@ const initialState = {
   activePetId: null,
   ping: 0,
   manifest:{},
-  manifestLoadComplete: false,
-  nextManifestItem: null
+  manifestStages: [],
+  nextManifestItem: null,
+  manifestStageIdx: 0
+}
+
+const returnNextStageItem = (manifestStages, manifestStageIdx, nextItemIdx) => {
+  // console.log(`returnNextStageItem: [${manifestStageIdx}, ${nextItemIdx}]`)
+  if(manifestStageIdx >= manifestStages.length){
+    console.log(`manifestStageIdx ${manifestStageIdx} is >= ${manifestStages.length}, therefore no stages remain`);
+    return null;
+  }
+
+  const thisStage = manifestStages[manifestStageIdx];
+  const nextItem = thisStage.items[nextItemIdx] || null;
+  if(nextItem){
+    console.log(`returnNextStageItem, returning: [${manifestStageIdx}, ${nextItemIdx}]`)
+    return {
+      id: nextItem.id,
+      url: nextItem.url,
+      itemIdx: nextItemIdx,
+      stageIdx: manifestStageIdx
+    };
+  }else{
+    return returnNextStageItem(manifestStages, manifestStageIdx + 1, 0);
+  }
+}
+
+export const getNextManifestData = (stages, curStageIdx, curItemIdx) => {
+  const nextItemObj = returnNextStageItem(stages, curStageIdx, curItemIdx);
+  if(nextItemObj){
+    const nextStage = stages[nextItemObj.stageIdx]
+
+    return {
+      nextManifestItem: {
+        type: nextStage.type,
+        idx: nextItemObj.itemIdx,
+        id: nextItemObj.id,
+        url: nextItemObj.url
+      },
+      manifestStageIdx: nextItemObj.stageIdx
+    }
+  }else{
+    console.log('-------------------------');
+    console.log('All manifest items loaded.');
+    return {
+      nextManifestItem: null,
+      manifestStageIdx: -1
+    }
+  }
 }
 
 export default handleActions({
   [setManifest.toString()]: (state, action) => {
     const cleanManifestObj = {};
     const parsedData = action.payload;
+    const customData = {};
+    let stages = [];
     for(let key in parsedData){
       if(VALID_KEYS.indexOf(key) === -1){
         console.warn(`key supplied in /data.json "${key}" is not a valid key`);
@@ -44,80 +87,38 @@ export default handleActions({
       }
       else{
         cleanManifestObj[key] = parsedData[key];
+        if(key === 'stages'){
+          stages = parsedData[key];
+        }else{
+          customData[key] = parsedData[key];
+        }
       }
     }
-
-    const manifestNext = cleanManifestObj.pets && cleanManifestObj.pets[0];
-    let nextManifestItem = null;
-    if(manifestNext){
-      nextManifestItem = {
-        type: 'pets',
-        idx: 0,
-        id: manifestNext.id,
-        url: manifestNext.url
-      }
-    }
+    const manifestData = getNextManifestData(stages, 0, 0);
 
     return {
       ...state,
-      manifest: cleanManifestObj,
-      nextManifestItem: nextManifestItem,
-      loaded: true
+      ...manifestData,
+      manifestStages: stages,
+      customData
     }
   },
 
   [storeManifestItem.toString()]: (state, action) => {
+    // console.log('storeManifestItem', action.payload);
     const { manifest, data} = action.payload;
     
     if(manifest.type === 'pets'){
       setFromPetManifest(data, manifest)
-    }
-
-    const nextManifestIdx = manifest.idx + 1;
-    const manifestNext = state.manifest.pets[nextManifestIdx] || null;
-
-    if(manifestNext){
-      return {
-        ...state,
-        nextManifestItem: {
-          type: 'pets',
-          idx: nextManifestIdx,
-          id: manifestNext.id,
-          url: manifestNext.url
-        },
-        manifestLoadComplete: false
-      }
-
     }else{
-      console.log('-------------------------');
-      console.log('All manifest items loaded.');
-      return {
-        ...state,
-        nextManifestItem: null,
-        manifestLoadComplete: true
-      }
-    }
-  },
-
-  [setOtherData.toString()]: (state, action) => {
-    let extrasLoaded = state.extrasLoaded;
-    console.log(`setOtherData: "${action.payload.type}"`);
-
-    if(REQUIRED_EXTRAS.indexOf(action.payload.type) > -1){
-      extrasLoaded += 1;
-    }
-    
-    if(action.payload.type === 'scenes'){
-      setStyleDefinitions(action.payload.data.styles || []);
-      setSceneDefinitions(action.payload.data.scenes || []);
-    } else if(action.payload.type === 'items'){
-      setItemDefinitions(action.payload.data.items || []);
+      setFromSceneManifest(data, manifest);
     }
 
+    const manifestData = getNextManifestData(state.manifestStages, state.manifestStageIdx, manifest.idx + 1);
     return {
       ...state,
-      extrasLoaded: extrasLoaded,
-      loadingComplete: extrasLoaded === REQUIRED_EXTRAS.length
+      ...manifestData,
+      loadingComplete: manifestData.manifestStageIdx === -1
     }
   },
 
