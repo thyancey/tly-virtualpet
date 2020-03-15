@@ -28,7 +28,7 @@ class LoadHelper extends Component {
   }
 
   loadAllData(){
-    this.loadManifestData('manifest', '_manifest.jsonc');
+    this.loadManifestData('manifest', 'manifest.jsonc');
   }
 
   loadManifestItem(manifestItemObj){

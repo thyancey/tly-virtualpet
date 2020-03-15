@@ -18,52 +18,47 @@ npm run build
 
 
 
-# Behavior Loop
-
-## Inputs
-[Time](#time) is used to to calculate [Stats](#stats), based on their rate and min/max values
-
-[Items](#items) and [Scenes](#scenes) may directly affect [Stats](#stats), or affect the rate at which [Stats](#stats) change
-
-[External Actions](#externalactions) trigger [Unique Events](#uniqueevents), which affect [Moods](#moods) (ex, "feelin slapped"), and [Stats](#stats) (ex, comfort +1/s) 
-
-[Time](#time) can also trigger [External Actions](#externalactions) (ex, birthday, holidays)
-
-
-
-## Current Status
-Pets determine their [Behavior](#behaviors) by interpreting their current [Activities](#activities) and [Moods](#moods) via [Mood Swings](#moodswings) criteria
-
-Once a [Behavior](#behaviors) is known, it can be used to render an [Animation](#animations) and drive any [Pet AI](#petai)
-
-[Pet AI](#petai) will determine which [Activities](#activities) may happen next
-
 
 ## Manifest
-The manifest defines which pets and (todo: scenes, items) to include.
+The manifest defines which pets, scenes, items, etc to include.
+
+Must be stored at './public/data/manifest.jsonc'
 
 
-*manifest entries for pet definitions*
+*example manifest*
 ```
 {
-  "pets":[ 
-    { "id": "neenya", "url": "data/pets/neenya" },
-    { "id": "hotdoug", "url": "data/pets/hot-doug" }
+  "title": "custom title here",
+  "stages":[
+    {
+      "type": "scenes",
+      "items": [
+        { "id": "magnadoodle", "url": "data/scenes/magnadoodle" },
+        { "id": "outside", "url": "data/scenes/outside" }
+      ]
+    },
+    {
+      "type": "items",
+      "items": []
+    },
+    {
+      "type": "pets",
+      "items": [
+        { "id": "neenya", "url": "data/pets/neenya" },
+        { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
+        { "id": "hotdoug", "url": "data/pets/hot-doug" }
+      ]
+    }
   ]
 }
 ```
 
 ## Pet Definition
 Each pet has a defined folder/file structure, and must be included in the [Manifest](#manifest) in order to appear.
-Every pet defintion *must* contain a ./data.jsonc file in a specificed format
+
+For more info on how pet definitions are used, see [Behavior Loop](#behavior-loop)
+
 <img src="https://docs.google.com/drawings/d/e/2PACX-1vRRSNPSSD_AEmkX8-vqk-OmGefqYvBavgudHKB1ei4Z8T1uOWCKm-5P0V61NHcJMe6i2LSS6nxOkX8W/pub?w=1158&amp;h=673">
-
-## Pet Behavior Flowchart
-*items in faded dotted box not implemented yet*
-
-<img src="https://docs.google.com/drawings/d/e/2PACX-1vTc_eIy9JXmXmmsghKjMFIsd6sT0125p37zkdk2KOQYZ_rxAdOQ01sf6MZcosYGUC-9Mj2nOD9_bUAh/pub?w=1158&amp;h=673">
-
-
 
 # Pet Architecture
 
@@ -80,6 +75,7 @@ Pets have a 2 level taxonomy of Type > Pet
   ]
 ]
 ```
+
 ---
 ## Activities
 WALKING, JUMPING, EATING
@@ -89,15 +85,17 @@ WALKING, JUMPING, EATING
 ---
 
 ## Mood Swings
-Rule sets for cause and effect based on current activities, stats, and behaviors
+Rule sets for cause and effect based on current moods, activities, and stats
 ```javascript
-  {
-    "when":[
-      { "type":"stat", "stat":"health", "value": "<_20%" },
-      { "type": "activity", "activity": "WALKING" }
-    ],
-    "then": "WALK_HURT"
-  }
+{
+  "when":[
+    { "type":"moods", "moods":[ "MOOD_HURT" ] },
+    //- stats work here, but moods are preferred for UI display
+    { "type":"stat", "stat":"health", "value":"<_20%" }, 
+    { "type":"activity", "activity":"WALKING" }
+  ],
+  "then":"WALK_HURT"
+}
 ```
 
 ### When Statements
@@ -208,6 +206,31 @@ Additional Notes
 
 ---
 
+
+
+
+
+# Behavior Loop
+*items in faded dotted box not implemented yet*
+
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vTc_eIy9JXmXmmsghKjMFIsd6sT0125p37zkdk2KOQYZ_rxAdOQ01sf6MZcosYGUC-9Mj2nOD9_bUAh/pub?w=1158&amp;h=673">
+
+## Inputs
+[Time](#time) is used to to calculate [Stats](#stats), based on their rate and min/max values
+
+[Items](#items) and [Scenes](#scenes) may directly affect [Stats](#stats), or affect the rate at which [Stats](#stats) change
+
+[External Actions](#externalactions) trigger [Unique Events](#uniqueevents), which affect [Moods](#moods) (ex, "feelin slapped"), and [Stats](#stats) (ex, comfort +1/s) 
+
+[Time](#time) can also trigger [External Actions](#externalactions) (ex, birthday, holidays)
+
+
+## Determining Behavior
+Pets determine their [Behavior](#behaviors) by interpreting their current [Moods](#moods) and [Activities](#activities) (and will probably drop support for, [Stats](#stats)) via [Mood Swings](#moodswings) criteria
+
+Once a [Behavior](#behaviors) is known, it can be used to render an [Animation](#animations) and drive any [Pet AI](#petai)
+
+[Pet AI](#petai) will determine which [Activities](#activities) may happen next
 
 ## Delta Stats
 Realtime values of stats ("Delta Stats") are calcuated by comparing the current time to the last time stats were saved. This allows the game to "continue in the background".

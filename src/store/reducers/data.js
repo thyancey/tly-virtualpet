@@ -10,6 +10,7 @@ import { setTransition } from '../actions/transition';
 import { handleActions } from 'redux-actions';
 import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
 import { setFromSceneManifest } from 'util/item-store';
+import { getNextManifestData, setManifestStages } from 'util/manifest-helper';
 
 const VALID_KEYS = [ 'title', 'stages' ];
 const RESTRICT_KEYS = false;
@@ -22,56 +23,7 @@ const initialState = {
   activePetType: null,
   activePetId: null,
   ping: 0,
-  manifest:{},
-  manifestStages: [],
-  nextManifestItem: null,
-  manifestStageIdx: 0
-}
-
-const returnNextStageItem = (manifestStages, manifestStageIdx, nextItemIdx) => {
-  // console.log(`returnNextStageItem: [${manifestStageIdx}, ${nextItemIdx}]`)
-  if(manifestStageIdx >= manifestStages.length){
-    console.log(`manifestStageIdx ${manifestStageIdx} is >= ${manifestStages.length}, therefore no stages remain`);
-    return null;
-  }
-
-  const thisStage = manifestStages[manifestStageIdx];
-  const nextItem = thisStage.items[nextItemIdx] || null;
-  if(nextItem){
-    console.log(`returnNextStageItem, returning: [${manifestStageIdx}, ${nextItemIdx}]`)
-    return {
-      id: nextItem.id,
-      url: nextItem.url,
-      itemIdx: nextItemIdx,
-      stageIdx: manifestStageIdx
-    };
-  }else{
-    return returnNextStageItem(manifestStages, manifestStageIdx + 1, 0);
-  }
-}
-
-export const getNextManifestData = (stages, curStageIdx, curItemIdx) => {
-  const nextItemObj = returnNextStageItem(stages, curStageIdx, curItemIdx);
-  if(nextItemObj){
-    const nextStage = stages[nextItemObj.stageIdx]
-
-    return {
-      nextManifestItem: {
-        type: nextStage.type,
-        idx: nextItemObj.itemIdx,
-        id: nextItemObj.id,
-        url: nextItemObj.url
-      },
-      manifestStageIdx: nextItemObj.stageIdx
-    }
-  }else{
-    console.log('-------------------------');
-    console.log('All manifest items loaded.');
-    return {
-      nextManifestItem: null,
-      manifestStageIdx: -1
-    }
-  }
+  nextManifestItem: null
 }
 
 export default handleActions({
@@ -79,7 +31,6 @@ export default handleActions({
     const cleanManifestObj = {};
     const parsedData = action.payload;
     const customData = {};
-    let stages = [];
     for(let key in parsedData){
       if(VALID_KEYS.indexOf(key) === -1){
         console.warn(`key supplied in /data.json "${key}" is not a valid key`);
@@ -87,19 +38,21 @@ export default handleActions({
       }
       else{
         cleanManifestObj[key] = parsedData[key];
-        if(key === 'stages'){
-          stages = parsedData[key];
-        }else{
+        if(key !== 'stages'){
           customData[key] = parsedData[key];
         }
       }
     }
-    const manifestData = getNextManifestData(stages, 0, 0);
+    
+    console.log('----------------');
+    console.log('starting manifest');
+    setManifestStages(parsedData.stages);
+    const nextManifestItem = getNextManifestData(0);
 
     return {
       ...state,
-      ...manifestData,
-      manifestStages: stages,
+      nextManifestItem,
+      loadingComplete: nextManifestItem === null,
       customData
     }
   },
@@ -114,11 +67,11 @@ export default handleActions({
       setFromSceneManifest(data, manifest);
     }
 
-    const manifestData = getNextManifestData(state.manifestStages, state.manifestStageIdx, manifest.idx + 1);
+    const nextManifestItem = getNextManifestData(manifest.idx + 1);
     return {
       ...state,
-      ...manifestData,
-      loadingComplete: manifestData.manifestStageIdx === -1
+      nextManifestItem,
+      loadingComplete: nextManifestItem === null
     }
   },
 
