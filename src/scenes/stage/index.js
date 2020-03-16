@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button } from 'components/button';
+import { Button } from 'components/ui/button';
 
 import { themeGet } from 'themes/';
 

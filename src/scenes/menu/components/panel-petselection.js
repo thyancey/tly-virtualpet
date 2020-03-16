@@ -7,7 +7,8 @@ import { themeGet, shadeColor } from 'themes/';
 
 import { 
   setActivePetType, 
-  setActivePetId 
+  setActivePetId,
+  loadExternalItem
 } from 'store/actions';
 
 import { 
@@ -19,6 +20,7 @@ import {
 } from 'store/selectors';
 
 import DropMenu from 'components/ui/dropmenu';
+import { LilButton } from 'components/ui/button';
 
 const $Body = styled.div`
   ul{
@@ -45,6 +47,13 @@ class PetSelection extends Component {
     this.props.onSelectPet(id);
   }
 
+  showLoadPrompt(){
+    const url = global.prompt('Enter URL to directory containing pet manifest and assets. \n (use the provided url to load the raccoon externally)', 'http://thomasyancey.com/projects/virtualpet-external/pets/rizzo-raccoon');
+    if(url){
+      this.props.loadExternalItem({ type: 'pets', url: url, id: `external_${url}` });
+    }
+  }
+
   render(){
     const { 
       taxonomy,
@@ -57,8 +66,11 @@ class PetSelection extends Component {
     return(
       <$Body>
         <ul>
+          <li key={0}>
+            <LilButton text={'Load external'} onClick={e => this.showLoadPrompt()} />
+          </li>
           {taxonomy.map((c, i) => (
-            <li key={i}>
+            <li key={`${i}-${c.type}`}>
               <DropMenu 
                 text={c.type} 
                 isActive={c.type === activePetType} 
@@ -85,7 +97,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { setActivePetType, setActivePetId },
+    { setActivePetType, setActivePetId, loadExternalItem },
     dispatch
   )
 

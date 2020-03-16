@@ -93,50 +93,52 @@ export const getPetTypes = () => {
   return allPetTypes;
 }
 
-export const setFromPetManifest = (petData, manifest) => {
+export const setFromPetManifest = (id, petData, manifest) => {
+  // console.log('setFromManifest', id);
   const savedData = getSavedData();
-  const savedPet = savedData.pets.find(savedPet => savedPet.id === petData.id);
-  const petDef = parsePetData(petData, savedPet, savedData, manifest);
-  setPetDefinition(petDef.id, petDef);
+  const savedPet = savedData.pets.find(savedPet => savedPet.id === id);
+  const petDef = parsePetData(id, petData, savedPet, savedData, manifest);
+  setPetDefinition(id, petDef);
 
   store.taxonomy = addToTaxonomy(petDef, store.taxonomy);
 }
 
-export const parsePetData = (p, savedPet, savedData, manifest) => {
-  let defaultBehavior = p.behaviors.DEFAULT;
+export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
+  let defaultBehavior = petDef.behaviors.DEFAULT;
   if(!defaultBehavior){
     try{
-      defaultBehavior = p.behaviors[Object.keys(p.behaviors)[0]];
+      defaultBehavior = petDef.behaviors[Object.keys(petDef.behaviors)[0]];
     }catch(e){
-      console.error(`could not autodeclare default status for pet "${p.id}"`);
+      console.error(`could not autodeclare default status for pet "${id}"`);
     }
   }
 
-  const moodSwings = parseMoodSwings(p.moodSwings);
+  const moodSwings = parseMoodSwings(petDef.moodSwings);
 
-  const definedStats = p.stats;
+  const definedStats = petDef.stats;
   let initialStats = [];
 
   /* if cookie stats, use them here instead */
   if(savedPet){
     initialStats = mergeStats(definedStats, savedPet.stats, true);
-    p.isAlive = savedPet.isAlive;
+    petDef.isAlive = savedPet.isAlive;
   }else{
     initialStats = definedStats;
-    p.isAlive = true;
+    petDef.isAlive = true;
   }
 
-  p.stats_saved = {
+  petDef.stats_saved = {
     timestamp: savedData.timestamp || new Date().getTime(),
     isAlive: savedData.isAlive,
     stats: initialStats.map(s => formatSavedStatObj(s))
   }
 
   return {
-    ...p,
+    ...petDef,
+    id: id,
     dir: manifest.url,
     behaviors:{
-      ...p.behaviors,
+      ...petDef.behaviors,
       DEFAULT: defaultBehavior
     },
     moodSwings:moodSwings
@@ -376,6 +378,7 @@ export const deleteAllData = () => {
 global.petStore = {
   getAllData: () => store,
   deleteAllData: () => deleteAllData(),
+  getSavedData: () => getSavedData(),
   getPets: () => getPets(),
   getPetStoreData: (itemType) => getPetStoreData(itemType),
   getPetDefinition: (id) => getPetDefinition(id),

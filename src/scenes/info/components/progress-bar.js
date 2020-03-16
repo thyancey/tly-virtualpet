@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { themeGet, shadeColor, getColor } from 'themes/';
-import { LilButton } from 'components/button';
+import { LilButton } from 'components/ui/button';
 import { round, parseExpressionString } from 'util/tools';
 import EffectMarker from './effect-marker';
 

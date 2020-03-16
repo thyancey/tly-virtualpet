@@ -6,6 +6,7 @@ import { getPetDefinition } from '../../util/pet-store';
 import { evaluateCondition } from '../../util/tools';
 
 export const getNextManifestItem = state => state.data.nextManifestItem || null;
+export const getNextExternalItem = state => state.data.nextExternalItem || null;
 export const getExtrasLoaded = state => state.data.extrasLoaded || 0;
 export const getDataLoadComplete= state => state.data.loadingComplete || 0;
 
@@ -49,6 +50,14 @@ export const selectNextManifestItem = createSelector(
     return nextManifestItem;
   }
 );
+
+export const selectNextExternalItem = createSelector(
+  [getNextExternalItem],
+  (nextExternalItem = null) => {
+    return nextExternalItem;
+  }
+);
+
 
 export const selectIsLoadingComplete = createSelector(
   [getDataLoadComplete],

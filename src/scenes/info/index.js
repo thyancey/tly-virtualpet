@@ -7,7 +7,7 @@ import { themeGet, getColor, mixin_clearBubble } from 'themes/';
 
 import ProgressBar from './components/progress-bar';
 
-import { LilButton, Button, NotAButton } from 'components/button';
+import { LilButton, Button, NotAButton } from 'components/ui/button';
 
 
 import {

@@ -7,14 +7,14 @@ const returnNextStageItem = (manifestStages, nextItemIdx) => {
   const manifestStageIdx = store.stageIdx;
 
   if(manifestStageIdx >= manifestStages.length){
-    console.log(`manifestStageIdx ${manifestStageIdx} is >= ${manifestStages.length}, therefore no stages remain`);
+    // console.log(`manifestStageIdx ${manifestStageIdx} is >= ${manifestStages.length}, therefore no stages remain`);
     return null;
   }
 
   const thisStage = manifestStages[manifestStageIdx];
   const nextItem = thisStage.items[nextItemIdx] || null;
   if(nextItem){
-    console.log(`returnNextStageItem, returning: [${manifestStageIdx}, ${nextItemIdx}]`)
+    console.log(`... [${manifestStageIdx}, ${nextItemIdx}]`)
     return {
       id: nextItem.id,
       url: nextItem.url,

@@ -1,6 +1,7 @@
 import { 
   setManifest,
   storeManifestItem,
+  loadExternalItem,
   setActivePetType,
   setActivePetId,
   setSettingsValue,
@@ -9,6 +10,7 @@ import {
 import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
+
 import { clamp } from 'util/tools';
 import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
 import { setFromSceneManifest } from 'util/item-store';
@@ -33,7 +35,8 @@ const initialState = {
   activePetType: null,
   activePetId: null,
   ping: 0,
-  nextManifestItem: null
+  nextManifestItem: null,
+  nextExternalItem: null
 }
 
 export default handleActions({
@@ -86,19 +89,26 @@ export default handleActions({
 
   [storeManifestItem.toString()]: (state, action) => {
     // console.log('storeManifestItem', action.payload);
-    const { manifest, data} = action.payload;
-    
+    const { manifest, data } = action.payload;
+    console.log('manifestItem', manifest)
     if(manifest.type === 'pets'){
-      setFromPetManifest(data, manifest)
+      setFromPetManifest(manifest.id, data, manifest)
     }else{
       setFromSceneManifest(data, manifest);
     }
 
-    const nextManifestItem = getNextManifestData(manifest.idx + 1);
-    return {
-      ...state,
-      nextManifestItem,
-      loadingComplete: nextManifestItem === null
+    if(manifest.isExternal){
+      return {
+        ...state,
+        nextExternalItem: null,
+      }
+    }else{
+      const nextManifestItem = getNextManifestData(manifest.idx + 1);
+      return {
+        ...state,
+        nextManifestItem,
+        loadingComplete: nextManifestItem === null
+      }
     }
   },
 
@@ -106,6 +116,21 @@ export default handleActions({
     return {
       ...state,
       transitionLabel: action.payload.label
+    }
+  },
+
+  [loadExternalItem.toString()]: (state, action) => {
+    console.log('received ', action.payload);
+
+    return {
+      ...state,
+      nextExternalItem: {
+        id: action.payload.id || action.payload.url,
+        idx: 0,
+        type: action.payload.type,
+        url: action.payload.url,
+        isExternal: true
+      }
     }
   },
 

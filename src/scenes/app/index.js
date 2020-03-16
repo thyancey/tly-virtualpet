@@ -14,9 +14,10 @@ import {
   selectActivePetId, selectIsLoadingComplete
 } from 'store/selectors';
 
-import { setActivePetId } from 'store/actions';
+import { setActivePetId, loadExternalItem } from 'store/actions';
 
-import { saveAllPetStatsToCookieNow } from 'util/pet-store';
+import { saveAllPetStatsToCookieNow } from '../../util/pet-store';
+import { decrypt } from '../../util/tools';
 
 import Stage from 'scenes/stage';
 
@@ -71,9 +72,17 @@ class App extends Component {
     this.loadDeeplinkedPet();
   }
 
+  /* if query starts with "external_", then its a url to an external pet/manifest file and should be loaded */
   loadDeeplinkedPet(force){
     if(this.props.queryPet && (force || !this.props.activePetId)){
-      this.props.setActivePetId(this.props.queryPet);
+      const queryPieces = this.props.queryPet.split('external_');
+      if(queryPieces.length > 1){
+        console.log(`--> Loading external pet with id "${queryPieces[1]}`);
+        
+        this.props.loadExternalItem({ type: 'pets', url: queryPieces[1], id: `external_${queryPieces[1]}` });
+      }else{
+        this.props.setActivePetId(queryPieces[0]);
+      }
     }
   }
 
@@ -101,7 +110,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { push, setActivePetId },
+    { push, setActivePetId, loadExternalItem },
     dispatch
   )
 

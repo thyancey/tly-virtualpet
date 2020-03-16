@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 import { themeGet, getColor, shadeColor, getBreakpoint } from 'themes/';
 
-import { Button } from 'components/button';
+import { Button } from 'components/ui/button';
 
 import PanelBase from './components/panel-base';
 import PanelPetSelection from './components/panel-petselection';

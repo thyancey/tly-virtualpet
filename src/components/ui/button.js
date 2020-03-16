@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, mixin_textStroke, shadeColor } from 'themes/';
+import { themeGet, mixin_textStroke, shadeColor } from '../../themes';
 
 const $NotAButton = styled.div`
   color: ${themeGet('color', 'grey')};

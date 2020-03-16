@@ -26,6 +26,9 @@ const $Header = styled.div`
   align-items:center;
   cursor:pointer;
 
+  img{
+    width: 30px;
+  }
   h2{
     flex:1;
     color: ${themeGet('color', 'black')};
@@ -41,12 +44,9 @@ const $Header = styled.div`
 
 const $Body = styled.div`
   padding: 0 3rem;
-
-  max-height:0rem;
+  max-height:0;
   ${p => p.isOpen && css`
-    overflow-y:auto;
-    max-height:50rem;  
-    transition: max-height 1s;
+    max-height: none;
   `}
 `;
 

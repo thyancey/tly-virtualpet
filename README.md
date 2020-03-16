@@ -17,6 +17,19 @@ npm run build
 ```
 
 
+## New WIP
+- can load external pet manifest using the "Load external" in the Pet Selection menu
+- external pet manifest must be hosted, with * cors requests or to thomasyancey.com (for now)
+- should be url to directory containing manifest (data.jsonc), and accompanying '/assets/' folder with any used assets.
+
+```
+hosted_url/
+└─── data.jsonc (required)
+└─── assets/
+    └─ thumbnail.jpg  (required)
+    └─ sprite-name-01.png
+    └─ overlay-name-01.png
+```
 
 
 ## Manifest

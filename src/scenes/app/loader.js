@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import fetchy from 'node-fetch';
+import fetch from 'node-fetch';
 import { jsonc } from 'jsonc';
 
-import { setManifest, storeManifestItem } from 'store/actions';
-import { selectNextManifestItem } from 'store/selectors';
+import { setManifest, storeManifestItem, setActivePetId } from 'store/actions';
+import { selectNextManifestItem, selectNextExternalItem } from 'store/selectors';
 
 let dataLocation = './data';
 
@@ -25,6 +25,15 @@ class LoadHelper extends Component {
         this.loadManifestItem(nextManifestItem);
       }
     }
+    
+    const nextExternalItem = this.props.nextExternalItem;
+    if(nextExternalItem){
+      if(!prevProps.nextExternalItem || prevProps.nextExternalItem.url !== nextExternalItem.url){
+        //- load each pet def
+        this.loadManifestItem(nextExternalItem);
+        global.setTimeout(() => {this.props.setActivePetId(nextExternalItem.id)}, 500);
+      }
+    }
   }
 
   loadAllData(){
@@ -41,7 +50,9 @@ class LoadHelper extends Component {
     const manifestLabel = `( [${manifestItemObj.type}]: ${manifestItemObj.id} )`;
     console.log(`reading manifestItem data for ${manifestLabel} from '${url}'`);
 
-    fetchy(url)
+    fetch(url, {
+      mode: 'cors'
+    })
       .then(res => res.text())
       .then(
         text => jsonc.parse(text), 
@@ -66,7 +77,7 @@ class LoadHelper extends Component {
     const url =  `${dataLocation}/${location}`;
     console.log(`reading ${type} data from '${url}'`);
 
-    fetchy(url)
+    fetch(url)
       .then(res => res.text())
       .then(
         text => {
@@ -95,12 +106,13 @@ class LoadHelper extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  nextManifestItem: selectNextManifestItem(state)
+  nextManifestItem: selectNextManifestItem(state),
+  nextExternalItem: selectNextExternalItem(state)
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { setManifest, storeManifestItem  },
+    { setManifest, storeManifestItem, setActivePetId  },
     dispatch
   )
 

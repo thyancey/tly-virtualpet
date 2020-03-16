@@ -4,6 +4,8 @@
     pingRate
     how often in milliseconds to check behavior/stat loop
     integer, can be "50" - "5000", but why would you want that
+
+    http://thomasyancey.com/projects/virtualpet-external/pets/rizzo-raccoon
   */
   "pingRate": "500",
   "stages":[
@@ -22,7 +24,7 @@
       "type": "pets",
       "items": [
         { "id": "neenya", "url": "data/pets/neenya" },
-        { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
+        // { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
         { "id": "hotdoug", "url": "data/pets/hot-doug" }
       ]
     }
