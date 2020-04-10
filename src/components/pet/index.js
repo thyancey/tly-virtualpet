@@ -25,9 +25,8 @@ import {
   selectActiveSceneType
 } from '../../store/selectors';
 
-const ENABLE_DEBUG_CLICKS = true;
+const ENABLE_DEBUG_CLICKS = false;
 const MAX_DEBUG_CLICKS = 10;
-const FRAME_RATE = 1;
 const DRAG_Y = .99;
 const DRAG_X = .8;
 const FALL_Y = 1;
