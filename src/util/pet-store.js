@@ -1,5 +1,5 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
-import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
+import { clamp, getCookieObj, setObjToCookie, deleteCookie, convertStringsToNumbersInDeepObj } from './tools';
 
 const SAVE_SCHEMA_VERSION = 5;
 
@@ -103,6 +103,20 @@ export const setFromPetManifest = (id, petData, manifest) => {
   store.taxonomy = addToTaxonomy(petDef, store.taxonomy);
 }
 
+const parseStatEvents = statEvents => {
+  return statEvents.map((sE, idx) => {
+    let retObj = {
+      id: sE.id,
+      label: sE.label,
+      type: sE.type || 'event',
+      cooldown: sE.cooldown ? parseInt(sE.cooldown) : 0,
+      statEffects: sE.statEffects.map(sEff => convertStringsToNumbersInDeepObj(sEff))
+    }
+
+    return retObj;    
+  })
+}
+
 export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
   let defaultBehavior = petDef.behaviors.DEFAULT;
   if(!defaultBehavior){
@@ -113,7 +127,9 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
     }
   }
 
+  console.log('petDef', petDef)
   const moodSwings = parseMoodSwings(petDef.moodSwings);
+  const statEvents = parseStatEvents(petDef.statEvents || []);
 
   const definedStats = petDef.stats;
   let initialStats = [];
@@ -141,7 +157,8 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
       ...petDef.behaviors,
       DEFAULT: defaultBehavior
     },
-    moodSwings:moodSwings
+    moodSwings:moodSwings,
+    statEvents: statEvents
   }
 }
 

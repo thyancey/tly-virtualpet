@@ -6,6 +6,7 @@ import styled, { css } from 'styled-components';
 import { themeGet, getColor, mixin_clearBubble } from 'themes/';
 
 import ProgressBar from './components/progress-bar';
+import StatEventButton from './components/stat-event-button';
 
 import { LilButton, Button, NotAButton } from 'components/ui/button';
 
@@ -30,7 +31,7 @@ import {
 } from 'store/selectors';
 
 
-const $PetStats = styled.div`
+const $Wrapper = styled.div`
   padding: 1rem;
   position:relative;
   ${mixin_clearBubble()}
@@ -55,11 +56,17 @@ const $StatDisplayValue = styled.span`
   font-size:3rem;
 `
 
-const $NameContainer = styled.div`
+const $FooterUi = styled.div`
   position:fixed;
   bottom:0;
   right:0;
   width:100%;
+`;
+
+const $EffectsContainer = styled.div`
+  position:absolute;
+  left:0;
+  bottom:0;
 `;
 
 const $Name = styled.div`
@@ -146,6 +153,7 @@ class PetStats extends Component {
   }
 
   updateStat(id, val){
+    // console.log('updateStat', id, val)
     this.props.augmentStat(id, val);
     this.props.ping();
   }
@@ -191,6 +199,7 @@ class PetStats extends Component {
     if(!activePet || !sceneStyles) return null;
 
     const petData = activePet.data;
+    // console.log('petData', petData)
 
     const behaviorIds = Object.keys(petData.behaviors);
 
@@ -201,7 +210,7 @@ class PetStats extends Component {
     const allMoods = Object.keys(petData.moods).map(mKey => ({ id: mKey, label: petData.moods[mKey].label || mKey }));
 
     return (
-      <$PetStats>
+      <$Wrapper>
         {deltaStats.map((s, i) => {
           if(s.type === 'number'){
             {/* return null; */}
@@ -247,13 +256,18 @@ class PetStats extends Component {
           </div>
         </$Info>
         
-        <$NameContainer>
+        <$FooterUi>
+          <$EffectsContainer>
+            {petData.statEvents && petData.statEvents.map((s,idx) => (
+              <StatEventButton key={idx} statEventObj={s} onImmediateUpdate={(stat,val) => this.updateStat(stat,val)} />
+            ))}
+          </$EffectsContainer>
           <$Name>
             <span>{`${petData.name} the ${petData.animal}`}</span>
             <$Level><span>{level}</span></$Level>
           </$Name>
-        </$NameContainer>
-      </$PetStats>
+        </$FooterUi>
+      </$Wrapper>
     );
   }
 }
