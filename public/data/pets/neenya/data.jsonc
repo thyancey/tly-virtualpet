@@ -135,7 +135,14 @@
     },
     {
       "when":[
-        { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] },
+        { "type":"moods", "moods": [ "MOOD_HUNGRY" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK_SAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_EXPOSED" ] },
         { "type": "activity", "activity": "WALKING" }
       ],
       "then": "WALK_SAD"

@@ -12,6 +12,10 @@ export const clamp = (val, min, max) => {
   return Math.min(Math.max(val, min), max);
 }
 
+export const randBetween = range => {
+  return range[0] + (Math.random() * (range[1] - range[0]));
+}
+
 export const isObj = obj => {
   return typeof obj === 'object' && obj !== null;
 }

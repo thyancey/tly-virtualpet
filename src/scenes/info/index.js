@@ -233,6 +233,7 @@ class PetStats extends Component {
             <NotAButton isActive={activities.indexOf('JUMPING') > -1} text={'JUMPING'} />
             <NotAButton isActive={activities.indexOf('DUCKING') > -1} text={'DUCKING'} />
             <NotAButton isActive={activities.indexOf('EATING') > -1} text={'EATING'} />
+            <NotAButton isActive={activities.indexOf('ROAMING') > -1} text={'ROAMING'} />
           <hr/>
           <p>{'Moods'}</p>
             {allMoods.map((mood, idx) => (

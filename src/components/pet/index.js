@@ -9,7 +9,7 @@ import { getAnimation } from '../animation-canvas/_animations';
 
 import { themeGet } from 'themes/';
 
-import { clamp } from 'util/tools';
+import { clamp, randBetween } from 'util/tools';
 
 import {
   addActivity,
@@ -27,10 +27,10 @@ import {
 
 const ENABLE_DEBUG_CLICKS = false;
 const MAX_DEBUG_CLICKS = 10;
-const DRAG_Y = .99;
-const DRAG_X = .8;
-const FALL_Y = 1;
-
+const DRAG_Y = .97;
+const DRAG_X = .7;
+const FALL_Y = .5;
+const JUMP_FORCE = .8;
 
 const fps = 60;
 let fpsInterval;
@@ -40,6 +40,12 @@ let elapsed;
 let startTime;
 let frameRatio;
 
+let lastRoamCheck;
+let nextRoamCheck;
+let roamCheckRange = [ 200, 2000 ];
+let thinkCheckRange = [ 200, 2000 ];
+let maxPetSpeed = 2;
+let hopChance = .2;
 
 const $PetContainer = styled.div`
   position:absolute;
@@ -57,6 +63,7 @@ class Pet extends Component {
   constructor(props){
     super(props);
     this.idleTimer = null;
+    this.thinkTimer = null;
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.vX = 0;
@@ -100,26 +107,7 @@ class Pet extends Component {
     this.rAF = requestAnimationFrame(this.updateAnimationState);
     this.resetPetPosition();
   }
-/*
-  updateAnimationState() {
-    // if(this.frames % FRAME_RATE === 0){
-    //   this.setState(prevState => ({ 
-    //     tick: this.frames 
-    //   }));
-    // }
-    
-    // console.log('tick');
-    this.checkKeys();
-    this.affectPetGravity();
 
-
-    // this.frames++;
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
-  }
-
-*/
-
-  
   updateAnimationState() {
     now = Date.now();
     elapsed = now - then;
@@ -127,54 +115,66 @@ class Pet extends Component {
 
     if (frameRatio > 1) {
       then = now - (elapsed % fpsInterval);
-      // console.log(elapsed / fpsInterval)
       this.frames++;
       this.setState(prevState => ({ 
         tick: this.frames 
       }));
     }
     this.affectPetGravity(frameRatio);
-    this.checkKeys();
+    const activeInput = this.checkKeys(frameRatio);
+    if(!activeInput) this.checkPetCommands(frameRatio);
 
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
-
 
   componentWillUnmount() {
     cancelAnimationFrame(this.rAF);
   }
 
-  jumpPet(amount){
+  jumpPet(amount = 0){
     if(this.state.isOnGround){
       
-      this.vY -= amount;
+      this.vY -= amount * JUMP_FORCE;
     }else{
       this.props.addActivity('JUMPING');
     }
   }
 
-  
+  startRoaming(){
+    lastRoamCheck = Date.now();
+    nextRoamCheck = lastRoamCheck + randBetween(roamCheckRange);
+    this.props.addActivity('ROAMING');
+  }
+
+  stopRoaming(forced){
+    this.props.removeActivity('ROAMING');
+    if(forced){
+      this.killTimer(this.thinkTimer);
+    }
+  }
+
   startDucking(){
     this.props.addActivity('DUCKING');
 
     //- TODO, use debounce, but none of the npm modules worked for some reason
     this.startIdleTimer();
   }
+  
   stopDucking(){
     if(this.props.activities.indexOf('DUCKING') > -1){
       this.props.removeActivity('DUCKING');
     }
   }
 
-  movePet(x, y){
-    this.vY += y;
-    this.vX += x;
+  movePet(dX, dY, frameRatio){
+    this.vY += (dY * frameRatio);
+    this.vX += (dX * frameRatio);
 
-    if(x < 0){
+    if(dX < 0){
       this.setState({
         direction: -1
       });
-    }else if(x > 0){
+    }else if(dX > 0){
       this.setState({
         direction: 1
       });
@@ -189,7 +189,7 @@ class Pet extends Component {
     }
   }
 
-  startWalking(){
+  startWalking(userInput){
     this.props.addActivity('WALKING');
 
     //- TODO, use debounce, but none of the npm modules worked for some reason
@@ -197,36 +197,91 @@ class Pet extends Component {
   }
 
   startIdleTimer(){
-    this.killIdleTimer();
+    this.killTimer(this.idleTimer);
     this.idleTimer = global.setTimeout(() => {
-      this.stopWalking()
-      this.stopDucking()
+      this.stopWalking();
+      this.stopDucking();
     }, 200)
   }
 
-  killIdleTimer(){
-    if(this.idleTimer){
-      global.clearTimeout(this.idleTimer);
-      this.idleTimer = null;
+  startThinking(){
+    this.startThinkTimer(randBetween(thinkCheckRange));
+  }
+
+  startThinkTimer(thinkTime){
+    this.killTimer(this.thinkTimer);
+    this.thinkTimer = global.setTimeout(() => {
+      if(Math.random() < hopChance){
+        this.jumpPet(20);
+      }
+      this.startRoaming();
+      // this.stopWalking()
+      // this.stopDucking()
+    }, thinkTime)
+  }
+
+  killTimer(timerRef){
+    if(timerRef){
+      global.clearTimeout(timerRef);
+      timerRef = null;
     }
   }
 
-  checkKeys(){
+  hasActivity(activityKey){
+    return this.props.activities.indexOf(activityKey) > -1
+  }
+  
+  checkPetCommands(frameRatio){
+    if(this.hasActivity('ROAMING')){
+      if(Date.now() > nextRoamCheck){
+
+        this.props.removeActivity('ROAMING');
+        this.startThinking();
+      }else{
+        if(this.state.direction === -1){
+          if(this.vX === 0){
+            this.movePet(1, 0, frameRatio);
+          }else{
+            this.movePet(-1, 0, frameRatio);
+          }
+        }else{
+          if(this.vX === 0){
+            this.movePet(-1, 0, frameRatio);
+          }else{
+            this.movePet(1, 0, frameRatio);
+          }
+        }
+      }
+      // startRoaming(){
+      //   lastRoamCheck = Date.now();
+      //   nextRoamCheck = lastRoamCheck + ROAM_CHECK;
+    }
+  }
+
+  checkKeys(frameRatio){
     this.keysDown.forEach(k => {
       switch(k){
         case 'ArrowRight': 
-          this.movePet(1, 0);
-          break;
+          this.movePet(1, 0, frameRatio);
+          return true;
         case 'ArrowLeft':
-          this.movePet(-1, 0);
-          break;
+          this.movePet(-1, 0, frameRatio);
+          return true;
         case 'ArrowUp':
           this.jumpPet(20);
-          break;
+          return true;
         case 'ArrowDown':
           this.startDucking();
-          break;
-        default:
+          return true;
+        case 'KeyR':
+          if(!this.hasActivity('ROAMING')){
+            this.startRoaming();
+          }
+          return true;
+        case 'KeyF':
+          this.stopRoaming(true);
+          return true;
+        default: return false;
       }
     })
   }
@@ -252,7 +307,7 @@ class Pet extends Component {
     /* gravity stuff */
     this.vY = this.vY + FALL_Y;
 
-    if(this.vY > 0 && this.vY < 1){
+    if(this.vY > 0 && this.vY < .25){
       this.vY = 0;
     }else{
       this.vY *= DRAG_Y;
@@ -261,8 +316,10 @@ class Pet extends Component {
     if(this.vX > -1 && this.vX < 1){
       this.vX = 0;
     }else{
-      this.vX *= DRAG_X;
+      this.vX = clamp((this.vX * DRAG_X), -maxPetSpeed, maxPetSpeed);
+      // this.vX *= DRAG_X;
     }
+
 
     //- check for sitting on ground, staying in container
     const newY = this.state.posY + this.vY * timePerc;
