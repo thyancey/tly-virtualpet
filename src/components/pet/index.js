@@ -259,6 +259,9 @@ class Pet extends Component {
   }
 
   checkKeys(frameRatio){
+    if(this.props.behavior === 'DEAD'){
+      return false;
+    }
     this.keysDown.forEach(k => {
       switch(k){
         case 'ArrowRight': 
