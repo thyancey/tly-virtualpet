@@ -32,6 +32,15 @@ const DRAG_X = .8;
 const FALL_Y = 1;
 
 
+const fps = 60;
+let fpsInterval;
+let then;
+let now;
+let elapsed;
+let startTime;
+let frameRatio;
+
+
 const $PetContainer = styled.div`
   position:absolute;
   width:0;
@@ -53,6 +62,7 @@ class Pet extends Component {
     this.vX = 0;
     this.vY = 0;
     this.aY = 1.08;
+    this.frames = 0;
 
     // this.frames = 0;
     this.rAF = 0;
@@ -62,7 +72,7 @@ class Pet extends Component {
     this.keysDown = [];
 
     this.state = {
-      // tick: 0,
+      tick: 0,
       petSize: [0, 0],
       posX: 0,
       posY: 0,
@@ -83,11 +93,14 @@ class Pet extends Component {
     global.document.addEventListener('keydown', this.onKeyDown);
   }
 
-  componentDidMount() {
+  componentDidMount() {    
+    fpsInterval = 1000 / fps;
+    then = Date.now();
+    startTime = then
     this.rAF = requestAnimationFrame(this.updateAnimationState);
     this.resetPetPosition();
   }
-
+/*
   updateAnimationState() {
     // if(this.frames % FRAME_RATE === 0){
     //   this.setState(prevState => ({ 
@@ -104,6 +117,27 @@ class Pet extends Component {
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
+*/
+
+  
+  updateAnimationState() {
+    now = Date.now();
+    elapsed = now - then;
+    frameRatio = elapsed / fpsInterval;
+
+    if (frameRatio > 1) {
+      then = now - (elapsed % fpsInterval);
+      // console.log(elapsed / fpsInterval)
+      this.frames++;
+      this.setState(prevState => ({ 
+        tick: this.frames 
+      }));
+    }
+    this.affectPetGravity(frameRatio);
+    this.checkKeys();
+
+    this.rAF = requestAnimationFrame(this.updateAnimationState);
+  }
 
 
   componentWillUnmount() {
@@ -214,29 +248,29 @@ class Pet extends Component {
     return (ctx, props) => getAnimation(type)(ctx, newBounds, newPosition, newDirection, props);
   }
 
-  affectPetGravity(){
+  affectPetGravity(timePerc){
     /* gravity stuff */
     this.vY = this.vY + FALL_Y;
 
-    if(this.vY < 1 && this.vY > 0){
+    if(this.vY > 0 && this.vY < 1){
       this.vY = 0;
     }else{
       this.vY *= DRAG_Y;
     }
 
-    if(this.vX < 1 && this.vX > -1){
+    if(this.vX > -1 && this.vX < 1){
       this.vX = 0;
     }else{
       this.vX *= DRAG_X;
     }
 
     //- check for sitting on ground, staying in container
-    const newY = this.state.posY + this.vY;
+    const newY = this.state.posY + this.vY * timePerc;
     if(newY >= this.state.maxY){
       this.vY = 0;
     }
 
-    const newX = this.state.posX + this.vX;
+    const newX = this.state.posX + this.vX * timePerc;
     if(newX >= this.state.maxX){
       this.vX = 0;
     }else if(newX < this.state.minX){
@@ -421,7 +455,8 @@ class Pet extends Component {
           width: width, 
           height: height
         }} >
-          <AnimationCanvas 
+          <AnimationCanvas
+            tick={this.state.tick} 
             petId={petId} 
             containerWidth={width} 
             containerHeight={height} 

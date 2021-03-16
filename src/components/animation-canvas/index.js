@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import Canvas from './canvas';
-import styled from 'styled-components';
 
 /*
- based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
+ some based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
 */
-
-//- should be at least 1. Increase to reduce the number of cycles per animationLoop
-const FRAME_RATE = 1;
-
 export default class AnimationCanvas extends Component {
   constructor(props) {
     super(props);
@@ -20,26 +15,6 @@ export default class AnimationCanvas extends Component {
       overlayImg: null,
       loadStarted: false
      };
-    this.updateAnimationState = this.updateAnimationState.bind(this);
-  }
-
-  componentDidMount() {
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
-  }
-
-  updateAnimationState() {
-    if(this.frames % FRAME_RATE === 0){
-      this.setState(prevState => ({ 
-        tick: this.frames 
-      }));
-    }
-
-    this.frames++;
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
-  }
-
-  componentWillUnmount() {
-    cancelAnimationFrame(this.rAF);
   }
 
   updateImage(imageUrl, overlayUrl){
@@ -91,7 +66,7 @@ export default class AnimationCanvas extends Component {
   render() {
     return (
       <Canvas 
-        tick={this.state.tick} 
+        tick={this.props.tick} 
         canvasWidth={this.props.containerWidth} 
         canvasHeight={this.props.containerHeight}
         sprite={this.state.img}
