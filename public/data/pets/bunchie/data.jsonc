@@ -69,7 +69,18 @@
     "IDLE_ANGRY": { "animations": [ "Bunchie_Angry1" ] },
     "WALK": { "animations": [ "Bunchie_Walk1" ] },
     "DEAD": { "animations": [ "Bunchie_Dead1" ] }
-  },
+  },  
+  "statEvents":[
+    {
+      "id":"E_FEED",
+      "label": "Feed",
+      "statEffects":[
+        { "id":"hunger", "immediate":"-20" }
+      ],
+      "type":"event",
+      "cooldown": 1000
+    }
+  ],
   "animations":{
     "Bunchie_Still":{
       "sprite": "Bunchie",

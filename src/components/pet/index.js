@@ -7,9 +7,12 @@ import { connect } from 'react-redux';
 import AnimationCanvas from '../animation-canvas/';
 import { getAnimation } from '../animation-canvas/_animations';
 
+import PetBrain from '../../util/pet-brain';
 import { themeGet } from 'themes/';
 
-import { clamp, randBetween } from 'util/tools';
+import { clamp } from 'util/tools';
+
+import { throttle } from 'throttle-debounce';
 
 import {
   addActivity,
@@ -32,6 +35,15 @@ const DRAG_X = .7;
 const FALL_Y = .5;
 const JUMP_FORCE = .8;
 
+export const INPUTS = {
+  MOVE_LEFT: 0,
+  MOVE_RIGHT: 1,
+  JUMP: 2,
+  DUCK: 3,
+  DEBUG_1: 4,
+  DEBUG_2: 5
+};
+
 const fps = 60;
 let fpsInterval;
 let then;
@@ -40,10 +52,6 @@ let elapsed;
 let startTime;
 let frameRatio;
 
-let lastRoamCheck;
-let nextRoamCheck;
-let roamCheckRange = [ 200, 2000 ];
-let thinkCheckRange = [ 200, 2000 ];
 let maxPetSpeed = 2;
 let hopChance = .2;
 
@@ -70,6 +78,7 @@ class Pet extends Component {
     this.vY = 0;
     this.aY = 1.08;
     this.frames = 0;
+    this.petBrain = new PetBrain(this.onBrainDoComplete.bind(this), this.onBrainThinkComplete.bind(this));
 
     // this.frames = 0;
     this.rAF = 0;
@@ -98,6 +107,34 @@ class Pet extends Component {
     }
     global.document.addEventListener('keyup', this.onKeyUp);
     global.document.addEventListener('keydown', this.onKeyDown);
+
+    this.throttledThink = throttle(200, true, () => {
+      this.onThrottledThink();
+    });
+  }
+
+  onThrottledThink(){
+    // console.log('onThrottledThink:');
+    if(this.props.behavior !== 'DEAD'){
+      //- if user input cancel any pet auto behavior
+      if(this.keysDown.length > 0){
+        if(this.hasActivity('ROAMING')) this.props.removeActivity('ROAMING');
+        this.petBrain.pullThePlug();
+      }else{
+        this.petBrain.think([], this.keysDown);
+      }
+
+    }
+  }
+
+  onBrainDoComplete(){
+    // console.log('brain DO complete');
+    this.stopRoaming();
+  }
+
+  onBrainThinkComplete(){
+    // console.log('brain THINK complete');
+    this.startRoaming();
   }
 
   componentDidMount() {    
@@ -109,9 +146,12 @@ class Pet extends Component {
   }
 
   updateAnimationState() {
+    this.throttledThink();
+
     now = Date.now();
     elapsed = now - then;
     frameRatio = elapsed / fpsInterval;
+    const inputs = this.checkKeys(frameRatio);
 
     if (frameRatio > 1) {
       then = now - (elapsed % fpsInterval);
@@ -120,9 +160,11 @@ class Pet extends Component {
         tick: this.frames 
       }));
     }
+    
+    if(this.hasActivity('ROAMING')){
+      this.checkRoamingStuff(frameRatio);
+    }
     this.affectPetGravity(frameRatio);
-    const activeInput = this.checkKeys(frameRatio);
-    if(!activeInput) this.checkPetCommands(frameRatio);
 
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
@@ -132,6 +174,7 @@ class Pet extends Component {
   }
 
   jumpPet(amount = 0){
+    console.log('jumpPet')
     if(this.state.isOnGround){
       
       this.vY -= amount * JUMP_FORCE;
@@ -141,19 +184,20 @@ class Pet extends Component {
   }
 
   startRoaming(){
-    lastRoamCheck = Date.now();
-    nextRoamCheck = lastRoamCheck + randBetween(roamCheckRange);
+    // lastRoamCheck = Date.now();
+    // nextRoamCheck = lastRoamCheck + randBetween(roamCheckRange);
     this.props.addActivity('ROAMING');
   }
 
   stopRoaming(forced){
     this.props.removeActivity('ROAMING');
-    if(forced){
-      this.killTimer(this.thinkTimer);
-    }
+    // if(forced){
+      // this.killTimer(this.thinkTimer);
+    // }
   }
 
   startDucking(){
+    console.log('start ducking')
     this.props.addActivity('DUCKING');
 
     //- TODO, use debounce, but none of the npm modules worked for some reason
@@ -204,22 +248,6 @@ class Pet extends Component {
     }, 200)
   }
 
-  startThinking(){
-    this.startThinkTimer(randBetween(thinkCheckRange));
-  }
-
-  startThinkTimer(thinkTime){
-    this.killTimer(this.thinkTimer);
-    this.thinkTimer = global.setTimeout(() => {
-      if(Math.random() < hopChance){
-        this.jumpPet(20);
-      }
-      this.startRoaming();
-      // this.stopWalking()
-      // this.stopDucking()
-    }, thinkTime)
-  }
-
   killTimer(timerRef){
     if(timerRef){
       global.clearTimeout(timerRef);
@@ -228,65 +256,52 @@ class Pet extends Component {
   }
 
   hasActivity(activityKey){
+    // console.log('activities', this.props.activities)
     return this.props.activities.indexOf(activityKey) > -1
   }
-  
-  checkPetCommands(frameRatio){
-    if(this.hasActivity('ROAMING')){
-      if(Date.now() > nextRoamCheck){
 
-        this.props.removeActivity('ROAMING');
-        this.startThinking();
-      }else{
-        if(this.state.direction === -1){
-          if(this.vX === 0){
-            this.movePet(1, 0, frameRatio);
-          }else{
-            this.movePet(-1, 0, frameRatio);
-          }
+  checkRoamingStuff(frameRatio){
+    if(this.hasActivity('ROAMING')){
+      if(this.state.direction === -1){
+        if(this.vX === 0){
+          this.movePet(1, 0, frameRatio);
         }else{
-          if(this.vX === 0){
-            this.movePet(-1, 0, frameRatio);
-          }else{
-            this.movePet(1, 0, frameRatio);
-          }
+          this.movePet(-1, 0, frameRatio);
+        }
+      }else{
+        if(this.vX === 0){
+          this.movePet(-1, 0, frameRatio);
+        }else{
+          this.movePet(1, 0, frameRatio);
         }
       }
-      // startRoaming(){
-      //   lastRoamCheck = Date.now();
-      //   nextRoamCheck = lastRoamCheck + ROAM_CHECK;
     }
   }
 
   checkKeys(frameRatio){
-    if(this.props.behavior === 'DEAD'){
-      return false;
-    }
+    let inputs = [];
     this.keysDown.forEach(k => {
       switch(k){
         case 'ArrowRight': 
           this.movePet(1, 0, frameRatio);
-          return true;
+          break;
+          // inputs.push(INPUTS.MOVE_RIGHT);
         case 'ArrowLeft':
           this.movePet(-1, 0, frameRatio);
-          return true;
+          break;
+          // inputs.push(INPUTS.MOVE_LEFT);
         case 'ArrowUp':
           this.jumpPet(20);
-          return true;
+          break;
+          // inputs.push(INPUTS.JUMP);
         case 'ArrowDown':
           this.startDucking();
-          return true;
-        case 'KeyR':
-          if(!this.hasActivity('ROAMING')){
-            this.startRoaming();
-          }
-          return true;
-        case 'KeyF':
-          this.stopRoaming(true);
-          return true;
-        default: return false;
+          break;
+          // inputs.push(INPUTS.DUCK);
       }
-    })
+    });
+
+    return inputs;
   }
 
   onKeyUp(e){
