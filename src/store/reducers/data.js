@@ -11,10 +11,10 @@ import { setTransition } from '../actions/transition';
 
 import { handleActions } from 'redux-actions';
 
-import { clamp } from 'util/tools';
-import { getPetDefinition, setFromPetManifest } from 'util/pet-store';
-import { setFromSceneManifest } from 'util/item-store';
-import { getNextManifestData, setManifestStages } from 'util/manifest-helper';
+import { clamp } from '@util/tools';
+import { getPetDefinition, setFromPetManifest } from '@util/pet-store';
+import { setFromSceneManifest } from '@util/item-store';
+import { getNextManifestData, setManifestStages } from '@util/manifest-helper';
 
 const VALID_KEYS = [ 'title', 'stages' ];
 const RESTRICT_KEYS = false;

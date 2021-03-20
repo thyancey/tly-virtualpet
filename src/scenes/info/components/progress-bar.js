@@ -1,11 +1,11 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, shadeColor, getColor } from 'themes/';
-import { LilButton } from 'components/ui/button';
-import { round, parseExpressionString } from 'util/tools';
+import { themeGet, shadeColor, getColor } from '@themes/';
+import { LilButton } from '@components/ui/button';
+import { round, parseExpressionString } from '@util/tools';
 import EffectMarker from './effect-marker';
 
-import { send as sendLog } from 'util/logger';
+import { send as sendLog } from '@util/logger';
 import { send } from '../../../util/logger';
 
 const STAT_AUGMENT_AMOUNT = 15;

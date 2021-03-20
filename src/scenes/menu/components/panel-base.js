@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import { themeGet, shadeColor } from 'themes/';
+import { themeGet, shadeColor } from '@themes/';
 import ICON_EXPAND from './assets/unfold_more.svg';
 import ICON_COLLAPSE from './assets/unfold_less.svg';
 

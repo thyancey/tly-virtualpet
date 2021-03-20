@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
-import { clamp } from 'util/tools';
+import { themeGet } from '@themes/';
+import { clamp } from '@util/tools';
 
 import Pet from '../../components/pet';
 import { 

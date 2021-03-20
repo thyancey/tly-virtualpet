@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import fetch from 'node-fetch';
 import { jsonc } from 'jsonc';
 
-import { setManifest, storeManifestItem, setActivePetId } from 'store/actions';
-import { selectNextManifestItem, selectNextExternalItem } from 'store/selectors';
+import { setManifest, storeManifestItem, setActivePetId } from '@store/actions';
+import { selectNextManifestItem, selectNextExternalItem } from '@store/selectors';
 
 let dataLocation = './data';
 

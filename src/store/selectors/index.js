@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getPetDeltaStats, getStatRules, getTaxonomy  } from 'util/pet-store';
+import { getPets, getPetDeltaStats, getStatRules, getTaxonomy  } from '@util/pet-store';
 import { getSceneDefinition } from '../../util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
 import { evaluateCondition } from '../../util/tools';

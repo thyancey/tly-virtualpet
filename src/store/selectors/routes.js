@@ -1,10 +1,12 @@
 
 import { createSelector } from 'reselect';
-import { getSearchObj } from 'util/tools';
+import { getSearchObj } from '@util/tools';
 
 
-export const getLocation = state => state.router.location || {};
-export const getSearch = state => state.router.location.search || null;
+// export const getLocation = state => state.router.location || {};
+// export const getSearch = state => state.router.location.search || null;
+export const getLocation = state => {};
+export const getSearch = state => null;
 
 export const selectPath = createSelector(
   [getLocation],

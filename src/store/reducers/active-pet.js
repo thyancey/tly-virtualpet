@@ -12,8 +12,8 @@ import {
 } from '../actions/pet';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData, killThisPet } from 'util/pet-store';
-import { changeQueryObj } from 'util/tools';
+import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData, killThisPet } from '@util/pet-store';
+import { changeQueryObj } from '@util/tools';
 
 const initialState = {
   id: null,

@@ -3,14 +3,14 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
+import { themeGet } from '@themes/';
 
-import { setSettingsValue } from 'store/actions';
+import { setSettingsValue } from '@store/actions';
 import { 
   selectSettingPingRate,
   selectSettingVolume,
   selectSettingAnimationSpeed
-} from 'store/selectors';
+} from '@store/selectors';
 
 import SettingsSlider from './settings-slider';
 

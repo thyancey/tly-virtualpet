@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, shadeColor, getColor } from 'themes/';
-import { LilButton } from 'components/ui/button';
-import { round, parseExpressionString } from 'util/tools';
+import { themeGet, shadeColor, getColor } from '@themes/';
+import { LilButton } from '@components/ui/button';
+import { round, parseExpressionString } from '@util/tools';
 
 const $Wrapper = styled.div`
   position:relative;

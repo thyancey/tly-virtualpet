@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import { themeGet, getColor, shadeColor, getBreakpoint } from 'themes/';
+import { themeGet, getColor, shadeColor, getBreakpoint } from '@themes/';
 
-import { Button } from 'components/ui/button';
+import { Button } from '@components/ui/button';
 
 import PanelBase from './components/panel-base';
 import PanelPetSelection from './components/panel-petselection';
 import PanelSettings from './components/panel-settings';
 
-import { deleteAllData } from 'util/pet-store';
+import { deleteAllData } from '@util/pet-store';
 
-require('themes/app.scss');
+require('@themes/app.scss');
 
 const $Menu = styled.div`
   position:absolute;

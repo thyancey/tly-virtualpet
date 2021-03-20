@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button } from 'components/ui/button';
+import { Button } from '@components/ui/button';
 
-import { themeGet } from 'themes/';
+import { themeGet } from '@themes/';
 
-import Cage from 'scenes/cage';
-import Menu from 'scenes/menu';
-import Info from 'scenes/info';
+import Cage from '@scenes/cage';
+import Menu from '@scenes/menu';
+import Info from '@scenes/info';
 
-import {} from 'store/selectors';
+import {} from '@store/selectors';
 
 
-require('themes/app.scss');
+require('@themes/app.scss');
 
 const MENU_WIDTH = '18rem';
 

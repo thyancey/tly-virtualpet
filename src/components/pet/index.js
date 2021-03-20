@@ -8,9 +8,9 @@ import AnimationCanvas from '../animation-canvas/';
 import { getAnimation } from '../animation-canvas/_animations';
 
 import PetBrain from '../../util/pet-brain';
-import { themeGet } from 'themes/';
+import { themeGet } from '@themes/';
 
-import { clamp } from 'util/tools';
+import { clamp } from '@util/tools';
 
 import { throttle } from 'throttle-debounce';
 

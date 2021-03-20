@@ -3,25 +3,25 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
+import { themeGet } from '@themes/';
 import Loader from './loader';
 import Pinger from './pinger';
 
-import { selectDeeplinkedPet } from 'store/selectors/routes';
+import { selectDeeplinkedPet } from '@store/selectors/routes';
 import { push } from 'connected-react-router';
 
 import { 
   selectActivePetId, selectIsLoadingComplete
-} from 'store/selectors';
+} from '@store/selectors';
 
-import { setActivePetId, loadExternalItem } from 'store/actions';
+import { setActivePetId, loadExternalItem } from '@store/actions';
 
 import { saveAllPetStatsToCookieNow } from '../../util/pet-store';
 import { decrypt } from '../../util/tools';
 
-import Stage from 'scenes/stage';
+import Stage from '@scenes/stage';
 
-require('themes/app.scss');
+require('@themes/app.scss');
 
 const $App = styled.section`
   position:absolute;

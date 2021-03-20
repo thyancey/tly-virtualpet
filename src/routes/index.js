@@ -1,15 +1,14 @@
-import React from 'react'
-import { Route, Switch } from 'react-router'
-import { ThemeProvider } from 'styled-components'
-import theme from 'themes/'
-import App from 'scenes/app'
+// import './App.css';
+import { Link, Route, Switch } from 'react-router-dom';
+import Game from '@scenes/app'
 
-const routes = (
-  <ThemeProvider theme={theme}>
-    <Switch>
-      <Route component={App} />
-    </Switch>
-  </ThemeProvider>
-)
+function App() {
+  
+  return (
+    <div className='App'>
+      <Route path='/' component={Game}></Route>
+    </div>
+  );
+}
 
-export default routes
+export default App;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, mixin_clearBubble, shadeColor } from 'themes/';
+import { themeGet, mixin_clearBubble, shadeColor } from '@themes/';
 import ReactImageFallback from 'react-image-fallback';
 
 const $MenuLabel = styled.div`

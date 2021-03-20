@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, shadeColor, getColor } from 'themes/';
-import { round, parseExpressionString } from 'util/tools';
+import { themeGet, shadeColor, getColor } from '@themes/';
+import { round, parseExpressionString } from '@util/tools';
 
-import { send, sendQuiet } from 'util/logger';
+import { send, sendQuiet } from '@util/logger';
 
 const $EffectMarker = styled.div`
   box-shadow: ${themeGet('shadow', 'z3')};

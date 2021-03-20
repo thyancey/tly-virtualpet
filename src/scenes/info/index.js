@@ -3,23 +3,23 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 
-import { themeGet, getColor, mixin_clearBubble } from 'themes/';
+import { themeGet, getColor, mixin_clearBubble } from '@themes/';
 
 import ProgressBar from './components/progress-bar';
 import StatEventButton from './components/stat-event-button';
 
-import { LilButton, Button, NotAButton } from 'components/ui/button';
+import { LilButton, Button, NotAButton } from '@components/ui/button';
 
 
 import {
   ping
-} from 'store/actions/index';
+} from '@store/actions/index';
 import {
   augmentStat,
   forceBehavior,
   resetPet,
   killPet
-} from 'store/actions/pet';
+} from '@store/actions/pet';
 import { 
   selectActivePet,
   selectActiveDeltaStats,
@@ -28,7 +28,7 @@ import {
   getForcedBehavior,
   selectActivePetActivities,
   selectActiveMoods
-} from 'store/selectors';
+} from '@store/selectors';
 
 
 const $Wrapper = styled.div`

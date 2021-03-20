@@ -3,13 +3,13 @@ import styled, { css } from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet, shadeColor } from 'themes/';
+import { themeGet, shadeColor } from '@themes/';
 
 import { 
   setActivePetType, 
   setActivePetId,
   loadExternalItem
-} from 'store/actions';
+} from '@store/actions';
 
 import { 
   getActivePetType,
@@ -17,10 +17,10 @@ import {
   getCounter,
   selectPetTaxonomy,
   selectActivePets
-} from 'store/selectors';
+} from '@store/selectors';
 
-import DropMenu from 'components/ui/dropmenu';
-import { LilButton } from 'components/ui/button';
+import DropMenu from '@components/ui/dropmenu';
+import { LilButton } from '@components/ui/button';
 
 const $Body = styled.div`
   ul{

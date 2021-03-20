@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet, getColor, shadeColor } from 'themes/';
+import { themeGet, getColor, shadeColor } from '@themes/';
 
-import { setSettingsValue } from 'store/actions';
+import { setSettingsValue } from '@store/actions';
 
 //- how often in milliseconds allowed to send action on dragging slider8
 const SLIDER_THROTTLE = 100;

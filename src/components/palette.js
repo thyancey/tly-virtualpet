@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, getColors } from 'themes/';
+import { themeGet, getColors } from '@themes/';
 
 const $Palette = styled.div`
   position:fixed;
