@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PureCanvas from './pure-canvas';
-// import HookCanvas from './hook-canvas';
+// import PureCanvas from './pure-canvas';
+import HookCanvas from './hook-canvas';
 
 
 export default class Canvas extends Component {
@@ -24,7 +24,7 @@ export default class Canvas extends Component {
   render() {
     // console.log('R: Canvas');
     return (
-      <PureCanvas 
+      <HookCanvas 
         contextRef={this.saveContext} 
         canvasWidth={this.props.canvasWidth} 
         canvasHeight={this.props.canvasHeight}

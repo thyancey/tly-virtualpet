@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+/* based off of https://css-tricks.com/using-requestanimationframe-with-react-hooks/ */
+import React from 'react';
 
 const useAnimationFrame = callback => {
   // Use useRef for mutable variables that we want to persist
@@ -16,35 +17,14 @@ const useAnimationFrame = callback => {
   }
   
   React.useEffect(() => {
+    console.log('e')
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
-  }, []); // Make sure the effect runs only once
+  }, []); // intentionally left out dependencey, make sure the effect runs only once
 }
 
-// export default class HookCanvas extends Component {
-//   shouldComponentUpdate(nextProps) {
-//     if(nextProps.canvasWidth !== this.props.canvasWidth || nextProps.canvasHeight !== this.props.canvasHeight){
-//       return true;
-//     }
-//     return false;
-//   }
 
-//   render() {
-//     // console.log('R: HookCanvas');
-//     return (
-//       <canvas
-//         onClick={this.props.onStageClick}
-//         width={this.props.canvasWidth}
-//         height={this.props.canvasHeight}
-//         ref={node =>
-//           node ? this.props.contextRef(node.getContext('2d')) : null
-//         }
-//       />
-//     );
-//   }
-// }
-
-const HookCanvas = () => {
+const HookCanvas = ({onStageClick, canvasWidth, canvasHeight, contextRef}) => {
   const [count, setCount] = React.useState(0)
   
   useAnimationFrame(deltaTime => {
@@ -55,11 +35,11 @@ const HookCanvas = () => {
     
   return (
     <canvas
-      onClick={this.props.onStageClick}
-      width={this.props.canvasWidth}
-      height={this.props.canvasHeight}
+      onClick={onStageClick}
+      width={canvasWidth}
+      height={canvasHeight}
       ref={node =>
-        node ? this.props.contextRef(node.getContext('2d')) : null
+        node ? contextRef(node.getContext('2d')) : null
       }
     />
   );
