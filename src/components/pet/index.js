@@ -8,7 +8,6 @@ import AnimationCanvas from '../animation-canvas/';
 import { getAnimation } from '../animation-canvas/_animations';
 
 import PetBrain from '../../util/pet-brain';
-import { themeGet } from '@themes/';
 
 import { clamp } from '@util/tools';
 
@@ -49,23 +48,24 @@ let fpsInterval;
 let then;
 let now;
 let elapsed;
-let startTime;
+// let startTime;
 let frameRatio;
 
 let maxPetSpeed = 2;
-let hopChance = .2;
 
-const $PetContainer = styled.div`
+const S = {};
+
+S.PetContainer = styled.div`
   position:absolute;
   width:0;
   height:0;
 `;
 
-const $Centerer = styled.div`
+S.Centerer = styled.div`
   left:50%;
   top:50%;
   transform:translate(-50%, -50%);
-`
+`;
 
 class Pet extends Component {
   constructor(props){
@@ -133,7 +133,7 @@ class Pet extends Component {
   componentDidMount() {    
     fpsInterval = 1000 / fps;
     then = Date.now();
-    startTime = then
+    // startTime = then
     // this.rAF = requestAnimationFrame(this.updateAnimationState);
     this.resetPetPosition();
   }
@@ -162,7 +162,7 @@ class Pet extends Component {
     now = Date.now();
     elapsed = now - then;
     frameRatio = elapsed / fpsInterval;
-    const inputs = this.checkKeys(frameRatio);
+    this.checkKeys(frameRatio);
 
     if (frameRatio > 1) {
       then = now - (elapsed % fpsInterval);
@@ -185,7 +185,7 @@ class Pet extends Component {
     now = Date.now();
     elapsed = now - then;
     frameRatio = elapsed / fpsInterval;
-    const inputs = this.checkKeys(frameRatio);
+    this.checkKeys(frameRatio);
 
     if (frameRatio > 1) {
       then = now - (elapsed % fpsInterval);
@@ -313,29 +313,23 @@ class Pet extends Component {
   }
 
   checkKeys(frameRatio){
-    let inputs = [];
     this.keysDown.forEach(k => {
       switch(k){
         case 'ArrowRight': 
           this.movePet(1, 0, frameRatio);
           break;
-          // inputs.push(INPUTS.MOVE_RIGHT);
         case 'ArrowLeft':
           this.movePet(-1, 0, frameRatio);
           break;
-          // inputs.push(INPUTS.MOVE_LEFT);
         case 'ArrowUp':
           this.jumpPet(20);
           break;
-          // inputs.push(INPUTS.JUMP);
         case 'ArrowDown':
           this.startDucking();
           break;
-          // inputs.push(INPUTS.DUCK);
+        default: break;
       }
     });
-
-    return inputs;
   }
 
   onKeyUp(e){
@@ -410,7 +404,7 @@ class Pet extends Component {
 
   //- recalc pet position when window changes size, when pets change, etc
   recalcMaxBounds(resetPetPosition){
-    const spriteInfo = this.props.animation && this.props.animation.spriteInfo || null;
+    const spriteInfo = this.props.animation?.spriteInfo || null;
     const cageObj = this.props.activeCage;
     const sceneType = this.props.activeSceneType;
 
@@ -555,12 +549,12 @@ class Pet extends Component {
     })
 
     return (
-      <$PetContainer style={{
+      <S.PetContainer style={{
         left: `${this.state.cssX}`, 
         top: `${this.state.cssY}`, 
         transform: `rotate(${this.state.adjustedRotation}deg)`
       }} >
-        <$Centerer style={{
+        <S.Centerer style={{
           width: width, 
           height: height
         }} >
@@ -573,8 +567,8 @@ class Pet extends Component {
             drawCommands={drawCommands} 
             onStageClick={e => this.onStageClick(e)}
           />
-        </$Centerer>
-      </$PetContainer>
+        </S.Centerer>
+      </S.PetContainer>
     );
   }
 }

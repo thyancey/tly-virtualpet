@@ -13,7 +13,8 @@ import { deleteAllData } from '@util/pet-store';
 
 require('@themes/app.scss');
 
-const $Menu = styled.div`
+const S = {};
+S.Menu = styled.div`
   position:absolute;
   top:0;
   right:0;
@@ -22,7 +23,7 @@ const $Menu = styled.div`
 `;
 
 
-const $MainPanel = styled.div`
+S.MainPanel = styled.div`
   position:fixed;
   top:0rem;
   bottom:0;
@@ -52,13 +53,13 @@ const $MainPanel = styled.div`
     `
   }
 `;
-const $PanelContainer = styled.div`
+S.PanelContainer = styled.div`
   width:100%;
   height:100%;
   /* padding: 2rem; */
 `;
 
-const $ResetButton = styled.div`
+S.ResetButton = styled.div`
   position:absolute;
   right:1rem;
   bottom:1rem;
@@ -73,7 +74,7 @@ const $ResetButton = styled.div`
     }
   }
 `
-const $MenuButton = styled.div`
+S.MenuButton = styled.div`
   margin:1rem;
   top:1rem;
   z-index:2;
@@ -86,7 +87,7 @@ const $MenuButton = styled.div`
   }
 `;
 
-const $PanelBg = styled.div`
+S.PanelBg = styled.div`
   width:100%;
   height:100%;
   position:absolute;
@@ -105,25 +106,25 @@ class Menu extends Component {
   render(){
     // console.log('R: Menu');
     return(
-      <$Menu id="menu" >
-        <$MainPanel id="main-panel" isOpen={this.props.isOpen}>
-          <$MenuButton>
+      <S.Menu id="menu" >
+        <S.MainPanel id="main-panel" isOpen={this.props.isOpen}>
+          <S.MenuButton>
             <Button text={'menu'} onClick={() => this.props.onToggleMenu()}/>
-          </$MenuButton>
-          <$PanelContainer>
+          </S.MenuButton>
+          <S.PanelContainer>
             <PanelBase label="Pet Selection">
               <PanelPetSelection onSelectPet={() => this.props.onToggleMenu(false)} />
             </PanelBase>
             <PanelBase label="Settings" >
               <PanelSettings />
             </PanelBase>
-            <$ResetButton>
+            <S.ResetButton>
               <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} style={{backgroundColor: getColor('red')}} />
-            </$ResetButton>
-          </$PanelContainer>
-          <$PanelBg/>
-        </$MainPanel>
-      </$Menu>
+            </S.ResetButton>
+          </S.PanelContainer>
+          <S.PanelBg/>
+        </S.MainPanel>
+      </S.Menu>
     );
   }
 }

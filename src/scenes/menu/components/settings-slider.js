@@ -3,14 +3,15 @@ import styled, { css } from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet, getColor, shadeColor } from '@themes/';
+import { themeGet, getColor } from '@themes/';
 
 import { setSettingsValue } from '@store/actions';
 
 //- how often in milliseconds allowed to send action on dragging slider8
 const SLIDER_THROTTLE = 100;
 
-const $Wrapper = styled.div`
+const S = {};
+S.Wrapper = styled.div`
   width: 100%;
   margin-bottom: 1rem;
   
@@ -19,12 +20,12 @@ const $Wrapper = styled.div`
   `}
 `;
 
-const $Label = styled.div`
+S.Label = styled.div`
   margin-bottom: .5rem;
 `;
 
 
-const $RangeInput = styled.input`
+S.RangeInput = styled.input`
 
   -webkit-appearance: none;
   width: 100%;
@@ -101,13 +102,13 @@ class SettingsSlider extends Component {
     } = this.props;
 
     return(
-      <$Wrapper isDisabled={isDisabled}>
-        <$Label>              
+      <S.Wrapper isDisabled={isDisabled}>
+        <S.Label>              
           <span>{`${title}:`}</span>
           <span>{` ${value}`}</span>
-        </$Label>
-        <$RangeInput id="myRange" type="range" min={min} max={max} step={step} value={value} disabled={isDisabled} onChange={e => this.onChangeSlider(e.target.value)} isInverted={isInverted}/>
-      </$Wrapper>
+        </S.Label>
+        <S.RangeInput id="myRange" type="range" min={min} max={max} step={step} value={value} disabled={isDisabled} onChange={e => this.onChangeSlider(e.target.value)} isInverted={isInverted}/>
+      </S.Wrapper>
     );
   }
 }

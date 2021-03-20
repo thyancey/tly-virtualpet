@@ -1,4 +1,3 @@
-import { INPUTS } from '../components/pet';
 import { randBetween } from './tools';
 
 export const STATUS = {
@@ -88,22 +87,24 @@ class PetBrain {
     }
 
     switch (this.status){
-      case STATUS.THINKING: {
+      case STATUS.THINKING: 
         // trigger the DO
         this.onThinkComplete && this.onThinkComplete();
         callback && callback();
         this.startDoing();
-      } break;
-      case STATUS.DOING: {
+        break;
+      case STATUS.DOING:
         // trigger the THINK
         this.onDoComplete && this.onDoComplete();
         callback && callback();
         this.startThinking();
-      } break;
-      case STATUS.BRAINDEAD: {
+      break;
+      case STATUS.BRAINDEAD:
         // do nothing, shouldnt be here anyways
         console.error('should not have finished a timer in a different status')
-      } break;
+        break;
+      default: 
+        break;
     }
     // move to the next state
     // do the callback

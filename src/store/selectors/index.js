@@ -198,9 +198,12 @@ const createSpriteObj = (label, overlayLabel, graphic, sprite, assetDir = '') =>
   }
 
   const imageUrl = `${assetDir}/${sprite.imageUrl}`;
-  let overlayUrl = overlayLabel && sprite.overlays && sprite.overlays[overlayLabel] || null;
-  if(overlayUrl){
-    overlayUrl = `${assetDir}/${overlayUrl}`;
+  let overlayUrl = null;
+  if(overlayLabel){
+    let overlayUrl = sprite.overlays?.[overlayLabel];
+    if(overlayUrl){
+      overlayUrl = `${assetDir}/${overlayUrl}`;
+    }
   }
 
   return {
@@ -447,7 +450,7 @@ export const selectCurrentPetBehavior = createSelector(
       return forcedBehavior;
     }else{
       const status = {
-        isDead: activePet && !activePet.isAlive || false
+        isDead: (activePet && !activePet.isAlive) ? true : false
       }
   
       const newBehavior = checkMoodSwingForBehavior(petDef.moodSwings, {

@@ -89,7 +89,6 @@ const A = {
     if(!props.sprite) return;
     
     const frame = props.spriteInfo.frame;
-    const frames = props.spriteInfo.frames;
     let idx;
     if(frame !== undefined){
       idx = frame;

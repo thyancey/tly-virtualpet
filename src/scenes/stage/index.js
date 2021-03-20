@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button } from '@components/ui/button';
 
-import { themeGet } from '@themes/';
-
 import Cage from '@scenes/cage';
 import Menu from '@scenes/menu';
 import Info from '@scenes/info';
@@ -15,7 +13,8 @@ require('@themes/app.scss');
 
 const MENU_WIDTH = '18rem';
 
-const $Stage = styled.section`
+const S = {};
+S.Stage = styled.section`
   position:relative;
   width: 100%;
   height: 100%;
@@ -23,7 +22,7 @@ const $Stage = styled.section`
   padding: .5rem;
 `
 
-const $CageContainer = styled.div`
+S.CageContainer = styled.div`
   position:absolute;
   top:0;
   right:0;
@@ -31,7 +30,7 @@ const $CageContainer = styled.div`
   left:0;
 `;
 
-const $Stuff = styled.div`
+S.Stuff = styled.div`
   display:flex;
   flex-direction:row;
 
@@ -39,7 +38,7 @@ const $Stuff = styled.div`
   pointer-events:none;
 `;
 
-const $MenuContainer = styled.div`
+S.MenuContainer = styled.div`
   position:fixed;
   /* width:${MENU_WIDTH}; */
 
@@ -48,13 +47,13 @@ const $MenuContainer = styled.div`
   z-index:1;
 `;
 
-const $InfoContainer = styled.div`
+S.InfoContainer = styled.div`
   margin:1rem;
   flex:1;
   z-index:1;
 `;
 
-const $MenuButton = styled.div`
+S.MenuButton = styled.div`
   margin:1rem;
   z-index:1;
   button{
@@ -81,26 +80,23 @@ class Stage extends Component {
   }
 
   render(){
-    console.log('R: Stage', this.props);
-    const { } = this.props;
-
     return(
-      <$Stage>
-        <$Stuff>
-          <$InfoContainer  id="info-container">
+      <S.Stage>
+        <S.Stuff>
+          <S.InfoContainer  id="info-container">
             <Info />
-          </$InfoContainer>
-          <$MenuButton>
+          </S.InfoContainer>
+          <S.MenuButton>
             <Button text={'menu'} onClick={() => this.onToggleMenu()}/>
-          </$MenuButton>
-        </$Stuff>
-        <$MenuContainer id="menu-container" >
+          </S.MenuButton>
+        </S.Stuff>
+        <S.MenuContainer id="menu-container" >
           <Menu isOpen={this.state.isOpen} onToggleMenu={f => this.onToggleMenu(f)}/>
-        </$MenuContainer>
-        <$CageContainer>
+        </S.MenuContainer>
+        <S.CageContainer>
           <Cage />
-        </$CageContainer>
-      </$Stage>
+        </S.CageContainer>
+      </S.Stage>
     );
   }
 }

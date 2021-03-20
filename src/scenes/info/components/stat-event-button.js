@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
-import { themeGet, shadeColor, getColor } from '@themes/';
+import styled from 'styled-components';
+import { getColor } from '@themes/';
 import { LilButton } from '@components/ui/button';
-import { round, parseExpressionString } from '@util/tools';
 
-const $Wrapper = styled.div`
+const S = {};
+S.Wrapper = styled.div`
   position:relative;
 
   &:hover{
@@ -15,7 +15,7 @@ const $Wrapper = styled.div`
 `
 
 
-const $CooldownBar = styled.div`
+S.CooldownBar = styled.div`
   width:100%;
   background-color: ${getColor('grey')};
   height:5px;
@@ -122,11 +122,11 @@ class StatEventButton extends Component {
   }
 
   render(){
-    const { statEventObj, onImmediateUpdate } = this.props;
+    const { statEventObj } = this.props;
     const cooldownWidth = this.getCooldownWidth(statEventObj.cooldown);
 
     return (
-      <$Wrapper >
+      <S.Wrapper >
         <LilButton 
           text={statEventObj.label} 
           onClick={e => this.onButtonClick(statEventObj)} 
@@ -134,11 +134,11 @@ class StatEventButton extends Component {
           tooltip={this.renderTooltip(statEventObj)}>
         </LilButton>
         {cooldownWidth && (
-          <$CooldownBar>
+          <S.CooldownBar>
             <div style={{width: cooldownWidth }} />
-          </$CooldownBar>
+          </S.CooldownBar>
         )}
-      </$Wrapper>
+      </S.Wrapper>
     );
   }
 }

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, mixin_clearBubble, shadeColor } from '@themes/';
+import { themeGet, shadeColor } from '@themes/';
 import ReactImageFallback from 'react-image-fallback';
-
-const $MenuLabel = styled.div`
+const S = {};
+S.MenuLabel = styled.div`
 `
 
-const $DropMenu = styled.div`
+S.DropMenu = styled.div`
   cursor: pointer;
   padding: 1rem;
   font-size:3rem;
@@ -42,7 +42,7 @@ const $DropMenu = styled.div`
 `;
 
 
-const $ImgContainer = styled.div`
+S.ImgContainer = styled.div`
 
   img{
     box-shadow: ${themeGet('shadow', 'z2')};
@@ -55,7 +55,7 @@ const $ImgContainer = styled.div`
 `;
 
 
-const $DropItem = styled.div`
+S.DropItem = styled.div`
   padding:2rem 2rem;
   text-align:right;
   margin-top: 2rem;
@@ -110,11 +110,11 @@ const $DropItem = styled.div`
   `}
 `
 
-const $DropItemLabel = styled.div`
+S.DropItemLabel = styled.div`
 
 `;
 
-const $DropItems = styled.div`
+S.DropItems = styled.div`
 `;
 
 // export const DropMenu = ({ text, isActive, onClick, style, items = [] }) => {
@@ -145,14 +145,14 @@ export default class DropMenu extends Component {
     } = this.props;
 
     return (
-      <$DropMenu isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
-        <$MenuLabel>{ text }</$MenuLabel>
-        <$DropItems>
+      <S.DropMenu isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+        <S.MenuLabel>{ text }</S.MenuLabel>
+        <S.DropItems>
           {isActive && items.map((i, idx) => (
             <DropItem key={idx} isActive={i.id === activeId} thumbnail={`${i.dir}/assets/${i.thumbnail}`} text={i.text} subText={i.subText} onClick={e => this.onItemClicked(i.id, e)} />
           ))}
-        </$DropItems>
-      </$DropMenu>
+        </S.DropItems>
+      </S.DropMenu>
     );
   }
 }
@@ -160,18 +160,18 @@ export default class DropMenu extends Component {
 
 export const DropItem = ({ text, subText, isActive, onClick, style, thumbnail }) => {
   return (
-    <$DropItem isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
-      <$ImgContainer>
+    <S.DropItem isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+      <S.ImgContainer>
         <ReactImageFallback
           src={thumbnail}
           fallbackImage={'ui/unknown_thumbnail.jpg'}
           initialImage={'ui/unknown_thumbnail.jpg'}
           alt={text} />
-      </$ImgContainer>
-      <$DropItemLabel>
+      </S.ImgContainer>
+      <S.DropItemLabel>
         <h2>{ text }</h2>
         <h5>{ subText }</h5>
-      </$DropItemLabel>
-    </$DropItem>
+      </S.DropItemLabel>
+    </S.DropItem>
   );
 }

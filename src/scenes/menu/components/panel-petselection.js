@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet, shadeColor } from '@themes/';
 
 import { 
   setActivePetType, 
@@ -22,7 +21,8 @@ import {
 import DropMenu from '@components/ui/dropmenu';
 import { LilButton } from '@components/ui/button';
 
-const $Body = styled.div`
+const S = {};
+S.Body = styled.div`
   ul{
     padding:0;
     margin: 0;
@@ -64,7 +64,7 @@ class PetSelection extends Component {
     } = this.props;
 
     return(
-      <$Body>
+      <S.Body>
         <ul>
           <li key={0}>
             <LilButton text={'Load external'} onClick={e => this.showLoadPrompt()} />
@@ -82,7 +82,7 @@ class PetSelection extends Component {
             </li>
           ))}
         </ul>
-      </$Body>
+      </S.Body>
     );
   }
 }

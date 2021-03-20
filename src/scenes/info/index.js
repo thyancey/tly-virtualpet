@@ -30,8 +30,8 @@ import {
   selectActiveMoods
 } from '@store/selectors';
 
-
-const $Wrapper = styled.div`
+const S = {};
+S.Wrapper = styled.div`
   padding: 1rem;
   position:relative;
   ${mixin_clearBubble()}
@@ -42,34 +42,34 @@ const $Wrapper = styled.div`
   }
 `
 
-const $StatDisplay = styled.div`
+S.StatDisplay = styled.div`
   text-align:right;
 `
 
-const $StatDisplayLabel = styled.span`
+S.StatDisplayLabel = styled.span`
   color: ${themeGet('color', 'white')};
   font-size:2rem;
 `
-const $StatDisplayValue = styled.span`
+S.StatDisplayValue = styled.span`
   color: ${themeGet('color', 'green')};
   margin-left:1rem;
   font-size:3rem;
 `
 
-const $FooterUi = styled.div`
+S.FooterUi = styled.div`
   position:fixed;
   bottom:0;
   right:0;
   width:100%;
 `;
 
-const $EffectsContainer = styled.div`
+S.EffectsContainer = styled.div`
   position:absolute;
   left:0;
   bottom:0;
 `;
 
-const $Name = styled.div`
+S.Name = styled.div`
   position:absolute;
   right:2rem;
   padding: 1rem 2rem;
@@ -83,7 +83,7 @@ const $Name = styled.div`
   text-align:center;
 `
 
-const $Level = styled.div`
+S.Level = styled.div`
   border-radius: 2rem;
   border: 4px solid black;
   padding: 1rem;
@@ -99,14 +99,14 @@ const $Level = styled.div`
   background-color: ${themeGet('color', 'white')};
 `
 
-const $InfoButton = styled.div`
+S.InfoButton = styled.div`
   position:absolute;
   right: .5rem;
   bottom: .5rem;
   z-index:1;
 `
 
-const $Info = styled.div`
+S.Info = styled.div`
   ${mixin_clearBubble()}
   max-height:500px;
   transition: max-height .5s ease-in-out;
@@ -130,10 +130,10 @@ const $Info = styled.div`
 
 const StatDisplay = ({ statObj }) => {
   return (
-    <$StatDisplay>
-      <$StatDisplayLabel>{statObj.label}</$StatDisplayLabel>
-      <$StatDisplayValue>{statObj.cur}</$StatDisplayValue>
-    </$StatDisplay>
+    <S.StatDisplay>
+      <S.StatDisplayLabel>{statObj.label}</S.StatDisplayLabel>
+      <S.StatDisplayValue>{statObj.cur}</S.StatDisplayValue>
+    </S.StatDisplay>
   );
 };
 
@@ -210,10 +210,9 @@ class PetStats extends Component {
     const allMoods = Object.keys(petData.moods).map(mKey => ({ id: mKey, label: petData.moods[mKey].label || mKey }));
 
     return (
-      <$Wrapper>
+      <S.Wrapper>
         {deltaStats.map((s, i) => {
           if(s.type === 'number'){
-            {/* return null; */}
             return (
               <StatDisplay key={i} statObj={s} />
             );
@@ -224,10 +223,10 @@ class PetStats extends Component {
           }
         })}
         
-        <$InfoButton>
+        <S.InfoButton>
           <LilButton text={'info'} onClick={e => this.onToggleShowInfo()} />
-        </$InfoButton>
-        <$Info showInfo={this.state.isInfoOpen}>
+        </S.InfoButton>
+        <S.Info showInfo={this.state.isInfoOpen}>
           <p>{'Activities'}</p>
             <NotAButton isActive={activities.indexOf('WALKING') > -1} text={'WALKING'} />
             <NotAButton isActive={activities.indexOf('JUMPING') > -1} text={'JUMPING'} />
@@ -255,20 +254,20 @@ class PetStats extends Component {
           <div>
             <Button text={'RESET PET'} onClick={() => this.resetPet(activePet.id)} style={{backgroundColor: getColor('red')}} />
           </div>
-        </$Info>
+        </S.Info>
         
-        <$FooterUi>
-          <$EffectsContainer>
+        <S.FooterUi>
+          <S.EffectsContainer>
             {petData.statEvents && petData.statEvents.map((s,idx) => (
               <StatEventButton key={idx} statEventObj={s} onImmediateUpdate={(stat,val) => this.updateStat(stat,val)} />
             ))}
-          </$EffectsContainer>
-          <$Name>
+          </S.EffectsContainer>
+          <S.Name>
             <span>{`${petData.name} the ${petData.animal}`}</span>
-            <$Level><span>{level}</span></$Level>
-          </$Name>
-        </$FooterUi>
-      </$Wrapper>
+            <S.Level><span>{level}</span></S.Level>
+          </S.Name>
+        </S.FooterUi>
+      </S.Wrapper>
     );
   }
 }

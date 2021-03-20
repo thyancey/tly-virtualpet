@@ -1,8 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, mixin_textStroke, shadeColor } from '../../themes';
+import { themeGet, shadeColor } from '../../themes';
 
-const $NotAButton = styled.div`
+const S = {};
+S.NotAButton = styled.div`
   color: ${themeGet('color', 'grey')};
   text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
   /* background-color: ${themeGet('color', 'grey')}; */
@@ -37,7 +38,7 @@ const $NotAButton = styled.div`
   }
 `
 
-const $Button = styled.button`
+S.Button = styled.button`
   cursor:pointer;
   position:relative;
 
@@ -105,7 +106,7 @@ const $Button = styled.button`
   `}
 `;
 
-const $BigButton = styled($Button)`
+S.BigButton = styled(S.Button)`
   padding: 1rem 2rem;
   margin: 1rem;
   font-size:3rem;
@@ -113,14 +114,14 @@ const $BigButton = styled($Button)`
 `;
 
 
-const $LilButton = styled($Button)`
+S.LilButton = styled(S.Button)`
   padding: .5rem 1.5rem;
   margin: .5rem;
   font-size: 2rem;
   font-weight: 600;
 `;
 
-const $Tooltip = styled.div`
+S.Tooltip = styled.div`
   z-index:1;
   opacity:0;
   left:0%;
@@ -151,34 +152,34 @@ const $Tooltip = styled.div`
 
 const Tooltip = ({ text }) => {
   return (
-    <$Tooltip className="button-tooltip">
+    <S.Tooltip className="button-tooltip">
       <p>{text}</p>
-    </$Tooltip>
+    </S.Tooltip>
   )
 }
 
 export const Button = ({ text, isActive, isDisabled, onClick, style, tooltip }) => {
   return (
-    <$BigButton isActive={isActive} disabled={isDisabled} isDisabled={isDisabled} onClick={(e) => onClick && onClick(e)} style={style} title={tooltip} >
+    <S.BigButton isActive={isActive} disabled={isDisabled} isDisabled={isDisabled} onClick={(e) => onClick && onClick(e)} style={style} title={tooltip} >
       <span>{ text }</span>
       {tooltip && <Tooltip text={tooltip} />}
-    </$BigButton>
+    </S.BigButton>
   );
 }
 
 export const LilButton = ({ text, isActive, isDisabled, onClick, style, tooltip }) => {
   return (
-    <$LilButton isActive={isActive} disabled={isDisabled} isDisabled={isDisabled} onClick={(e) => onClick && onClick(e)} style={style} title={tooltip}>
+    <S.LilButton isActive={isActive} disabled={isDisabled} isDisabled={isDisabled} onClick={(e) => onClick && onClick(e)} style={style} title={tooltip}>
       <span>{ text }</span>
       {tooltip && <Tooltip text={tooltip} />}
-    </$LilButton>
+    </S.LilButton>
   );
 }
 
 export const NotAButton = ({ text, isActive, isDisabled, onClick, style }) => {
   return (
-    <$NotAButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+    <S.NotAButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
       <span>{ text }</span>
-    </$NotAButton>
+    </S.NotAButton>
   );
 }

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from '@themes/';
-import { clamp } from '@util/tools';
 
 import Pet from '../../components/pet';
 import { 
@@ -13,8 +12,8 @@ import {
 
 import Scene from './components/scene';
 
-
-const $Cage = styled.div`
+const S = {};
+S.Cage = styled.div`
   position:relative;
 
   width:100%;
@@ -74,14 +73,14 @@ class Cage extends Component {
       return null;
     }else{
       return(
-        <$Cage ref={this.containerRef} >
+        <S.Cage ref={this.containerRef} >
           <Pet 
             activePetId={activePetId} 
             containerWidth={this.state.containerWidth}
             containerHeight={this.state.containerHeight}
             />
           <Scene />
-        </$Cage>
+        </S.Cage>
       );
     }
 

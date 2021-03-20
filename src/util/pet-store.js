@@ -210,7 +210,7 @@ const mergeStats = (origArray, newArray, overwrite) => {
     const matchingStatIdx = retArray.findIndex(oStat => oStat.id === newStat.id);
     if(matchingStatIdx > -1){
       if(overwrite){
-        retArray[matchingStatIdx] = { ... retArray[matchingStatIdx], ...newStat };
+        retArray[matchingStatIdx] = { ...retArray[matchingStatIdx], ...newStat };
       }else{
         //- not unique, dont add it
       }
@@ -231,7 +231,7 @@ export const getPetStoreData = (itemType) => {
 
 export const getStartStats = petId => {
   const petDef = getPetDefinition(petId);
-  return petDef && petDef.startStats || [];
+  return petDef?.startStats || [];
 }
 
 export const getStartStat = (petId, statId) => {

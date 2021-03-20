@@ -1,5 +1,5 @@
 // import './App.css';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Game from '@scenes/app'
 
 function App({location}) {

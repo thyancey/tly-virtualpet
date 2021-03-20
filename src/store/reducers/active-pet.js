@@ -12,7 +12,7 @@ import {
 } from '../actions/pet';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData, killThisPet } from '@util/pet-store';
+import { getPetDefinition, augmentPetStat, resetPetState, killThisPet } from '@util/pet-store';
 import { changeQueryObj } from '@util/tools';
 
 const initialState = {

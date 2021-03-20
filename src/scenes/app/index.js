@@ -20,7 +20,8 @@ import Stage from '@scenes/stage';
 
 require('@themes/app.scss');
 
-const $App = styled.section`
+const S = {};
+S.App = styled.section`
   position:absolute;
   left:0;
   top:0;
@@ -32,7 +33,7 @@ const $App = styled.section`
   color: ${themeGet('color', 'blue')};
 `
 
-const $Stage = styled.div`
+S.Stage = styled.div`
   position:absolute;
   top:0;
   right:0;
@@ -89,13 +90,13 @@ class App extends Component {
     // console.log('R: App', this.props );
 
     return(
-      <$App id="app" >
+      <S.App id="app" >
         <Pinger />
         <Loader/>
-        <$Stage>
+        <S.Stage>
           <Stage />
-        </$Stage>
-      </$App>
+        </S.Stage>
+      </S.App>
     );
   }
 }

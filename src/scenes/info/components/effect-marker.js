@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, shadeColor, getColor } from '@themes/';
+import { themeGet, getColor } from '@themes/';
 import { round, parseExpressionString } from '@util/tools';
 
-import { send, sendQuiet } from '@util/logger';
-
-const $EffectMarker = styled.div`
+const S = {};
+S.EffectMarker = styled.div`
   box-shadow: ${themeGet('shadow', 'z3')};
   position:absolute;
   height:100%;
@@ -36,7 +35,7 @@ const $EffectMarker = styled.div`
 
 `
 
-const $Stick = styled.div`
+S.Stick = styled.div`
   width:8px;
   height:100%;
   opacity:1;
@@ -67,7 +66,7 @@ const $Stick = styled.div`
 `
 
 
-const $Bubble = styled.div`
+S.Bubble = styled.div`
   box-shadow: ${themeGet('shadow', 'z3')};
   border: .3rem solid ${p => p.color};
   background-color: ${p => p.color};
@@ -121,7 +120,7 @@ const $Bubble = styled.div`
   `}
 `
 
-const $BubbleTip = styled.div`
+S.BubbleTip = styled.div`
 
   ${p => p.isShowing ? css`
     top:100%;
@@ -244,20 +243,20 @@ class EffectMarker extends Component {
     }
 
     return (
-      <$EffectMarker style={{ left: effectMarker.position }} isActive={isActive} onMouseEnter={(e) => this.onEnterBubble(e)} onMouseLeave={() => this.onLeaveBubble()}>
-        <$Stick color={color} isActive={isActive} direction={direction}>
+      <S.EffectMarker style={{ left: effectMarker.position }} isActive={isActive} onMouseEnter={(e) => this.onEnterBubble(e)} onMouseLeave={() => this.onLeaveBubble()}>
+        <S.Stick color={color} isActive={isActive} direction={direction}>
           <div className="left"></div>
           <div className="right"></div>
-        </$Stick>
-        <$Bubble className="effect-label" color={color} isActive={isActive} direction={direction} alt={effectMarker.label} >
+        </S.Stick>
+        <S.Bubble className="effect-label" color={color} isActive={isActive} direction={direction} alt={effectMarker.label} >
           <div className="left"></div>
           <div className="right"></div>
-        </$Bubble>
+        </S.Bubble>
 
-        <$BubbleTip color={color} isShowing={this.state.tooltipShowing} >
+        <S.BubbleTip color={color} isShowing={this.state.tooltipShowing} >
           {this.renderMessage(effect, statObj.label, statObj.doesKill, statObj.fullIsGood, direction)}
-        </$BubbleTip>
-      </$EffectMarker>
+        </S.BubbleTip>
+      </S.EffectMarker>
     );
   }
 
