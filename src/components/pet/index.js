@@ -82,7 +82,7 @@ class Pet extends Component {
 
     // this.frames = 0;
     this.rAF = 0;
-    this.updateAnimationState = this.updateAnimationState.bind(this);
+    // this.updateAnimationState = this.updateAnimationState.bind(this);
 
 
     this.keysDown = [];
@@ -111,6 +111,37 @@ class Pet extends Component {
     this.throttledThink = throttle(200, true, () => {
       this.onThrottledThink();
     });
+    this.throttledLogic = throttle(200, true, () => {
+      this.onThrottledLogic();
+    });
+
+    this.thinkInterval = window.setInterval(this.onPetInterval.bind(this), 10);
+  }
+
+
+
+  onBrainDoComplete(){
+    // console.log('brain DO complete');
+    this.stopRoaming();
+  }
+
+  onBrainThinkComplete(){
+    // console.log('brain THINK complete');
+    this.startRoaming();
+  }
+
+  componentDidMount() {    
+    fpsInterval = 1000 / fps;
+    then = Date.now();
+    startTime = then
+    // this.rAF = requestAnimationFrame(this.updateAnimationState);
+    this.resetPetPosition();
+  }
+
+  onPetInterval(){
+    // console.log('interval')
+    this.onThrottledLogic();
+    this.throttledThink();
   }
 
   onThrottledThink(){
@@ -127,26 +158,29 @@ class Pet extends Component {
     }
   }
 
-  onBrainDoComplete(){
-    // console.log('brain DO complete');
-    this.stopRoaming();
+  onThrottledLogic(){
+    now = Date.now();
+    elapsed = now - then;
+    frameRatio = elapsed / fpsInterval;
+    const inputs = this.checkKeys(frameRatio);
+
+    if (frameRatio > 1) {
+      then = now - (elapsed % fpsInterval);
+      this.frames++;
+      this.setState(prevState => ({ 
+        tick: this.frames 
+      }));
+    }
+    
+    if(this.hasActivity('ROAMING')){
+      this.checkRoamingStuff(frameRatio);
+    }
+    this.affectPetGravity(frameRatio);
+    // this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
-  onBrainThinkComplete(){
-    // console.log('brain THINK complete');
-    this.startRoaming();
-  }
-
-  componentDidMount() {    
-    fpsInterval = 1000 / fps;
-    then = Date.now();
-    startTime = then
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
-    this.resetPetPosition();
-  }
 
   updateAnimationState() {
-    this.throttledThink();
 
     now = Date.now();
     elapsed = now - then;
@@ -166,7 +200,7 @@ class Pet extends Component {
     }
     this.affectPetGravity(frameRatio);
 
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
+    // this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
   componentWillUnmount() {
