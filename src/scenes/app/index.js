@@ -7,9 +7,7 @@ import { themeGet } from '@themes/';
 import Loader from './loader';
 import Pinger from './pinger';
 
-import { selectDeeplinkedPet } from '@store/selectors/routes';
-import { push } from 'connected-react-router';
-
+import { selectPetFromUrl } from '@store/selectors/routes';
 import { 
   selectActivePetId, selectIsLoadingComplete
 } from '@store/selectors';
@@ -17,7 +15,6 @@ import {
 import { setActivePetId, loadExternalItem } from '@store/actions';
 
 import { saveAllPetStatsToCookieNow } from '../../util/pet-store';
-import { decrypt } from '../../util/tools';
 
 import Stage from '@scenes/stage';
 
@@ -87,6 +84,7 @@ class App extends Component {
   }
 
   render(){
+    console.log('location is ', this.props.location)
     // global.test = this;
     // console.log('R: App', this.props );
 
@@ -102,15 +100,15 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, props) => ({
   loadingComplete: selectIsLoadingComplete(state),
-  queryPet: selectDeeplinkedPet(state),
+  queryPet: selectPetFromUrl(props.location.search),
   activePetId: selectActivePetId(state)
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { push, setActivePetId, loadExternalItem },
+    { setActivePetId, loadExternalItem },
     dispatch
   )
 

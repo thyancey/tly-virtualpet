@@ -290,7 +290,7 @@ export const getDeltaStats = (statsObj, timestamp) =>{
 }
 
 export const killThisPet = petId => {
-  console.error('KILL THIS PET ', petId)
+  console.log('KILL THIS PET ', petId)
   const petDef = getPetDefinition(petId);
   petDef.isAlive = false;
   setPetDefinition(petId, petDef, true);

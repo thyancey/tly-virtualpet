@@ -4,9 +4,8 @@ import App from './routes';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import { BrowserRouter } from "react-router-dom";
-import { ConnectedRouter } from 'connected-react-router'
 import { ThemeProvider } from 'styled-components'
-import store, { history } from './store'
+import store from './store'
 import theme from '@themes/'
 import Logger, { init as initLogger } from './util/logger';
 
@@ -17,7 +16,7 @@ global.logger = Logger;
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter history={history}>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
