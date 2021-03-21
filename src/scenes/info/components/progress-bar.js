@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { themeGet, shadeColor, getColor } from '@themes/';
 import { LilButton } from '@components/ui/button';
 import { round } from '@util/tools';

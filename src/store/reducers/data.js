@@ -59,8 +59,6 @@ export default handleActions({
 
     let pingRate = state.settings.pingRate;
     if(parsedData.pingRate !== undefined){
-      console.error('I SEE PINGRATE', parsedData.pingRate);
-
       try {
         if(!isNaN(parsedData.pingRate)){
           pingRate = clamp(parseInt(parsedData.pingRate), 50, 5000);

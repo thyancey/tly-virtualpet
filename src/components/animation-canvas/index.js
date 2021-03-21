@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Canvas from './canvas';
+import HookCanvas from './hook-canvas';
 
 /*
  some based off of this article from Phil Nash https://philna.sh/blog/2018/09/27/techniques-for-animating-on-the-canvas-in-react/
@@ -10,7 +10,6 @@ export default class AnimationCanvas extends Component {
     this.frames = 0;
 
     this.state = { 
-      tick: 0,
       img: null,
       overlayImg: null,
       loadStarted: false
@@ -65,17 +64,19 @@ export default class AnimationCanvas extends Component {
 
   render() {
     return (
-      <Canvas 
+      <HookCanvas 
         tick={this.props.tick} 
         canvasWidth={this.props.containerWidth} 
         canvasHeight={this.props.containerHeight}
-        sprite={this.state.img}
-        overlaySprite={this.state.overlayImg}
-        spriteInfo={this.props.animation.spriteInfo}
-        direction={this.props.direction}
         onStageClick={this.props.onStageClick}
-        drawCommands={ this.props.drawCommands } />
+        drawCommands={ this.props.drawCommands } 
+        drawProps={{
+          sprite: this.state.img,
+          overlaySprite: this.state.overlayImg,
+          spriteInfo: this.props.animation.spriteInfo,
+          direction: this.props.direction
+        }}
+      />
     );
-
   }
 }

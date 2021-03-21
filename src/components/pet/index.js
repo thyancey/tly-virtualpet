@@ -79,11 +79,7 @@ class Pet extends Component {
     this.aY = 1.08;
     this.frames = 0;
     this.petBrain = new PetBrain(this.onBrainDoComplete.bind(this), this.onBrainThinkComplete.bind(this));
-
-    // this.frames = 0;
     this.rAF = 0;
-    // this.updateAnimationState = this.updateAnimationState.bind(this);
-
 
     this.keysDown = [];
 
@@ -118,34 +114,26 @@ class Pet extends Component {
     this.thinkInterval = window.setInterval(this.onPetInterval.bind(this), 10);
   }
 
-
-
   onBrainDoComplete(){
-    // console.log('brain DO complete');
     this.stopRoaming();
   }
 
   onBrainThinkComplete(){
-    // console.log('brain THINK complete');
     this.startRoaming();
   }
 
   componentDidMount() {    
     fpsInterval = 1000 / fps;
     then = Date.now();
-    // startTime = then
-    // this.rAF = requestAnimationFrame(this.updateAnimationState);
     this.resetPetPosition();
   }
 
   onPetInterval(){
-    // console.log('interval')
     this.onThrottledLogic();
     this.throttledThink();
   }
 
   onThrottledThink(){
-    // console.log('onThrottledThink:');
     if(this.props.behavior !== 'DEAD'){
       //- if user input cancel any pet auto behavior
       if(this.keysDown.length > 0){
@@ -172,35 +160,10 @@ class Pet extends Component {
       }));
     }
     
-    if(this.hasActivity('ROAMING')){
+    if(this.props.behavior !== 'DEAD' && this.hasActivity('ROAMING')){
       this.checkRoamingStuff(frameRatio);
     }
     this.affectPetGravity(frameRatio);
-    // this.rAF = requestAnimationFrame(this.updateAnimationState);
-  }
-
-
-  updateAnimationState() {
-
-    now = Date.now();
-    elapsed = now - then;
-    frameRatio = elapsed / fpsInterval;
-    this.checkKeys(frameRatio);
-
-    if (frameRatio > 1) {
-      then = now - (elapsed % fpsInterval);
-      this.frames++;
-      this.setState(prevState => ({ 
-        tick: this.frames 
-      }));
-    }
-    
-    if(this.hasActivity('ROAMING')){
-      this.checkRoamingStuff(frameRatio);
-    }
-    this.affectPetGravity(frameRatio);
-
-    // this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
   componentWillUnmount() {
@@ -218,16 +181,11 @@ class Pet extends Component {
   }
 
   startRoaming(){
-    // lastRoamCheck = Date.now();
-    // nextRoamCheck = lastRoamCheck + randBetween(roamCheckRange);
     this.props.addActivity('ROAMING');
   }
 
   stopRoaming(forced){
     this.props.removeActivity('ROAMING');
-    // if(forced){
-      // this.killTimer(this.thinkTimer);
-    // }
   }
 
   startDucking(){
@@ -366,7 +324,6 @@ class Pet extends Component {
       // this.vX *= DRAG_X;
     }
 
-
     //- check for sitting on ground, staying in container
     const newY = this.state.posY + this.vY * timePerc;
     if(newY >= this.state.maxY){
@@ -379,7 +336,6 @@ class Pet extends Component {
     }else if(newX < this.state.minX){
       this.vX = 0;
     }
-
 
     const clampedX = clamp(newX, this.state.minX, this.state.maxX);
     // const clampedY = clamp(newY, this.state.minY, this.state.maxY);
