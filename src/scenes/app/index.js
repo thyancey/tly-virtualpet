@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from '@themes/';
-import Loader from './loader';
-import Pinger from './pinger';
-
-import { selectPetFromUrl } from '@store/selectors/routes';
-import { 
-  selectActivePetId, selectIsLoadingComplete
-} from '@store/selectors';
+import { Route, withRouter, Redirect } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { setActivePetId, loadExternalItem } from '@store/actions';
+import { selectPetFromWindow } from '@store/selectors/routes';
+import { selectIsLoadingComplete} from '@store/selectors';
+import { saveAllPetStatsToCookieNow } from '@util/pet-store';
+import { themeGet } from '@themes/';
 
-import { saveAllPetStatsToCookieNow } from '../../util/pet-store';
-
-import Stage from '@scenes/stage';
-
-require('@themes/app.scss');
+import Loader from './loader';
+import Pinger from './pinger';
+import Main from './main';
+import Editor from './editor';
+import Menu from '@scenes/menu';
 
 const S = {};
 S.App = styled.section`
@@ -33,20 +29,9 @@ S.App = styled.section`
   color: ${themeGet('color', 'blue')};
 `
 
-S.Stage = styled.div`
-  position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
-  z-index:1;
-`
-
-
-class App extends Component {
+class AppContainer extends Component {
   constructor(){
     super();
-
     global.spriteScale = 1; //- used to change sprite size/bounds, gets updated in cage.js when window is resized
 
     window.addEventListener('beforeunload', (e) => {
@@ -56,11 +41,9 @@ class App extends Component {
 
   onExitPage(){
     if(this.props.loadingComplete) saveAllPetStatsToCookieNow();
-    
   }
 
   componentDidUpdate(prevProps, prevState){
-    console.log('onUpdate')
     if(this.props.loadingComplete && !prevProps.loadingComplete){
       this.onLoadComplete();
     }
@@ -73,7 +56,8 @@ class App extends Component {
 
   /* if query starts with "external_", then its a url to an external pet/manifest file and should be loaded */
   loadDeeplinkedPet(force){
-   const petQuery = selectPetFromUrl(this.props.location?.search);
+    const petQuery = selectPetFromWindow();
+    console.log('loadDeeplinkedPet', petQuery)
 
     if(petQuery && (force || !this.props.activePetId)){
       const queryPieces = petQuery.split('external_');
@@ -92,27 +76,26 @@ class App extends Component {
       <S.App id="app" >
         <Pinger />
         <Loader/>
-        <S.Stage>
-          <Stage />
-        </S.Stage>
+        <Menu />
+        <Route path='/' component={Main}></Route>
+        <Route path='/editor' component={Editor}></Route>
       </S.App>
     );
   }
 }
 
+
 const mapStateToProps = (state, props) => ({
-  loadingComplete: selectIsLoadingComplete(state),
-  activePetId: selectActivePetId(state)
+  loadingComplete: selectIsLoadingComplete(state)
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     { setActivePetId, loadExternalItem },
     dispatch
-  )
+  );
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
-
+)(AppContainer))

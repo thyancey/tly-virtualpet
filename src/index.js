@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './routes';
+// import App from './routes';
+import AppContainer from '@scenes/app';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import { BrowserRouter } from "react-router-dom";
@@ -18,7 +19,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <App />
+        <AppContainer />
       </ThemeProvider>
     </BrowserRouter>
   </Provider>,
