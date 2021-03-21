@@ -200,7 +200,7 @@ const createSpriteObj = (label, overlayLabel, graphic, sprite, assetDir = '') =>
   const imageUrl = `${assetDir}/${sprite.imageUrl}`;
   let overlayUrl = null;
   if(overlayLabel){
-    let overlayUrl = sprite.overlays?.[overlayLabel];
+    overlayUrl = sprite.overlays?.[overlayLabel];
     if(overlayUrl){
       overlayUrl = `${assetDir}/${overlayUrl}`;
     }

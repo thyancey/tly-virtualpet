@@ -127,7 +127,6 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
     }
   }
 
-  console.log('petDef', petDef)
   const moodSwings = parseMoodSwings(petDef.moodSwings);
   const statEvents = parseStatEvents(petDef.statEvents || []);
 

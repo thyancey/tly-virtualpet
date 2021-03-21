@@ -99,17 +99,11 @@ S.BarGroup = styled.div`
   }
 `
 
-
 S.Bg = styled.div`
   position:absolute;
   top:0;
   left:0;
-  height:100%;
-  width: ${p => p.progress + '%'};
-  ${p => css`
-    background-color: ${p => p.barColor};
-  `}
- 
+  height:100%; 
   transition: width .3s ease-in-out, background-color .5s ease-in-out;
 `
 
@@ -165,7 +159,12 @@ const ProgressBar = ({ statObj, label, isActive, augmentAction, sceneStyles, moo
         </S.EffectMarkers>
         <S.Bar isActive={isActive} >
           <S.Value>{ `${round(statObj.cur)} / ${statObj.max} (${round(statObj.percent)}%)` }</S.Value>
-          <S.Bg progress={statObj.percent} barColor={barColor} />
+          <S.Bg 
+            style={{ 
+              width:`${statObj.percent}%`,
+              backgroundColor: barColor
+            }} 
+          />
         </S.Bar>
         {augmentAction && (<LilButton text={'+'} onClick={e => augmentAction(statObj.id, STAT_AUGMENT_AMOUNT)} style={{ backgroundColor: bgColor_plus }} />)}
       </S.BarGroup>

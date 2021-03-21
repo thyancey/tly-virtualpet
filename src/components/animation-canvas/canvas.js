@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import PureCanvas from './pure-canvas';
 import HookCanvas from './hook-canvas';
 
 

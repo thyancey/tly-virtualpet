@@ -60,6 +60,7 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
+    console.log('onUpdate')
     if(this.props.loadingComplete && !prevProps.loadingComplete){
       this.onLoadComplete();
     }
@@ -72,8 +73,10 @@ class App extends Component {
 
   /* if query starts with "external_", then its a url to an external pet/manifest file and should be loaded */
   loadDeeplinkedPet(force){
-    if(this.props.queryPet && (force || !this.props.activePetId)){
-      const queryPieces = this.props.queryPet.split('external_');
+   const petQuery = selectPetFromUrl(this.props.location?.search);
+
+    if(petQuery && (force || !this.props.activePetId)){
+      const queryPieces = petQuery.split('external_');
       if(queryPieces.length > 1){
         console.log(`--> Loading external pet with id "${queryPieces[1]}`);
         
@@ -85,10 +88,6 @@ class App extends Component {
   }
 
   render(){
-    console.log('location is ', this.props.location)
-    // global.test = this;
-    // console.log('R: App', this.props );
-
     return(
       <S.App id="app" >
         <Pinger />
@@ -103,7 +102,6 @@ class App extends Component {
 
 const mapStateToProps = (state, props) => ({
   loadingComplete: selectIsLoadingComplete(state),
-  queryPet: selectPetFromUrl(props.location.search),
   activePetId: selectActivePetId(state)
 })
 

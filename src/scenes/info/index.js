@@ -153,7 +153,7 @@ class PetStats extends Component {
   }
 
   updateStat(id, val){
-    // console.log('updateStat', id, val)
+    console.log('updateStat', id, val)
     this.props.augmentStat(id, val);
     this.props.ping();
   }
@@ -199,16 +199,12 @@ class PetStats extends Component {
     if(!activePet || !sceneStyles) return null;
 
     const petData = activePet.data;
-    // console.log('petData', petData)
-
     const behaviorIds = Object.keys(petData.behaviors);
-
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
-
     const isAlive = activePet.isAlive;
+    
     if(isAlive) this.checkForDead(deltaStats);
     const allMoods = Object.keys(petData.moods).map(mKey => ({ id: mKey, label: petData.moods[mKey].label || mKey }));
-
     return (
       <S.Wrapper>
         {deltaStats.map((s, i) => {

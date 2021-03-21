@@ -50,7 +50,7 @@ export default class AnimationCanvas extends Component {
 
   componentDidUpdate(prevProps){
     const { imageUrl, overlayUrl } = this.props.animation;
-    
+    if(this.props.overlayUrl) console.log(this.props.overlayUrl)
     if(imageUrl){
       if(prevProps.animation.imageUrl !== imageUrl || prevProps.animation.overlayUrl !== overlayUrl){
         this.updateImage(imageUrl, overlayUrl);

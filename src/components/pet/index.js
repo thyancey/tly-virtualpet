@@ -531,6 +531,7 @@ class Pet extends Component {
     //- some error happened
 
     if(!animation ) return null;
+    window.ani = animation;
 
     let width = this.state.adjustedWidth;
     let height = this.state.adjustedHeight;
