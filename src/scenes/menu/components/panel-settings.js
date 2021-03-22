@@ -3,18 +3,18 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
 
-import { setSettingsValue } from 'store/actions';
+import { setSettingsValue } from '@store/actions';
 import { 
   selectSettingPingRate,
   selectSettingVolume,
   selectSettingAnimationSpeed
-} from 'store/selectors';
+} from '@store/selectors';
 
 import SettingsSlider from './settings-slider';
 
-const $Body = styled.div`
+const S = {};
+S.Body = styled.div`
   ul{
     padding:0;
     margin: 0;
@@ -24,7 +24,7 @@ const $Body = styled.div`
   }
 `;
 
-const $Item = styled.li`
+S.Item = styled.li`
   display: inline-block;
   width:100%;
   margin-bottom: 1rem;
@@ -99,10 +99,10 @@ class PanelSettings extends Component {
     ]
 
     return(
-      <$Body>
+      <S.Body>
         <ul>
           { settingsData.map((c, i) => (
-            <$Item key={i}>
+            <S.Item key={i}>
               <SettingsSlider 
                 id={c.id} 
                 title={c.title} 
@@ -113,10 +113,10 @@ class PanelSettings extends Component {
                 isDisabled={c.isDisabled}
                 isInverted={c.isInverted}
               />
-            </$Item>
+            </S.Item>
           ))}
         </ul>
-      </$Body>
+      </S.Body>
     );
   }
 }

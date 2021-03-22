@@ -1,16 +1,14 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { themeGet, shadeColor, getColor } from 'themes/';
-import { LilButton } from 'components/ui/button';
-import { round, parseExpressionString } from 'util/tools';
+import styled from 'styled-components';
+import { themeGet, shadeColor, getColor } from '@themes/';
+import { LilButton } from '@components/ui/button';
+import { round } from '@util/tools';
 import EffectMarker from './effect-marker';
-
-import { send as sendLog } from 'util/logger';
-import { send } from '../../../util/logger';
 
 const STAT_AUGMENT_AMOUNT = 15;
 
-const $ProgressBar = styled.div`
+const S = {};
+S.ProgressBar = styled.div`
   position:relative;
   margin: 1rem;
   margin-bottom: 3rem;
@@ -18,7 +16,7 @@ const $ProgressBar = styled.div`
   color: ${themeGet('color', 'black')};
 `
 
-const $Bar = styled.div`
+S.Bar = styled.div`
   position:relative;
   border:.5rem solid ${themeGet('color', 'white')};
   border-radius: 1rem;
@@ -30,13 +28,13 @@ const $Bar = styled.div`
   box-shadow: 0px -2px 4px ${shadeColor('white', -40)};
 `
 
-const $Value = styled.span`
+S.Value = styled.span`
   position: relative;
   z-index:1;
   /* color: white; */
 `
 
-const $Label = styled.div`
+S.Label = styled.div`
   position:relative;
   display:inline;
 
@@ -62,7 +60,7 @@ const $Label = styled.div`
   }
 `
 
-const $BarGroup = styled.div`
+S.BarGroup = styled.div`
   /* allows canvas clicks behind menu elements */
   /* pointer-events: all; */
   
@@ -101,21 +99,15 @@ const $BarGroup = styled.div`
   }
 `
 
-
-const $Bg = styled.div`
+S.Bg = styled.div`
   position:absolute;
   top:0;
   left:0;
-  height:100%;
-  width: ${p => p.progress + '%'};
-  ${p => css`
-    background-color: ${p => p.barColor};
-  `}
- 
+  height:100%; 
   transition: width .3s ease-in-out, background-color .5s ease-in-out;
 `
 
-const $EffectMarkers = styled.div`
+S.EffectMarkers = styled.div`
   position:absolute;
   width:100%;
   height:100%;
@@ -154,24 +146,29 @@ const ProgressBar = ({ statObj, label, isActive, augmentAction, sceneStyles, moo
 
 
   return (
-    <$ProgressBar style={{ color: sceneStyles.text }}>
-      <$Label>
+    <S.ProgressBar style={{ color: sceneStyles.text }}>
+      <S.Label>
         <h4>{label}</h4>
-      </$Label>
-      <$BarGroup>
+      </S.Label>
+      <S.BarGroup>
         {augmentAction && (<LilButton text={'-'} onClick={e => augmentAction(statObj.id, -STAT_AUGMENT_AMOUNT)} style={{ backgroundColor: bgColor_minus }} />)}
-        <$EffectMarkers>
+        <S.EffectMarkers>
           { statObj.effects.map((effect, idx) => (
             <EffectMarker key={idx} isOdd={idx % 2} isActive={moods.indexOf(effect.mood.id) > -1} effect={effect} statObj={statObj} colorObj={{ minus: bgColor_minus, plus: bgColor_plus }} />
           ))}
-        </$EffectMarkers>
-        <$Bar isActive={isActive} >
-          <$Value>{ `${round(statObj.cur)} / ${statObj.max} (${round(statObj.percent)}%)` }</$Value>
-          <$Bg progress={statObj.percent} barColor={barColor} />
-        </$Bar>
+        </S.EffectMarkers>
+        <S.Bar isActive={isActive} >
+          <S.Value>{ `${round(statObj.cur)} / ${statObj.max} (${round(statObj.percent)}%)` }</S.Value>
+          <S.Bg 
+            style={{ 
+              width:`${statObj.percent}%`,
+              backgroundColor: barColor
+            }} 
+          />
+        </S.Bar>
         {augmentAction && (<LilButton text={'+'} onClick={e => augmentAction(statObj.id, STAT_AUGMENT_AMOUNT)} style={{ backgroundColor: bgColor_plus }} />)}
-      </$BarGroup>
-    </$ProgressBar>
+      </S.BarGroup>
+    </S.ProgressBar>
   );
 }
 

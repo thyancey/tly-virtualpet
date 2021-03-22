@@ -1,5 +1,5 @@
 /* simple data handler for all the pre-parsed pet information that doesnt change */
-import { clamp, getCookieObj, setObjToCookie, deleteCookie } from './tools';
+import { clamp, getCookieObj, setObjToCookie, deleteCookie, convertStringsToNumbersInDeepObj } from './tools';
 
 const SAVE_SCHEMA_VERSION = 5;
 
@@ -103,6 +103,20 @@ export const setFromPetManifest = (id, petData, manifest) => {
   store.taxonomy = addToTaxonomy(petDef, store.taxonomy);
 }
 
+const parseStatEvents = statEvents => {
+  return statEvents.map((sE, idx) => {
+    let retObj = {
+      id: sE.id,
+      label: sE.label,
+      type: sE.type || 'event',
+      cooldown: sE.cooldown ? parseInt(sE.cooldown) : 0,
+      statEffects: sE.statEffects.map(sEff => convertStringsToNumbersInDeepObj(sEff))
+    }
+
+    return retObj;    
+  })
+}
+
 export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
   let defaultBehavior = petDef.behaviors.DEFAULT;
   if(!defaultBehavior){
@@ -114,6 +128,7 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
   }
 
   const moodSwings = parseMoodSwings(petDef.moodSwings);
+  const statEvents = parseStatEvents(petDef.statEvents || []);
 
   const definedStats = petDef.stats;
   let initialStats = [];
@@ -141,7 +156,8 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
       ...petDef.behaviors,
       DEFAULT: defaultBehavior
     },
-    moodSwings:moodSwings
+    moodSwings:moodSwings,
+    statEvents: statEvents
   }
 }
 
@@ -193,7 +209,7 @@ const mergeStats = (origArray, newArray, overwrite) => {
     const matchingStatIdx = retArray.findIndex(oStat => oStat.id === newStat.id);
     if(matchingStatIdx > -1){
       if(overwrite){
-        retArray[matchingStatIdx] = { ... retArray[matchingStatIdx], ...newStat };
+        retArray[matchingStatIdx] = { ...retArray[matchingStatIdx], ...newStat };
       }else{
         //- not unique, dont add it
       }
@@ -214,7 +230,7 @@ export const getPetStoreData = (itemType) => {
 
 export const getStartStats = petId => {
   const petDef = getPetDefinition(petId);
-  return petDef && petDef.startStats || [];
+  return petDef?.startStats || [];
 }
 
 export const getStartStat = (petId, statId) => {
@@ -273,7 +289,7 @@ export const getDeltaStats = (statsObj, timestamp) =>{
 }
 
 export const killThisPet = petId => {
-  console.error('KILL THIS PET ', petId)
+  console.log('KILL THIS PET ', petId)
   const petDef = getPetDefinition(petId);
   petDef.isAlive = false;
   setPetDefinition(petId, petDef, true);

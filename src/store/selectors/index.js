@@ -1,6 +1,6 @@
 
 import { createSelector } from 'reselect';
-import { getPets, getPetDeltaStats, getStatRules, getTaxonomy  } from 'util/pet-store';
+import { getPets, getPetDeltaStats, getStatRules, getTaxonomy  } from '@util/pet-store';
 import { getSceneDefinition } from '../../util/item-store';
 import { getPetDefinition } from '../../util/pet-store';
 import { evaluateCondition } from '../../util/tools';
@@ -198,9 +198,12 @@ const createSpriteObj = (label, overlayLabel, graphic, sprite, assetDir = '') =>
   }
 
   const imageUrl = `${assetDir}/${sprite.imageUrl}`;
-  let overlayUrl = overlayLabel && sprite.overlays && sprite.overlays[overlayLabel] || null;
-  if(overlayUrl){
-    overlayUrl = `${assetDir}/${overlayUrl}`;
+  let overlayUrl = null;
+  if(overlayLabel){
+    overlayUrl = sprite.overlays?.[overlayLabel];
+    if(overlayUrl){
+      overlayUrl = `${assetDir}/${overlayUrl}`;
+    }
   }
 
   return {
@@ -447,7 +450,7 @@ export const selectCurrentPetBehavior = createSelector(
       return forcedBehavior;
     }else{
       const status = {
-        isDead: activePet && !activePet.isAlive || false
+        isDead: (activePet && !activePet.isAlive) ? true : false
       }
   
       const newBehavior = checkMoodSwingForBehavior(petDef.moodSwings, {

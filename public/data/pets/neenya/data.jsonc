@@ -52,6 +52,66 @@
       ]
     }
   ],
+  /*
+  "actionBinding":{
+    "WALK": {
+      "activities": [ "WALKING" ],
+      "statEvents": []
+    },
+    "JUMP": {
+      "activities": [ "JUMPING" ],
+      "statEvents": []
+    },
+    "DUCK": {
+      "activities": [],
+      "statEvents": [ ]
+    },
+    "CLICK": {
+      "activities": [],
+      "statEvents": [ "POKE" ]
+    }
+  },
+  */
+  "statEvents":[
+    {
+      "id":"E_POKE",
+      "label": "Poke",
+      "statEffects":[
+        { "id":"stealth", "immediate":"-5" }
+      ],
+      "type":"event",
+      "cooldown": 0
+    },
+    {
+      "id":"E_SNEAK",
+      "label": "Sneak",
+      "statEffects":[
+        { "id":"stealth", "perSecond":"-1" }
+      ],
+      "type":"hold",
+      "cooldown": 0
+    },
+    {
+      "id":"E_SMOKEBOMB",
+      "label": "Smoke Bomb",
+      "statEffects":[
+        { "id":"stealth", "immediate":"35" }
+      ],
+      "type":"event",
+      "cooldown": 6000
+    },
+    {
+      "id":"E_EAT",
+      "label": "Eat",
+      "statEffects":[
+        { "id":"hunger", "immediate":"-10", "perSecond":"-1", "duration":"6000" },
+        { "id":"stealth", "immediate":"-10", "perSecond":"-1", "duration":"6000" }
+        //{ "id":"stealth", "perSecond":"2", "duration":"6000" } //- from cronchin on chips
+      ],
+      "type":"stack",
+      "cooldown": 1000
+    }
+  ],
   "moods":{
     "MOOD_POWERUP":  { "label": "Power UP", "moodType": 1 },
     "MOOD_FULL":  { "label": "Full", "moodType": 1 },
@@ -75,7 +135,14 @@
     },
     {
       "when":[
-        { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] },
+        { "type":"moods", "moods": [ "MOOD_HUNGRY" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK_SAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_EXPOSED" ] },
         { "type": "activity", "activity": "WALKING" }
       ],
       "then": "WALK_SAD"

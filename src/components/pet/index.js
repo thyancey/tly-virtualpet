@@ -7,9 +7,11 @@ import { connect } from 'react-redux';
 import AnimationCanvas from '../animation-canvas/';
 import { getAnimation } from '../animation-canvas/_animations';
 
-import { themeGet } from 'themes/';
+import PetBrain from '../../util/pet-brain';
 
-import { clamp } from 'util/tools';
+import { clamp } from '@util/tools';
+
+import { throttle } from 'throttle-debounce';
 
 import {
   addActivity,
@@ -25,45 +27,64 @@ import {
   selectActiveSceneType
 } from '../../store/selectors';
 
-const ENABLE_DEBUG_CLICKS = true;
+const ENABLE_DEBUG_CLICKS = false;
 const MAX_DEBUG_CLICKS = 10;
-const FRAME_RATE = 1;
-const DRAG_Y = .99;
-const DRAG_X = .8;
-const FALL_Y = 1;
+const DRAG_Y = .97;
+const DRAG_X = .7;
+const FALL_Y = .5;
+const JUMP_FORCE = .8;
 
+export const INPUTS = {
+  MOVE_LEFT: 0,
+  MOVE_RIGHT: 1,
+  JUMP: 2,
+  DUCK: 3,
+  DEBUG_1: 4,
+  DEBUG_2: 5
+};
 
-const $PetContainer = styled.div`
+const fps = 60;
+let fpsInterval;
+let then;
+let now;
+let elapsed;
+// let startTime;
+let frameRatio;
+
+let maxPetSpeed = 2;
+
+const S = {};
+
+S.PetContainer = styled.div`
   position:absolute;
   width:0;
   height:0;
 `;
 
-const $Centerer = styled.div`
+S.Centerer = styled.div`
   left:50%;
   top:50%;
   transform:translate(-50%, -50%);
-`
+`;
 
 class Pet extends Component {
   constructor(props){
     super(props);
     this.idleTimer = null;
+    this.thinkTimer = null;
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.vX = 0;
     this.vY = 0;
     this.aY = 1.08;
-
-    // this.frames = 0;
+    this.frames = 0;
+    this.petBrain = new PetBrain(this.onBrainDoComplete.bind(this), this.onBrainThinkComplete.bind(this));
     this.rAF = 0;
-    this.updateAnimationState = this.updateAnimationState.bind(this);
-
 
     this.keysDown = [];
 
     this.state = {
-      // tick: 0,
+      tick: 0,
       petSize: [0, 0],
       posX: 0,
       posY: 0,
@@ -82,66 +103,114 @@ class Pet extends Component {
     }
     global.document.addEventListener('keyup', this.onKeyUp);
     global.document.addEventListener('keydown', this.onKeyDown);
+
+    this.throttledThink = throttle(200, true, () => {
+      this.onThrottledThink();
+    });
+    this.throttledLogic = throttle(200, true, () => {
+      this.onThrottledLogic();
+    });
+
+    this.thinkInterval = window.setInterval(this.onPetInterval.bind(this), 10);
   }
 
-  componentDidMount() {
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
+  onBrainDoComplete(){
+    this.stopRoaming();
+  }
+
+  onBrainThinkComplete(){
+    this.startRoaming();
+  }
+
+  componentDidMount() {    
+    fpsInterval = 1000 / fps;
+    then = Date.now();
     this.resetPetPosition();
   }
 
-  updateAnimationState() {
-    // if(this.frames % FRAME_RATE === 0){
-    //   this.setState(prevState => ({ 
-    //     tick: this.frames 
-    //   }));
-    // }
-    
-    // console.log('tick');
-    this.checkKeys();
-    this.affectPetGravity();
-
-
-    // this.frames++;
-    this.rAF = requestAnimationFrame(this.updateAnimationState);
+  onPetInterval(){
+    this.onThrottledLogic();
+    this.throttledThink();
   }
 
+  onThrottledThink(){
+    if(this.props.behavior !== 'DEAD'){
+      //- if user input cancel any pet auto behavior
+      if(this.keysDown.length > 0){
+        if(this.hasActivity('ROAMING')) this.props.removeActivity('ROAMING');
+        this.petBrain.pullThePlug();
+      }else{
+        this.petBrain.think([], this.keysDown);
+      }
 
+    }
+  }
+
+  onThrottledLogic(){
+    now = Date.now();
+    elapsed = now - then;
+    frameRatio = elapsed / fpsInterval;
+    this.checkKeys(frameRatio);
+
+    if (frameRatio > 1) {
+      then = now - (elapsed % fpsInterval);
+      this.frames++;
+      this.setState(prevState => ({ 
+        tick: this.frames 
+      }));
+    }
+    
+    if(this.props.behavior !== 'DEAD' && this.hasActivity('ROAMING')){
+      this.checkRoamingStuff(frameRatio);
+    }
+    this.affectPetGravity(frameRatio);
+  }
 
   componentWillUnmount() {
     cancelAnimationFrame(this.rAF);
   }
 
-  jumpPet(amount){
+  jumpPet(amount = 0){
+    console.log('jumpPet')
     if(this.state.isOnGround){
       
-      this.vY -= amount;
+      this.vY -= amount * JUMP_FORCE;
     }else{
       this.props.addActivity('JUMPING');
     }
   }
 
-  
+  startRoaming(){
+    this.props.addActivity('ROAMING');
+  }
+
+  stopRoaming(forced){
+    this.props.removeActivity('ROAMING');
+  }
+
   startDucking(){
+    console.log('start ducking')
     this.props.addActivity('DUCKING');
 
     //- TODO, use debounce, but none of the npm modules worked for some reason
     this.startIdleTimer();
   }
+  
   stopDucking(){
     if(this.props.activities.indexOf('DUCKING') > -1){
       this.props.removeActivity('DUCKING');
     }
   }
 
-  movePet(x, y){
-    this.vY += y;
-    this.vX += x;
+  movePet(dX, dY, frameRatio){
+    this.vY += (dY * frameRatio);
+    this.vX += (dX * frameRatio);
 
-    if(x < 0){
+    if(dX < 0){
       this.setState({
         direction: -1
       });
-    }else if(x > 0){
+    }else if(dX > 0){
       this.setState({
         direction: 1
       });
@@ -156,7 +225,7 @@ class Pet extends Component {
     }
   }
 
-  startWalking(){
+  startWalking(userInput){
     this.props.addActivity('WALKING');
 
     //- TODO, use debounce, but none of the npm modules worked for some reason
@@ -164,28 +233,51 @@ class Pet extends Component {
   }
 
   startIdleTimer(){
-    this.killIdleTimer();
+    this.killTimer(this.idleTimer);
     this.idleTimer = global.setTimeout(() => {
-      this.stopWalking()
-      this.stopDucking()
+      this.stopWalking();
+      this.stopDucking();
     }, 200)
   }
 
-  killIdleTimer(){
-    if(this.idleTimer){
-      global.clearTimeout(this.idleTimer);
-      this.idleTimer = null;
+  killTimer(timerRef){
+    if(timerRef){
+      global.clearTimeout(timerRef);
+      timerRef = null;
     }
   }
 
-  checkKeys(){
+  hasActivity(activityKey){
+    // console.log('activities', this.props.activities)
+    return this.props.activities.indexOf(activityKey) > -1
+  }
+
+  checkRoamingStuff(frameRatio){
+    if(this.hasActivity('ROAMING')){
+      if(this.state.direction === -1){
+        if(this.vX === 0){
+          this.movePet(1, 0, frameRatio);
+        }else{
+          this.movePet(-1, 0, frameRatio);
+        }
+      }else{
+        if(this.vX === 0){
+          this.movePet(-1, 0, frameRatio);
+        }else{
+          this.movePet(1, 0, frameRatio);
+        }
+      }
+    }
+  }
+
+  checkKeys(frameRatio){
     this.keysDown.forEach(k => {
       switch(k){
         case 'ArrowRight': 
-          this.movePet(1, 0);
+          this.movePet(1, 0, frameRatio);
           break;
         case 'ArrowLeft':
-          this.movePet(-1, 0);
+          this.movePet(-1, 0, frameRatio);
           break;
         case 'ArrowUp':
           this.jumpPet(20);
@@ -193,9 +285,9 @@ class Pet extends Component {
         case 'ArrowDown':
           this.startDucking();
           break;
-        default:
+        default: break;
       }
-    })
+    });
   }
 
   onKeyUp(e){
@@ -215,35 +307,35 @@ class Pet extends Component {
     return (ctx, props) => getAnimation(type)(ctx, newBounds, newPosition, newDirection, props);
   }
 
-  affectPetGravity(){
+  affectPetGravity(timePerc){
     /* gravity stuff */
     this.vY = this.vY + FALL_Y;
 
-    if(this.vY < 1 && this.vY > 0){
+    if(this.vY > 0 && this.vY < .25){
       this.vY = 0;
     }else{
       this.vY *= DRAG_Y;
     }
 
-    if(this.vX < 1 && this.vX > -1){
+    if(this.vX > -1 && this.vX < 1){
       this.vX = 0;
     }else{
-      this.vX *= DRAG_X;
+      this.vX = clamp((this.vX * DRAG_X), -maxPetSpeed, maxPetSpeed);
+      // this.vX *= DRAG_X;
     }
 
     //- check for sitting on ground, staying in container
-    const newY = this.state.posY + this.vY;
+    const newY = this.state.posY + this.vY * timePerc;
     if(newY >= this.state.maxY){
       this.vY = 0;
     }
 
-    const newX = this.state.posX + this.vX;
+    const newX = this.state.posX + this.vX * timePerc;
     if(newX >= this.state.maxX){
       this.vX = 0;
     }else if(newX < this.state.minX){
       this.vX = 0;
     }
-
 
     const clampedX = clamp(newX, this.state.minX, this.state.maxX);
     // const clampedY = clamp(newY, this.state.minY, this.state.maxY);
@@ -268,7 +360,7 @@ class Pet extends Component {
 
   //- recalc pet position when window changes size, when pets change, etc
   recalcMaxBounds(resetPetPosition){
-    const spriteInfo = this.props.animation && this.props.animation.spriteInfo || null;
+    const spriteInfo = this.props.animation?.spriteInfo || null;
     const cageObj = this.props.activeCage;
     const sceneType = this.props.activeSceneType;
 
@@ -395,6 +487,7 @@ class Pet extends Component {
     //- some error happened
 
     if(!animation ) return null;
+    window.ani = animation;
 
     let width = this.state.adjustedWidth;
     let height = this.state.adjustedHeight;
@@ -413,16 +506,17 @@ class Pet extends Component {
     })
 
     return (
-      <$PetContainer style={{
+      <S.PetContainer style={{
         left: `${this.state.cssX}`, 
         top: `${this.state.cssY}`, 
         transform: `rotate(${this.state.adjustedRotation}deg)`
       }} >
-        <$Centerer style={{
+        <S.Centerer style={{
           width: width, 
           height: height
         }} >
-          <AnimationCanvas 
+          <AnimationCanvas
+            tick={this.state.tick} 
             petId={petId} 
             containerWidth={width} 
             containerHeight={height} 
@@ -430,8 +524,8 @@ class Pet extends Component {
             drawCommands={drawCommands} 
             onStageClick={e => this.onStageClick(e)}
           />
-        </$Centerer>
-      </$PetContainer>
+        </S.Centerer>
+      </S.PetContainer>
     );
   }
 }

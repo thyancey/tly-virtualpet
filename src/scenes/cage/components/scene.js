@@ -3,13 +3,13 @@ import styled, { css } from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
 
 import { 
   selectActiveScene
 } from '../../../store/selectors';
 
-const $Scene = styled.div`
+const S = {};
+S.Scene = styled.div`
   position:absolute;
   top:0;
   left:0;
@@ -41,7 +41,7 @@ const $Scene = styled.div`
 
 `
 
-const $SceneFloor = styled.div`
+S.SceneFloor = styled.div`
   position:absolute;
   bottom:0;
   left:0;
@@ -52,7 +52,7 @@ const $SceneFloor = styled.div`
   background-color: ${p => p.color};
 `
 
-const $SceneBackground = styled.div`
+S.SceneBackground = styled.div`
   position:absolute;
   top:0;
   left:0;
@@ -76,21 +76,21 @@ class Scene extends Component {
     }else{
       const bgImage = activeScene.background.imageUrl ? activeScene.background.imageUrl : null;
       const floorImage = activeScene.floor.imageUrl ? activeScene.floor.imageUrl : null;
-      const bgPosition = activeScene.background.backgroundPosition ? activeScene.background.backgroundPosition : '0';
+      // const bgPosition = activeScene.background.backgroundPosition ? activeScene.background.backgroundPosition : '0';
       const type = activeScene.type;
       /*
         TODO, using styled components with background-image was causing flickering for some reason (not because of re-render)
         so for now, just made them non-styled components
       */
       return(
-        <$Scene type={type}>
-          <$SceneFloor height={activeScene.floor.height} color={activeScene.floor.color} >
+        <S.Scene type={type}>
+          <S.SceneFloor height={activeScene.floor.height} color={activeScene.floor.color} >
             <div className={'footer-image'} style={{ backgroundImage: `url(${floorImage})`}} />
-          </$SceneFloor>
-          <$SceneBackground style={{ backgroundColor: activeScene.background.color }} >
+          </S.SceneFloor>
+          <S.SceneBackground style={{ backgroundColor: activeScene.background.color }} >
             <div className={'background-image'} style={{ backgroundImage: `url(${bgImage})` }} />
-          </$SceneBackground>
-        </$Scene>
+          </S.SceneBackground>
+        </S.Scene>
       );
     }
 

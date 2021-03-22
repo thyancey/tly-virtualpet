@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import fetch from 'node-fetch';
 import { jsonc } from 'jsonc';
 
-import { setManifest, storeManifestItem, setActivePetId } from 'store/actions';
-import { selectNextManifestItem, selectNextExternalItem } from 'store/selectors';
+import { setManifest, storeManifestItem, setActivePetId } from '@store/actions';
+import { selectNextManifestItem, selectNextExternalItem } from '@store/selectors';
 
 let dataLocation = './data';
 
@@ -68,7 +68,7 @@ class LoadHelper extends Component {
           return true;
         }, 
         err => {
-          console.error(`Error parsing data from manifestObj ${manifestItemObj} (or the url (${url}) was bad), skipping`, err && err.stack || err);
+          console.error(`Error parsing data from manifestObj ${manifestItemObj} (or the url (${url}) was bad), skipping`, err?.stack || err);
         }
       );
   }
@@ -94,7 +94,7 @@ class LoadHelper extends Component {
           return true;
         }, 
         err => {
-          console.error(`Error parsing ${type} data (or the url was bad), skipping`, err && err.stack || err);
+          console.error(`Error parsing ${type} data (or the url was bad), skipping`, err?.stack || err);
         }
       );
   }

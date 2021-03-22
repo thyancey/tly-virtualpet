@@ -62,7 +62,7 @@ export const logLast = () => {
   }
 }
 
-export default {
+const PublicInterface = {
   init: init,
   send: send,
   sendQuiet: sendQuiet,
@@ -72,3 +72,5 @@ export default {
   logPrevious: logPrevious,
   logLast: logLast
 }
+
+export default PublicInterface;

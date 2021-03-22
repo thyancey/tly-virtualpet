@@ -1,0 +1,129 @@
+{
+  "id": "bunchie",
+  "type": "samples",
+  "animal": "Llama",
+  "name": "Bunchie",
+  "scene": "outside",
+  "thumbnail": "thumbnail.jpg",
+  "stats":[
+    {
+      "id": "level",
+      "type": "number",
+      "value": "64",
+      "perSecond": "0",
+      "max": "100",
+      "fullIsGood": true
+    },
+    {
+      "id": "xp",
+      "type": "number",
+      "value": "888",
+      "perSecond": "0",
+      "max": "20000",
+      "fullIsGood": true
+    },
+    {
+      "id": "hunger",
+      "value": "0",
+      "perSecond": "1",
+      "max": "500",
+      "doesKill": true,
+      "fullIsGood": false,
+      "effects":[
+        { "when": ">=_25%", "then": "MOOD_HUNGRY" },
+        { "when": "<=_5%", "then": "MOOD_FULL" }
+      ]
+    }
+  ],
+  "moods":{
+    "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+    "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 }
+  },
+  "moodSwings":[
+    {
+      "when":[
+        { "type":"status", "isDead": true }
+      ],
+      "then": "DEAD"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_HUNGRY" ] }
+      ],
+      "then": "IDLE_ANGRY"
+    },
+    {
+      "when":[],
+      "then": "IDLE"
+    }
+  ],
+  "behaviors": {
+    "DEFAULT": { "animations": [ "Bunchie_Idle1" ] },
+    "IDLE": { "animations": [ "Bunchie_Idle1" ] },
+    "IDLE_ANGRY": { "animations": [ "Bunchie_Angry1" ] },
+    "WALK": { "animations": [ "Bunchie_Walk1" ] },
+    "DEAD": { "animations": [ "Bunchie_Dead1" ] }
+  },  
+  "statEvents":[
+    {
+      "id":"E_FEED",
+      "label": "Feed",
+      "statEffects":[
+        { "id":"hunger", "immediate":"-20" }
+      ],
+      "type":"event",
+      "cooldown": 1000
+    }
+  ],
+  "animations":{
+    "Bunchie_Still":{
+      "sprite": "Bunchie",
+      "speed": "50",
+      "dir": 1,
+      "frames": [11]
+    },
+    "Bunchie_Idle1":{
+      "sprite": "Bunchie",
+      "speed": "50",
+      "dir": 1,
+      "frames": [11]
+    },
+    "Bunchie_Walk1":{
+      "sprite": "Bunchie",
+      "speed": "3",
+      "dir": 1,
+      "frames": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    },
+    "Bunchie_Dead1":{
+      "sprite": "Bunchie",
+      "speed": "20",
+      "dir": 1,
+      "frames": [13]
+    },
+    "Bunchie_Angry1":{
+      "sprite": "Bunchie",
+      "speed": "20",
+      "dir": 1,
+      "frames": [12]
+    }
+  },
+  "sprites":{
+    "Bunchie":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bunchie.png",
+      "spriteInfo":{
+        "scale": ".7",
+        "faceDirection": true,
+        "orientation": -1,
+        "grid": [ 4, 4 ],
+        "cells": [ 535, 660 ]
+      }
+    }
+  }
+}

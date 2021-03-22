@@ -12,8 +12,8 @@ import {
 } from '../actions/pet';
 
 import { handleActions } from 'redux-actions'; 
-import { getPetDefinition, augmentPetStat, resetPetState, deleteAllData, killThisPet } from 'util/pet-store';
-import { changeQueryObj } from 'util/tools';
+import { getPetDefinition, augmentPetStat, resetPetState, killThisPet } from '@util/pet-store';
+import { changeQueryObj } from '@util/tools';
 
 const initialState = {
   id: null,
@@ -27,10 +27,7 @@ export default handleActions({
   [setActivePetId.toString()]: (state, action) => {
     const petObj = getPetDefinition(action.payload);
     //- get stats, etc
-
-    //- update the route
     if(petObj){
-      changeQueryObj('pet', petObj.id, global.location.search);
       // const found = allPets.find(p => p.id === activePetId);
   
       if(petObj.isAlive){

@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { ping } from 'store/actions';
-import { selectSettingPingRate } from 'store/selectors';
+import { ping } from '@store/actions';
+import { selectSettingPingRate } from '@store/selectors';
 
-require('themes/app.scss');
+require('@themes/app.scss');
 
 class Pinger extends Component {
 

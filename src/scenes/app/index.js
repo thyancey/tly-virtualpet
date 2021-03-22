@@ -1,29 +1,23 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet } from 'themes/';
+import { Route, withRouter, Redirect } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { setActivePetId, loadExternalItem } from '@store/actions';
+import { selectPetFromSearchQuery } from '@store/selectors/routes';
+import { selectIsLoadingComplete} from '@store/selectors';
+import { saveAllPetStatsToCookieNow } from '@util/pet-store';
+import { themeGet } from '@themes/';
+
 import Loader from './loader';
 import Pinger from './pinger';
+import Main from './main';
+import Editor from './editor';
+import Menu from '@scenes/menu';
 
-import { selectDeeplinkedPet } from 'store/selectors/routes';
-import { push } from 'connected-react-router';
-
-import { 
-  selectActivePetId, selectIsLoadingComplete
-} from 'store/selectors';
-
-import { setActivePetId, loadExternalItem } from 'store/actions';
-
-import { saveAllPetStatsToCookieNow } from '../../util/pet-store';
-import { decrypt } from '../../util/tools';
-
-import Stage from 'scenes/stage';
-
-require('themes/app.scss');
-
-const $App = styled.section`
+const S = {};
+S.App = styled.section`
   position:absolute;
   left:0;
   top:0;
@@ -35,20 +29,9 @@ const $App = styled.section`
   color: ${themeGet('color', 'blue')};
 `
 
-const $Stage = styled.div`
-  position:absolute;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
-  z-index:1;
-`
-
-
-class App extends Component {
+class AppContainer extends Component {
   constructor(){
     super();
-
     global.spriteScale = 1; //- used to change sprite size/bounds, gets updated in cage.js when window is resized
 
     window.addEventListener('beforeunload', (e) => {
@@ -58,7 +41,6 @@ class App extends Component {
 
   onExitPage(){
     if(this.props.loadingComplete) saveAllPetStatsToCookieNow();
-    
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -74,8 +56,10 @@ class App extends Component {
 
   /* if query starts with "external_", then its a url to an external pet/manifest file and should be loaded */
   loadDeeplinkedPet(force){
-    if(this.props.queryPet && (force || !this.props.activePetId)){
-      const queryPieces = this.props.queryPet.split('external_');
+    const petQuery = selectPetFromSearchQuery(this.props.location.search);
+
+    if(petQuery && (force || !this.props.activePetId)){
+      const queryPieces = petQuery.split('external_');
       if(queryPieces.length > 1){
         console.log(`--> Loading external pet with id "${queryPieces[1]}`);
         
@@ -87,35 +71,33 @@ class App extends Component {
   }
 
   render(){
-    // global.test = this;
-    // console.log('R: App', this.props );
-
     return(
-      <$App id="app" >
+      <S.App id="app" >
         <Pinger />
         <Loader/>
-        <$Stage>
-          <Stage />
-        </$Stage>
-      </$App>
+        <Menu />
+        <Route exact path="/" >
+          <Redirect to="/pet" />
+        </Route>
+        <Route path='/pet' component={Main}></Route>
+        <Route path='/editor' component={Editor}></Route>
+      </S.App>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  loadingComplete: selectIsLoadingComplete(state),
-  queryPet: selectDeeplinkedPet(state),
-  activePetId: selectActivePetId(state)
+
+const mapStateToProps = (state, props) => ({
+  loadingComplete: selectIsLoadingComplete(state)
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { push, setActivePetId, loadExternalItem },
+    { setActivePetId, loadExternalItem },
     dispatch
-  )
+  );
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
-
+)(AppContainer))

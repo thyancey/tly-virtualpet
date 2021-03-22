@@ -89,7 +89,6 @@ const A = {
     if(!props.sprite) return;
     
     const frame = props.spriteInfo.frame;
-    const frames = props.spriteInfo.frames;
     let idx;
     if(frame !== undefined){
       idx = frame;
@@ -111,7 +110,7 @@ const A = {
     const sH = cCoords.h * s;
 
     
-    // console.log('sprite is ', props.sprite);
+    // console.log('sprite is ', props.spriteInfo.frame, idx);
 
     ctx.save();
     ctx.clearRect(0, 0, bounds[0], bounds[1]);
@@ -129,7 +128,6 @@ const A = {
       y, 
       sW, 
       sH);
-
 
       // console.log('overlay sprite', props.overlaySprite)
     props.overlaySprite && ctx.drawImage(

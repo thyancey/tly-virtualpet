@@ -1,8 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { themeGet, mixin_textStroke, shadeColor } from '../../themes';
+import { themeGet, shadeColor } from '../../themes';
 
-const $NotAButton = styled.div`
+const S = {};
+S.NotAButton = styled.div`
   color: ${themeGet('color', 'grey')};
   text-shadow: .5px .5px 1.5px ${themeGet('color', 'black')};
   /* background-color: ${themeGet('color', 'grey')}; */
@@ -37,8 +38,9 @@ const $NotAButton = styled.div`
   }
 `
 
-const $Button = styled.button`
+S.Button = styled.button`
   cursor:pointer;
+  position:relative;
 
   pointer-events: all;
   outline:0;
@@ -66,6 +68,11 @@ const $Button = styled.button`
     transform: translate(-1px, -1px);
     
     transition: background-color .1s ease-out, transform .1s ease-out;
+
+    .button-tooltip{
+      opacity:1;
+      left:100%;
+    }
   }
   
   &:active{
@@ -78,6 +85,16 @@ const $Button = styled.button`
     /* transition: background-color .1s ease-out, transform .1s ease-out; */
   }
 
+  ${p => p.isDisabled && css`
+    color: ${themeGet('color', 'black')};
+    text-shadow: 1px 1px 1.5px ${themeGet('color', 'black')};
+    background-color: ${themeGet('color', 'grey')};
+
+    &:hover{
+      background-color: ${shadeColor('grey', 10)};
+    }
+  `}
+
   ${p => p.isActive && css`
     color: ${themeGet('color', 'yellow')};
     text-shadow: 1px 1px 1.5px ${themeGet('color', 'black')};
@@ -89,7 +106,7 @@ const $Button = styled.button`
   `}
 `;
 
-const $BigButton = styled($Button)`
+S.BigButton = styled(S.Button)`
   padding: 1rem 2rem;
   margin: 1rem;
   font-size:3rem;
@@ -97,33 +114,72 @@ const $BigButton = styled($Button)`
 `;
 
 
-const $LilButton = styled($Button)`
+S.LilButton = styled(S.Button)`
   padding: .5rem 1.5rem;
   margin: .5rem;
   font-size: 2rem;
   font-weight: 600;
 `;
 
-export const Button = ({ text, isActive, onClick, style }) => {
+S.Tooltip = styled.div`
+  z-index:1;
+  opacity:0;
+  left:0%;
+
+  pointer-events:none;
+
+  position:absolute;
+  top:50%;
+  transform: translateY(-50%);
+
+
+  transition: opacity .4s ease-in-out, left .2s ease-in-out;
+  padding:.5rem 1rem;
+
+  color: ${themeGet('color', 'black')};
+  background-color: ${themeGet('color', 'white')};
+
+  border-radius:1rem;
+  margin:1;
+  white-space:pre-line;
+  min-width:auto;
+  max-width:auto;
+
+  font-size: 1.5rem;
+  text-shadow:none;
+  margin-left:1rem;
+`;
+
+const Tooltip = ({ text }) => {
   return (
-    <$BigButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+    <S.Tooltip className="button-tooltip">
+      <p>{text}</p>
+    </S.Tooltip>
+  )
+}
+
+export const Button = ({ text, isActive, isDisabled, onClick, style, tooltip }) => {
+  return (
+    <S.BigButton isActive={isActive} disabled={isDisabled} isDisabled={isDisabled} onClick={(e) => onClick && onClick(e)} style={style} title={tooltip} >
       <span>{ text }</span>
-    </$BigButton>
+      {tooltip && <Tooltip text={tooltip} />}
+    </S.BigButton>
   );
 }
 
-export const LilButton = ({ text, isActive, onClick, style }) => {
+export const LilButton = ({ text, isActive, isDisabled, onClick, style, tooltip }) => {
   return (
-    <$LilButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+    <S.LilButton isActive={isActive} disabled={isDisabled} isDisabled={isDisabled} onClick={(e) => onClick && onClick(e)} style={style} title={tooltip}>
       <span>{ text }</span>
-    </$LilButton>
+      {tooltip && <Tooltip text={tooltip} />}
+    </S.LilButton>
   );
 }
 
-export const NotAButton = ({ text, isActive, onClick, style }) => {
+export const NotAButton = ({ text, isActive, isDisabled, onClick, style }) => {
   return (
-    <$NotAButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
+    <S.NotAButton isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
       <span>{ text }</span>
-    </$NotAButton>
+    </S.NotAButton>
   );
 }

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { themeGet, shadeColor } from 'themes/';
+import { withRouter } from 'react-router-dom';
 
 import { 
   setActivePetType, 
   setActivePetId,
   loadExternalItem
-} from 'store/actions';
+} from '@store/actions';
 
 import { 
   getActivePetType,
@@ -17,12 +17,13 @@ import {
   getCounter,
   selectPetTaxonomy,
   selectActivePets
-} from 'store/selectors';
+} from '@store/selectors';
 
-import DropMenu from 'components/ui/dropmenu';
-import { LilButton } from 'components/ui/button';
+import DropMenu from '@components/ui/dropmenu';
+import { LilButton } from '@components/ui/button';
 
-const $Body = styled.div`
+const S = {};
+S.Body = styled.div`
   ul{
     padding:0;
     margin: 0;
@@ -43,6 +44,9 @@ const $Body = styled.div`
 class PetSelection extends Component {
 
   onSelectPet(id){
+    this.props.history.push({
+      search: `?pet=${id}`
+    });
     this.props.setActivePetId(id);
     this.props.onSelectPet(id);
   }
@@ -64,7 +68,7 @@ class PetSelection extends Component {
     } = this.props;
 
     return(
-      <$Body>
+      <S.Body>
         <ul>
           <li key={0}>
             <LilButton text={'Load external'} onClick={e => this.showLoadPrompt()} />
@@ -82,7 +86,7 @@ class PetSelection extends Component {
             </li>
           ))}
         </ul>
-      </$Body>
+      </S.Body>
     );
   }
 }
@@ -101,8 +105,8 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PetSelection)
+)(PetSelection));
 

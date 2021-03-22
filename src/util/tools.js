@@ -12,6 +12,10 @@ export const clamp = (val, min, max) => {
   return Math.min(Math.max(val, min), max);
 }
 
+export const randBetween = range => {
+  return range[0] + (Math.random() * (range[1] - range[0]));
+}
+
 export const isObj = obj => {
   return typeof obj === 'object' && obj !== null;
 }
@@ -101,22 +105,24 @@ export const getCookieObj = cookieName => {
 }
 
 export const setCookie = (cname, cvalue, expires) => {
+  console.log('setCookie');
   var d = new Date();
   d.setTime(d.getTime() + (expires || 3000000000000));
-  var expires = 'expires='+ d.toUTCString();
+  expires = 'expires='+ d.toUTCString();
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 }
 
 export const getCookie = (cname) => {
+  console.log('getCookie');
   var name = cname + '=';
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');
   for(var i = 0; i <ca.length; i++) {
     var c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1);
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length);
     }
   }

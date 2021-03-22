@@ -3,22 +3,23 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 
-import { themeGet, getColor, mixin_clearBubble } from 'themes/';
+import { themeGet, getColor, mixin_clearBubble } from '@themes/';
 
 import ProgressBar from './components/progress-bar';
+import StatEventButton from './components/stat-event-button';
 
-import { LilButton, Button, NotAButton } from 'components/ui/button';
+import { LilButton, Button, NotAButton } from '@components/ui/button';
 
 
 import {
   ping
-} from 'store/actions/index';
+} from '@store/actions/index';
 import {
   augmentStat,
   forceBehavior,
   resetPet,
   killPet
-} from 'store/actions/pet';
+} from '@store/actions/pet';
 import { 
   selectActivePet,
   selectActiveDeltaStats,
@@ -27,10 +28,10 @@ import {
   getForcedBehavior,
   selectActivePetActivities,
   selectActiveMoods
-} from 'store/selectors';
+} from '@store/selectors';
 
-
-const $PetStats = styled.div`
+const S = {};
+S.Wrapper = styled.div`
   padding: 1rem;
   position:relative;
   ${mixin_clearBubble()}
@@ -41,28 +42,34 @@ const $PetStats = styled.div`
   }
 `
 
-const $StatDisplay = styled.div`
+S.StatDisplay = styled.div`
   text-align:right;
 `
 
-const $StatDisplayLabel = styled.span`
+S.StatDisplayLabel = styled.span`
   color: ${themeGet('color', 'white')};
   font-size:2rem;
 `
-const $StatDisplayValue = styled.span`
+S.StatDisplayValue = styled.span`
   color: ${themeGet('color', 'green')};
   margin-left:1rem;
   font-size:3rem;
 `
 
-const $NameContainer = styled.div`
+S.FooterUi = styled.div`
   position:fixed;
   bottom:0;
   right:0;
   width:100%;
 `;
 
-const $Name = styled.div`
+S.EffectsContainer = styled.div`
+  position:absolute;
+  left:0;
+  bottom:0;
+`;
+
+S.Name = styled.div`
   position:absolute;
   right:2rem;
   padding: 1rem 2rem;
@@ -76,7 +83,7 @@ const $Name = styled.div`
   text-align:center;
 `
 
-const $Level = styled.div`
+S.Level = styled.div`
   border-radius: 2rem;
   border: 4px solid black;
   padding: 1rem;
@@ -92,14 +99,14 @@ const $Level = styled.div`
   background-color: ${themeGet('color', 'white')};
 `
 
-const $InfoButton = styled.div`
+S.InfoButton = styled.div`
   position:absolute;
   right: .5rem;
   bottom: .5rem;
   z-index:1;
 `
 
-const $Info = styled.div`
+S.Info = styled.div`
   ${mixin_clearBubble()}
   max-height:500px;
   transition: max-height .5s ease-in-out;
@@ -123,10 +130,10 @@ const $Info = styled.div`
 
 const StatDisplay = ({ statObj }) => {
   return (
-    <$StatDisplay>
-      <$StatDisplayLabel>{statObj.label}</$StatDisplayLabel>
-      <$StatDisplayValue>{statObj.cur}</$StatDisplayValue>
-    </$StatDisplay>
+    <S.StatDisplay>
+      <S.StatDisplayLabel>{statObj.label}</S.StatDisplayLabel>
+      <S.StatDisplayValue>{statObj.cur}</S.StatDisplayValue>
+    </S.StatDisplay>
   );
 };
 
@@ -146,6 +153,7 @@ class PetStats extends Component {
   }
 
   updateStat(id, val){
+    console.log('updateStat', id, val)
     this.props.augmentStat(id, val);
     this.props.ping();
   }
@@ -191,20 +199,16 @@ class PetStats extends Component {
     if(!activePet || !sceneStyles) return null;
 
     const petData = activePet.data;
-
     const behaviorIds = Object.keys(petData.behaviors);
-
     const level = deltaStats.find(ds => ds.id === 'level') ? deltaStats.find(ds => ds.id === 'level').cur : -1;
-
     const isAlive = activePet.isAlive;
+    
     if(isAlive) this.checkForDead(deltaStats);
     const allMoods = Object.keys(petData.moods).map(mKey => ({ id: mKey, label: petData.moods[mKey].label || mKey }));
-
     return (
-      <$PetStats>
+      <S.Wrapper>
         {deltaStats.map((s, i) => {
           if(s.type === 'number'){
-            {/* return null; */}
             return (
               <StatDisplay key={i} statObj={s} />
             );
@@ -215,15 +219,16 @@ class PetStats extends Component {
           }
         })}
         
-        <$InfoButton>
+        <S.InfoButton>
           <LilButton text={'info'} onClick={e => this.onToggleShowInfo()} />
-        </$InfoButton>
-        <$Info showInfo={this.state.isInfoOpen}>
+        </S.InfoButton>
+        <S.Info showInfo={this.state.isInfoOpen}>
           <p>{'Activities'}</p>
             <NotAButton isActive={activities.indexOf('WALKING') > -1} text={'WALKING'} />
             <NotAButton isActive={activities.indexOf('JUMPING') > -1} text={'JUMPING'} />
             <NotAButton isActive={activities.indexOf('DUCKING') > -1} text={'DUCKING'} />
             <NotAButton isActive={activities.indexOf('EATING') > -1} text={'EATING'} />
+            <NotAButton isActive={activities.indexOf('ROAMING') > -1} text={'ROAMING'} />
           <hr/>
           <p>{'Moods'}</p>
             {allMoods.map((mood, idx) => (
@@ -245,15 +250,20 @@ class PetStats extends Component {
           <div>
             <Button text={'RESET PET'} onClick={() => this.resetPet(activePet.id)} style={{backgroundColor: getColor('red')}} />
           </div>
-        </$Info>
+        </S.Info>
         
-        <$NameContainer>
-          <$Name>
+        <S.FooterUi>
+          <S.EffectsContainer>
+            {petData.statEvents && petData.statEvents.map((s,idx) => (
+              <StatEventButton key={idx} statEventObj={s} onImmediateUpdate={(stat,val) => this.updateStat(stat,val)} />
+            ))}
+          </S.EffectsContainer>
+          <S.Name>
             <span>{`${petData.name} the ${petData.animal}`}</span>
-            <$Level><span>{level}</span></$Level>
-          </$Name>
-        </$NameContainer>
-      </$PetStats>
+            <S.Level><span>{level}</span></S.Level>
+          </S.Name>
+        </S.FooterUi>
+      </S.Wrapper>
     );
   }
 }
