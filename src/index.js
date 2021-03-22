@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import AppContainer from '@scenes/app';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { ThemeProvider } from 'styled-components'
 import store from './store'
 import theme from '@themes/'
@@ -17,11 +17,11 @@ global.logger = Logger;
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <AppContainer />
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   </Provider>,
   document.getElementById('root')
 );

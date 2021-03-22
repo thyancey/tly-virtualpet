@@ -42,18 +42,6 @@ S.DropMenu = styled.div`
 `;
 
 
-S.ImgContainer = styled.div`
-
-  img{
-    box-shadow: ${themeGet('shadow', 'z2')};
-    border: .5rem solid ${themeGet('color', 'white')};
-    border-radius: 50%;
-    width:auto;
-    height:100%;
-  }
-
-`;
-
 
 S.DropItem = styled.div`
   padding:2rem 2rem;
@@ -61,8 +49,6 @@ S.DropItem = styled.div`
   margin-top: 2rem;
   max-height:15rem;
   position:relative;
-  display: flex;
-  flex-direction: row;
 
   >*{
     :first-child{
@@ -108,10 +94,29 @@ S.DropItem = styled.div`
       background-color: ${shadeColor('green', 10)};
     }
   `}
+
+  >div{
+    display:inline-block;
+    vertical-align:middle;
+  }
 `
 
-S.DropItemLabel = styled.div`
+S.DropItemImgContainer = styled.div`
+  width:106px;
+  height:106px;
 
+  img{
+    box-shadow: ${themeGet('shadow', 'z2')};
+    border: .5rem solid ${themeGet('color', 'white')};
+    border-radius: 50%;
+    width:auto;
+    height:100%;
+  }
+
+`;
+
+S.DropItemLabel = styled.div`
+  width:calc(100% - 106px);
 `;
 
 S.DropItems = styled.div`
@@ -161,13 +166,13 @@ export default class DropMenu extends Component {
 export const DropItem = ({ text, subText, isActive, onClick, style, thumbnail }) => {
   return (
     <S.DropItem isActive={isActive} onClick={(e) => onClick && onClick(e)} style={style} >
-      <S.ImgContainer>
+      <S.DropItemImgContainer>
         <ReactImageFallback
           src={thumbnail}
           fallbackImage={'ui/unknown_thumbnail.jpg'}
           initialImage={'ui/unknown_thumbnail.jpg'}
           alt={text} />
-      </S.ImgContainer>
+      </S.DropItemImgContainer>
       <S.DropItemLabel>
         <h2>{ text }</h2>
         <h5>{ subText }</h5>

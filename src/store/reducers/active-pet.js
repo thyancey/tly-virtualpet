@@ -27,10 +27,7 @@ export default handleActions({
   [setActivePetId.toString()]: (state, action) => {
     const petObj = getPetDefinition(action.payload);
     //- get stats, etc
-
-    //- update the route
     if(petObj){
-      changeQueryObj('pet', petObj.id, global.location.search);
       // const found = allPets.find(p => p.id === activePetId);
   
       if(petObj.isAlive){

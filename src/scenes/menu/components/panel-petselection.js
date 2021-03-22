@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { 
   setActivePetType, 
@@ -43,6 +44,9 @@ S.Body = styled.div`
 class PetSelection extends Component {
 
   onSelectPet(id){
+    this.props.history.push({
+      search: `?pet=${id}`
+    });
     this.props.setActivePetId(id);
     this.props.onSelectPet(id);
   }
@@ -101,8 +105,8 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PetSelection)
+)(PetSelection));
 

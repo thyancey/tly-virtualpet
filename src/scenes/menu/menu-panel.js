@@ -121,8 +121,8 @@ class MenuPanel extends Component {
               <PanelSettings />
             </PanelBase>
             <S.ResetButton>
-              <Button text={'main'} onClick={() => this.props.history.push(`./${this.props.location.search}`)} />
-              <Button text={'editor'} onClick={() => this.props.history.push(`./editor${this.props.location.search}`)} />
+              <Button text={'pet'} onClick={() => this.props.history.push(`/pet${this.props.location.search}`)} />
+              <Button text={'editor'} onClick={() => this.props.history.push(`/editor${this.props.location.search}`)} />
               <Button text={'CLEAR SAVE'} onClick={() => deleteAllData()} style={{backgroundColor: getColor('red')}} />
             </S.ResetButton>
           </S.PanelContainer>

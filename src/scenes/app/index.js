@@ -5,7 +5,7 @@ import { Route, withRouter, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { setActivePetId, loadExternalItem } from '@store/actions';
-import { selectPetFromWindow } from '@store/selectors/routes';
+import { selectPetFromSearchQuery } from '@store/selectors/routes';
 import { selectIsLoadingComplete} from '@store/selectors';
 import { saveAllPetStatsToCookieNow } from '@util/pet-store';
 import { themeGet } from '@themes/';
@@ -56,8 +56,7 @@ class AppContainer extends Component {
 
   /* if query starts with "external_", then its a url to an external pet/manifest file and should be loaded */
   loadDeeplinkedPet(force){
-    const petQuery = selectPetFromWindow();
-    console.log('loadDeeplinkedPet', petQuery)
+    const petQuery = selectPetFromSearchQuery(this.props.location.search);
 
     if(petQuery && (force || !this.props.activePetId)){
       const queryPieces = petQuery.split('external_');
@@ -77,7 +76,10 @@ class AppContainer extends Component {
         <Pinger />
         <Loader/>
         <Menu />
-        <Route path='/' component={Main}></Route>
+        <Route exact path="/" >
+          <Redirect to="/pet" />
+        </Route>
+        <Route path='/pet' component={Main}></Route>
         <Route path='/editor' component={Editor}></Route>
       </S.App>
     );
