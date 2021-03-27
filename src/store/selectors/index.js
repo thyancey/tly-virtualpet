@@ -434,10 +434,24 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
   return behavior || 'ERROR';
 }
 
-export const selectCurrentPetBehavior = createSelector(
+export const selectActivePetDefinition = createSelector(
+  [selectActivePet],
+  (activePet) => {
+    return getPetDefinition(activePet?.id);
+  }
+)
+
+export const selectActivePetPersonality = createSelector(
+  [selectActivePetDefinition],
+  (petDef) => {
+    return petDef?.personality
+  }
+)
+
+export const selectActivePetBehavior = createSelector(
   [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveMoods, getForcedBehavior],
   (activePet, deltaStats, activities, activeMoods, forcedBehavior) => {
-    // console.log('selectCurrentPetBehavior');
+    // console.log('selectActivePetBehavior');
     if(!activePet || !activePet.id){
       return 'PET NOT FOUND';
     }
@@ -467,7 +481,7 @@ export const selectCurrentPetBehavior = createSelector(
 );
 
 export const selectActivePetAnimation = createSelector(
-  [selectActivePet, selectCurrentPetBehavior],
+  [selectActivePet, selectActivePetBehavior],
   (activePet, behavior) => {
     if(!activePet) return null;
 

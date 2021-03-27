@@ -1,10 +1,16 @@
-import { randBetween } from './tools';
+import { randBetween } from '@util/tools';
 
 export const STATUS = {
   BRAINDEAD: 0,
   THINKING: 1,
   DOING: 2
 };
+
+export const DEFAULT_PERSONALITY = {
+  "thinkRange": [ 200, 2000 ],
+  "doRange": [ 200, 2000 ],
+  "jumpChance": 0
+}
 
 export const TIME_RANGE = {
   THINKING: [ 200, 2000 ],
@@ -18,6 +24,7 @@ class PetBrain {
 
     this.timer = null;
     this.status = STATUS.BRAINDEAD;
+    this.personality = DEFAULT_PERSONALITY;
   }
 
   getStatus(){
@@ -45,13 +52,17 @@ class PetBrain {
 
   getDuration(statusType){
     if(statusType === STATUS.THINKING){
-      return randBetween(TIME_RANGE.THINKING);
+      return randBetween(this.personality.thinkRange);
     }else if(statusType === STATUS.DOING) {
-      return randBetween(TIME_RANGE.DOING);
+      return randBetween(this.personality.doRange);
     }else{
       console.error(`unexpected duration type "${statusType}"`);
       return 0;
     }
+  }
+
+  setPersonality(personality){
+    this.personality = { ...this.personality, ...personality };
   }
 
   think(stats, inputs){

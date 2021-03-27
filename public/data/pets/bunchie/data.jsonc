@@ -5,6 +5,12 @@
   "name": "Bunchie",
   "scene": "outside",
   "thumbnail": "thumbnail.jpg",
+  "personality":{
+    "thinkRange": [ 2000, 4000 ],
+    "doRange": [ 1000, 10000 ],
+    "jumpChance": 0.01,
+    "jumpForce": 0.6
+  },
   "stats":[
     {
       "id": "level",
