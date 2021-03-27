@@ -7,7 +7,9 @@ export const DEFAULT_PERSONALITY = {
   "thinkRange": [ 200, 2000 ],
   "doRange": [ 200, 2000 ],
   "jumpChance": 0.01,
-  "jumpForce": 0.8
+  "jumpForce": 0.8,
+  "xForce": 1.0,
+  "yForce": 1.0
 }
 
 const store = {

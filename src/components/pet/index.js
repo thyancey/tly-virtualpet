@@ -173,10 +173,8 @@ class Pet extends Component {
 
   jumpPet(amount = 0){
     if(this.state.isOnGround){
-      
-      this.vY -= amount * this.props.personality.jumpForce;
-    }else{
       this.props.addActivity('JUMPING');
+      this.vY -= amount * this.props.personality.jumpForce;
     }
   }
 
@@ -203,8 +201,9 @@ class Pet extends Component {
   }
 
   movePet(dX, dY, frameRatio){
-    this.vY += (dY * frameRatio);
-    this.vX += (dX * frameRatio);
+    
+    this.vX += ((dX * frameRatio) * this.props.personality.xForce);
+    this.vY += ((dY * frameRatio) * this.props.personality.yForce);
 
     if(dX < 0){
       this.setState({
