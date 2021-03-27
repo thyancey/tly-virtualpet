@@ -68,8 +68,8 @@ export default handleActions({
       }
     }
     
-    console.log('----------------');
-    console.log('starting manifest');
+    // console.log('----------------');
+    // console.log('starting manifest');
     setManifestStages(parsedData.stages);
     const nextManifestItem = getNextManifestData(0);
 
@@ -88,7 +88,7 @@ export default handleActions({
   [storeManifestItem.toString()]: (state, action) => {
     // console.log('storeManifestItem', action.payload);
     const { manifest, data } = action.payload;
-    console.log('manifestItem', manifest)
+    // console.log('manifestItem', manifest)
     if(manifest.type === 'pets'){
       setFromPetManifest(manifest.id, data, manifest)
     }else{
@@ -118,7 +118,7 @@ export default handleActions({
   },
 
   [loadExternalItem.toString()]: (state, action) => {
-    console.log('received ', action.payload);
+    // console.log('received ', action.payload);
 
     return {
       ...state,
@@ -133,7 +133,7 @@ export default handleActions({
   },
 
   [setSettingsValue.toString()]: (state, action) => {
-    console.log('setSettingsValue', action.payload);
+    // console.log('setSettingsValue', action.payload);
     const settingsKey = action.payload.id;
     const storedValue = state.settings[settingsKey];
 
@@ -151,7 +151,7 @@ export default handleActions({
   },
 
   [setActivePetType.toString()]: (state, action) => {
-    console.log('setActivePetType', action.payload)
+    // console.log('setActivePetType', action.payload)
     return {
       ...state,
       activePetType: action.payload

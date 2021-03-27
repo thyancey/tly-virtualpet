@@ -113,7 +113,7 @@ export const selectActiveScene = createSelector(
   [selectActivePetData],
   (activePetData) => {
     if(!activePetData) return null;
-    console.log('selectActiveScene', activePetData);
+    // console.log('selectActiveScene', activePetData);
 
     const sceneId = activePetData.scene;
     const scene = getSceneDefinition(sceneId);
@@ -251,7 +251,7 @@ export const selectActiveDeltaStats = createSelector(
 export const selectActiveSceneStyles = createSelector(
   [selectActiveScene],
   (activeScene) => {
-    console.log('selectActiveSceneStyle', activeScene);
+    // console.log('selectActiveSceneStyle', activeScene);
     if(!activeScene) {
       return null;
     }
@@ -434,10 +434,24 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
   return behavior || 'ERROR';
 }
 
-export const selectCurrentPetBehavior = createSelector(
+export const selectActivePetDefinition = createSelector(
+  [selectActivePet],
+  (activePet) => {
+    return getPetDefinition(activePet?.id);
+  }
+)
+
+export const selectActivePetPersonality = createSelector(
+  [selectActivePetDefinition],
+  (petDef) => {
+    return petDef?.personality
+  }
+)
+
+export const selectActivePetBehavior = createSelector(
   [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveMoods, getForcedBehavior],
   (activePet, deltaStats, activities, activeMoods, forcedBehavior) => {
-    // console.log('selectCurrentPetBehavior');
+    // console.log('selectActivePetBehavior');
     if(!activePet || !activePet.id){
       return 'PET NOT FOUND';
     }
@@ -467,7 +481,7 @@ export const selectCurrentPetBehavior = createSelector(
 );
 
 export const selectActivePetAnimation = createSelector(
-  [selectActivePet, selectCurrentPetBehavior],
+  [selectActivePet, selectActivePetBehavior],
   (activePet, behavior) => {
     if(!activePet) return null;
 

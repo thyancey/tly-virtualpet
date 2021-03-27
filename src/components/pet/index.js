@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import AnimationCanvas from '../animation-canvas/';
 import { getAnimation } from '../animation-canvas/_animations';
 
-import PetBrain from '../../util/pet-brain';
+import PetBrain from './pet-brain';
 
 import { clamp } from '@util/tools';
 
@@ -21,8 +21,9 @@ import {
 import { 
   selectActivePetId,
   selectActivePetActivities,
+  selectActivePetPersonality,
   selectActivePetAnimation,
-  selectCurrentPetBehavior,
+  selectActivePetBehavior,
   selectActiveCage,
   selectActiveSceneType
 } from '../../store/selectors';
@@ -32,7 +33,6 @@ const MAX_DEBUG_CLICKS = 10;
 const DRAG_Y = .97;
 const DRAG_X = .7;
 const FALL_Y = .5;
-const JUMP_FORCE = .8;
 
 export const INPUTS = {
   MOVE_LEFT: 0,
@@ -126,6 +126,7 @@ class Pet extends Component {
     fpsInterval = 1000 / fps;
     then = Date.now();
     this.resetPetPosition();
+    this.petBrain.setPersonality(this.props.personality);
   }
 
   onPetInterval(){
@@ -171,10 +172,9 @@ class Pet extends Component {
   }
 
   jumpPet(amount = 0){
-    console.log('jumpPet')
     if(this.state.isOnGround){
       
-      this.vY -= amount * JUMP_FORCE;
+      this.vY -= amount * this.props.personality.jumpForce;
     }else{
       this.props.addActivity('JUMPING');
     }
@@ -252,20 +252,31 @@ class Pet extends Component {
     return this.props.activities.indexOf(activityKey) > -1
   }
 
+  roamLeft(frameRatio){
+    if(this.getPetOnWall() === -1){
+      this.movePet(1, 0, frameRatio);
+    }else{
+      this.movePet(-1, 0, frameRatio);
+    }
+  }
+
+  roamRight(frameRatio){
+    if(this.getPetOnWall() === 1){
+      this.movePet(-1, 0, frameRatio);
+    }else{
+      this.movePet(1, 0, frameRatio);
+    }
+  }
+
   checkRoamingStuff(frameRatio){
     if(this.hasActivity('ROAMING')){
+      if(Math.random() < this.props.personality.jumpChance){
+        this.jumpPet(20);
+      }
       if(this.state.direction === -1){
-        if(this.vX === 0){
-          this.movePet(1, 0, frameRatio);
-        }else{
-          this.movePet(-1, 0, frameRatio);
-        }
+        this.roamLeft(frameRatio);
       }else{
-        if(this.vX === 0){
-          this.movePet(-1, 0, frameRatio);
-        }else{
-          this.movePet(1, 0, frameRatio);
-        }
+        this.roamRight(frameRatio);
       }
     }
   }
@@ -413,6 +424,8 @@ class Pet extends Component {
         spriteSize[1] + spriteInfo.hitboxOffset[1]
       ]
 
+      // console.log(thisWidth, petSize[0])
+
       const stateObj = {
         petSize: petSize,
         minX: 0 - spriteInfo.hitboxOffset[0],
@@ -445,7 +458,8 @@ class Pet extends Component {
     // global.activePet = this;
     if(prevProps.activePetId !== this.props.activePetId){
       this.resetPetPosition();
-      this.setState({ debugDraws: [] })
+      this.setState({ debugDraws: [] });
+      this.petBrain.setPersonality(this.props.personality);
     }
     if(prevProps.containerWidth !== this.props.containerWidth || prevProps.containerHeight !== this.props.containerHeight){
       this.recalcMaxBounds();
@@ -453,6 +467,7 @@ class Pet extends Component {
     if(!prevState.isOnGround && this.state.isOnGround){
       this.props.removeActivity('JUMPING');
     }
+    // console.log('posX', this.state.posX)
   }
 
   checkForPetClicked(x, y){
@@ -482,6 +497,17 @@ class Pet extends Component {
     }
   }
 
+  getPetOnWall(){
+    const wallBuffer = 50;
+    if(this.state.posX + wallBuffer >= this.state.maxX){
+      return 1;
+    }else if(this.state.posX - wallBuffer <= this.state.minX){
+      return -1;
+    }
+
+    return 0;
+  }
+
   render(){
     const { animation, petId } = this.props;
     //- some error happened
@@ -491,6 +517,11 @@ class Pet extends Component {
 
     let width = this.state.adjustedWidth;
     let height = this.state.adjustedHeight;
+
+    // console.log('petX', this.state.posX)
+    // console.log('maxX', this.state.maxX)
+    // console.log('personality', this.props.personality)
+    global.p = this;
 
     let drawCommands = [];
     if(animation.type){
@@ -533,8 +564,9 @@ class Pet extends Component {
 
 const mapStateToProps = (state) => ({
   petId: selectActivePetId(state),
-  behavior: selectCurrentPetBehavior(state),
+  behavior: selectActivePetBehavior(state),
   activities: selectActivePetActivities(state),
+  personality: selectActivePetPersonality(state),
   animation: selectActivePetAnimation(state),
   activeCage: selectActiveCage(state),
   activeSceneType: selectActiveSceneType(state)

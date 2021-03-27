@@ -105,7 +105,7 @@ export const getCookieObj = cookieName => {
 }
 
 export const setCookie = (cname, cvalue, expires) => {
-  console.log('setCookie');
+  // console.log('setCookie');
   var d = new Date();
   d.setTime(d.getTime() + (expires || 3000000000000));
   expires = 'expires='+ d.toUTCString();
@@ -113,7 +113,7 @@ export const setCookie = (cname, cvalue, expires) => {
 }
 
 export const getCookie = (cname) => {
-  console.log('getCookie');
+  // console.log('getCookie');
   var name = cname + '=';
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');

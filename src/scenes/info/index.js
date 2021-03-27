@@ -24,7 +24,7 @@ import {
   selectActivePet,
   selectActiveDeltaStats,
   selectActiveSceneStyles,
-  selectCurrentPetBehavior,
+  selectActivePetBehavior,
   getForcedBehavior,
   selectActivePetActivities,
   selectActiveMoods
@@ -272,7 +272,7 @@ const mapStateToProps = (state) => ({
   activePet: selectActivePet(state),
   deltaStats: selectActiveDeltaStats(state),
   sceneStyles: selectActiveSceneStyles(state),
-  behavior: selectCurrentPetBehavior(state),
+  behavior: selectActivePetBehavior(state),
   forcedBehavior: getForcedBehavior(state),
   moods: selectActiveMoods(state),
   activities: selectActivePetActivities(state)

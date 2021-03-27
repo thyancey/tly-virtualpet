@@ -13,7 +13,7 @@ import { themeGet } from '@themes/';
 import Loader from './loader';
 import Pinger from './pinger';
 import Main from './main';
-import Editor from './editor';
+import Editor from '../editor';
 import Menu from '@scenes/menu';
 
 const S = {};

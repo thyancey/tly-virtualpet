@@ -9,9 +9,9 @@
     {
       "id": "level",
       "type": "number",
-      "value": "2",
-      "perSecond": "0",
-      "max": "10",
+      "value": 2.0,
+      "perSecond": 0.0,
+      "max": 10.0,
       "effects":[
         { "when": ">=_10", "then": "MOOD_EVOLVE" }
       ]
@@ -19,9 +19,9 @@
     {
       "id": "xp",
       "type": "number",
-      "value": "300",
-      "perSecond": "0",
-      "max": "500",
+      "value": 300.0,
+      "perSecond": 0.0,
+      "max": 500.0,
       "effects":[
         { "when": "<_90%", "then": "MOOD_POWERUP" }
       ]
@@ -29,9 +29,9 @@
     { 
       "id":"shelflife",
       "label":"Shelf Life",
-      "value": "100",
-      "perSecond": "-1",
-      "max": "100",
+      "value": 100.0,
+      "perSecond": -1.0,
+      "max": 100.0,
       "fullIsGood": true,
       "doesKill": true,
       "effects":[
@@ -42,9 +42,9 @@
     { 
       "id":"meatyness",
       "label":"MEATYNESS",
-      "value": "50",
-      "perSecond": "-1",
-      "max": "150",
+      "value": 50.0,
+      "perSecond": -1.0,
+      "max": 150.0,
       "fullIsGood": true,
       "doesKill": false,
       "effects":[
@@ -219,7 +219,7 @@
         "green": "hot-doug-overlay-green.png"
       },
       "spriteInfo":{
-        "scale": ".8",
+        "scale": 0.8,
         "orientation": -1,
         "grid": [ 6, 4 ],
         "cells": [ 400, 533 ],

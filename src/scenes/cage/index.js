@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from '@themes/';
+import { clamp } from '@util/tools';
 
 import Pet from '../../components/pet';
 import { 
@@ -48,6 +49,7 @@ class Cage extends Component {
 
   componentDidMount() {
     global.addEventListener('resize', this.onResize);
+    this.onResize();
   }
 
   onResize(){
@@ -56,7 +58,11 @@ class Cage extends Component {
 
   updateCanvasDims(){
     if(this.containerRef.current){
-      // global.spriteScale = clamp((this.containerRef.current.offsetWidth / 1000), .4, 1);
+      const squishers = {
+        x: clamp((this.containerRef.current.offsetWidth / 1000), .3, 1),
+        y: clamp((this.containerRef.current.offsetHeight / 1000), .3, 1)
+      }
+      global.spriteScale = squishers.x < squishers.y ? squishers.x : squishers.y;
       this.setState({
         containerWidth: this.containerRef.current.offsetWidth,
         containerHeight: this.containerRef.current.offsetHeight
