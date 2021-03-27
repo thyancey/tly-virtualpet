@@ -14,7 +14,7 @@ const returnNextStageItem = (manifestStages, nextItemIdx) => {
   const thisStage = manifestStages[manifestStageIdx];
   const nextItem = thisStage.items[nextItemIdx] || null;
   if(nextItem){
-    console.log(`... [${manifestStageIdx}, ${nextItemIdx}]`)
+    // console.log(`... [${manifestStageIdx}, ${nextItemIdx}]`)
     return {
       id: nextItem.id,
       url: nextItem.url,
@@ -40,7 +40,7 @@ export const getNextManifestData = (curItemIdx) => {
     }
   }else{
     console.log('All manifest items loaded.');
-    console.log('-------------------------');
+    // console.log('-------------------------');
     return null;
   }
 }

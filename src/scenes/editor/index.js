@@ -34,6 +34,8 @@ class Editor extends Component {
           <S.Editor>
             <PetCell />
             <PetCell />
+            <PetCell />
+            <PetCell />
           </S.Editor>
         </ScopedCssBaseline>
       </ThemeProvider>

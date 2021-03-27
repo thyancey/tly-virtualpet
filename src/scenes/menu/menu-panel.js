@@ -105,7 +105,7 @@ S.PanelBg = styled.div`
 
 class MenuPanel extends Component {
   render(){
-    console.log('R: Menu', this.props.location);
+    // console.log('R: Menu', this.props.location);
     
     return(
       <S.Menu id="menu" >

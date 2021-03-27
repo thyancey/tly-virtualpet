@@ -3,6 +3,13 @@ import { clamp, getCookieObj, setObjToCookie, deleteCookie, convertStringsToNumb
 
 const SAVE_SCHEMA_VERSION = 5;
 
+export const DEFAULT_PERSONALITY = {
+  "thinkRange": [ 200, 2000 ],
+  "doRange": [ 200, 2000 ],
+  "jumpChance": 0.01,
+  "jumpForce": 0.8
+}
+
 const store = {
   pets:[],
   taxonomy: []
@@ -147,6 +154,9 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
     isAlive: savedData.isAlive,
     stats: initialStats.map(s => formatSavedStatObj(s))
   }
+  console.log('personality', petDef.personality)
+
+  petDef.personality = { ...DEFAULT_PERSONALITY, ...petDef.personality };
 
   return {
     ...petDef,

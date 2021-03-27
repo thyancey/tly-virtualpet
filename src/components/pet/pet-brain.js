@@ -7,8 +7,8 @@ export const STATUS = {
 };
 
 export const DEFAULT_PERSONALITY = {
-  "thinkRange": [ 200, 2000 ],
-  "doRange": [ 200, 2000 ],
+  "thinkRange": [ 500, 2000 ],
+  "doRange": [ 500, 2000 ],
   "jumpChance": 0
 }
 
@@ -24,7 +24,6 @@ class PetBrain {
 
     this.timer = null;
     this.status = STATUS.BRAINDEAD;
-    this.personality = DEFAULT_PERSONALITY;
   }
 
   getStatus(){
@@ -43,6 +42,10 @@ class PetBrain {
     }, timerDuration)
   }
 
+  getPersonality(){
+    return this.personality || DEFAULT_PERSONALITY;
+  }
+
   killTimer(){
     if(this.timer){
       window.clearTimeout(this.timer);
@@ -52,9 +55,9 @@ class PetBrain {
 
   getDuration(statusType){
     if(statusType === STATUS.THINKING){
-      return randBetween(this.personality.thinkRange);
+      return randBetween(this.getPersonality().thinkRange);
     }else if(statusType === STATUS.DOING) {
-      return randBetween(this.personality.doRange);
+      return randBetween(this.getPersonality().doRange);
     }else{
       console.error(`unexpected duration type "${statusType}"`);
       return 0;
@@ -62,7 +65,7 @@ class PetBrain {
   }
 
   setPersonality(personality){
-    this.personality = { ...this.personality, ...personality };
+    this.personality = { ...this.getPersonality(), ...personality };
   }
 
   think(stats, inputs){

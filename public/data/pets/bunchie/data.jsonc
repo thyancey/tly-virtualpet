@@ -15,24 +15,24 @@
     {
       "id": "level",
       "type": "number",
-      "value": "64",
-      "perSecond": "0",
-      "max": "100",
+      "value": 64.0,
+      "perSecond": 0.0,
+      "max": 100.0,
       "fullIsGood": true
     },
     {
       "id": "xp",
       "type": "number",
-      "value": "888",
-      "perSecond": "0",
-      "max": "20000",
+      "value": 888.0,
+      "perSecond": 0.0,
+      "max": 20000.0,
       "fullIsGood": true
     },
     {
       "id": "hunger",
-      "value": "0",
-      "perSecond": "1",
-      "max": "500",
+      "value": 0.0,
+      "perSecond": 1.0,
+      "max": 500.0,
       "doesKill": true,
       "fullIsGood": false,
       "effects":[
@@ -81,7 +81,7 @@
       "id":"E_FEED",
       "label": "Feed",
       "statEffects":[
-        { "id":"hunger", "immediate":"-20" }
+        { "id":"hunger", "immediate":-20 }
       ],
       "type":"event",
       "cooldown": 1000
@@ -90,31 +90,31 @@
   "animations":{
     "Bunchie_Still":{
       "sprite": "Bunchie",
-      "speed": "50",
+      "speed": 50,
       "dir": 1,
       "frames": [11]
     },
     "Bunchie_Idle1":{
       "sprite": "Bunchie",
-      "speed": "50",
+      "speed": 50,
       "dir": 1,
       "frames": [11]
     },
     "Bunchie_Walk1":{
       "sprite": "Bunchie",
-      "speed": "3",
+      "speed": 3,
       "dir": 1,
       "frames": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
     "Bunchie_Dead1":{
       "sprite": "Bunchie",
-      "speed": "20",
+      "speed": 20,
       "dir": 1,
       "frames": [13]
     },
     "Bunchie_Angry1":{
       "sprite": "Bunchie",
-      "speed": "20",
+      "speed": 20,
       "dir": 1,
       "frames": [12]
     }
@@ -124,7 +124,7 @@
       "type": "Sprite_Animated",
       "imageUrl": "bunchie.png",
       "spriteInfo":{
-        "scale": ".7",
+        "scale": 0.7,
         "faceDirection": true,
         "orientation": -1,
         "grid": [ 4, 4 ],

@@ -47,8 +47,8 @@ class LoadHelper extends Component {
     // console.log('loadManifestItem', manifestItemObj)
 
     const url =  `${manifestItemObj.url}/data.jsonc`;
-    const manifestLabel = `( [${manifestItemObj.type}]: ${manifestItemObj.id} )`;
-    console.log(`reading manifestItem data for ${manifestLabel} from '${url}'`);
+    // const manifestLabel = `( [${manifestItemObj.type}]: ${manifestItemObj.id} )`;
+    // console.log(`reading manifestItem data for ${manifestLabel} from '${url}'`);
 
     fetch(url, {
       mode: 'cors'

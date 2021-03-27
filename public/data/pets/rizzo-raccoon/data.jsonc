@@ -5,28 +5,34 @@
   "name": "Rizzo",
   "scene": "outside",
   "thumbnail": "thumbnail.jpg",
+  "personality":{
+    "thinkRange": [ 500, 1000 ],
+    "doRange": [ 5000, 10000 ],
+    "jumpChance": 0.005,
+    "jumpForce": 0.4
+  },
   "stats":[
     {
       "id": "level",
       "type": "number",
-      "value": "64",
-      "perSecond": "0",
-      "max": "100",
+      "value": 64.0,
+      "perSecond": 0.0,
+      "max": 100.0,
       "fullIsGood": true
     },
     {
       "id": "xp",
       "type": "number",
-      "value": "888",
-      "perSecond": "0",
-      "max": "20000",
+      "value": 888.0,
+      "perSecond": 0.0,
+      "max": 20000.0,
       "fullIsGood": true
     },
     {
       "id": "hunger",
-      "value": "0",
-      "perSecond": "1",
-      "max": "500",
+      "value": 0.0,
+      "perSecond": 1.0,
+      "max": 500.0,
       "doesKill": true,
       "fullIsGood": false,
       "effects":[
@@ -37,9 +43,9 @@
     { 
       "id":"mana",
       "label":"Banana Mana",
-      "value": "1",
-      "perSecond": "3",
-      "max": "200",
+      "value": 1.0,
+      "perSecond": 3.0,
+      "max": 200.0,
       "fullIsGood": true,
       "doesKill": true,
       "effects":[
@@ -100,37 +106,37 @@
   "animations":{
     "Raccoon_NanaRage1":{
       "sprite": "Raccoon",
-      "speed": "2",
+      "speed": 2.0,
       "dir": 1,
       "frames": [0, 1, 2, 3]
     },
     "Raccoon_Still":{
       "sprite": "Raccoon",
-      "speed": "50",
+      "speed": 50.0,
       "dir": 1,
       "frames": [0]
     },
     "Raccoon_Idle1":{
       "sprite": "Raccoon",
-      "speed": "50",
+      "speed": 50.0,
       "dir": 1,
       "frames": [0, 3]
     },
     "Raccoon_Castin":{
       "sprite": "Raccoon",
-      "speed": "10",
+      "speed": 10.0,
       "dir": 1,
       "frames": [0, 1, 2, 3]
     },
     "Raccoon_Walk1":{
       "sprite": "Raccoon",
-      "speed": "20",
+      "speed": 20.0,
       "dir": 1,
       "frames": [4, 5]
     },
     "Raccoon_Dead1":{
       "sprite": "Raccoon",
-      "speed": "20",
+      "speed": 20.0,
       "dir": 1,
       "frames": [6, 7, 8]
     }
@@ -140,7 +146,7 @@
       "type": "Sprite_Animated",
       "imageUrl": "raccoon.png",
       "spriteInfo":{
-        "scale": ".8",
+        "scale": 0.8,
         "faceDirection": true,
         "grid": [ 3, 3 ],
         "cells": [ 400, 500 ]

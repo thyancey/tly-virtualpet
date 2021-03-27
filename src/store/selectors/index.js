@@ -113,7 +113,7 @@ export const selectActiveScene = createSelector(
   [selectActivePetData],
   (activePetData) => {
     if(!activePetData) return null;
-    console.log('selectActiveScene', activePetData);
+    // console.log('selectActiveScene', activePetData);
 
     const sceneId = activePetData.scene;
     const scene = getSceneDefinition(sceneId);
@@ -251,7 +251,7 @@ export const selectActiveDeltaStats = createSelector(
 export const selectActiveSceneStyles = createSelector(
   [selectActiveScene],
   (activeScene) => {
-    console.log('selectActiveSceneStyle', activeScene);
+    // console.log('selectActiveSceneStyle', activeScene);
     if(!activeScene) {
       return null;
     }
