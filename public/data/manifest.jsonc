@@ -12,7 +12,8 @@
       "type": "scenes",
       "items": [
         { "id": "magnadoodle", "url": "data/scenes/magnadoodle" },
-        { "id": "outside", "url": "data/scenes/outside" }
+        { "id": "outside", "url": "data/scenes/outside" },
+        { "id": "dump", "url": "data/scenes/dump" }
       ]
     },
     {

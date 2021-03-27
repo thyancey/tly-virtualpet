@@ -3,7 +3,7 @@
   "type": "samples",
   "animal": "Raccoon",
   "name": "Racky",
-  "scene": "outside",
+  "scene": "dump",
   "thumbnail": "thumbnail.jpg",
   "personality":{
     "thinkRange": [ 2000, 4000 ],
