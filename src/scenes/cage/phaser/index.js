@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { createGame, updateBounds } from './game';
-import { debounce } from 'throttle-debounce';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
+import { createGame, updateBounds, updatePet, updatePetAnimationLabel } from './game';
+import { debounce } from 'throttle-debounce';
+import { 
+  selectActivePet,
+  selectActivePetId,
+  selectActivePetAnimation
+} from '@store/selectors';
 
 const S = {};
 S.PhaserContainer = styled.div`
@@ -16,11 +23,20 @@ class PhaserComponent extends Component {
     });
 
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
+    updatePet(this.props.pet);
   }
 
   componentDidUpdate(prevProps){
     if(prevProps.width !== this.props.width || prevProps.height !== this.props.height){
       this.debouncedUpdateBounds(0, 0, this.props.width, this.props.height);
+    }
+
+    if(prevProps.petId !== this.props.petId){
+      updatePet(this.props.pet);
+    }
+
+    if(prevProps.animation !== this.props.animation){
+      updatePetAnimationLabel(this.props.petId, this.props.animation.label);
     }
   }
 
@@ -31,4 +47,21 @@ class PhaserComponent extends Component {
   }
 }
 
-export default PhaserComponent;
+const mapStateToProps = (state) => ({
+  petId: selectActivePetId(state),
+  pet: selectActivePet(state),
+  animation: selectActivePetAnimation(state)
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators(
+    {},
+    dispatch
+  )
+);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PhaserComponent);
+

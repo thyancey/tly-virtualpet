@@ -1,13 +1,18 @@
 import Phaser from 'phaser';
+import SpawnController from './spawn.js';
 
 let game;
-let enemies;
-let platforms;
-let emitter;
 let sceneContext;
 
-export const createGame = (jsonData) =>{
-  console.log('jsonData is ', jsonData);
+export const createGame = (jsonData) => {
+  console.log('Phaser.createGame, jsonData:', jsonData);
+
+  // SpawnController.setDefinitions([
+  //   {
+  //     id: 'bario'
+  //   }
+  // ]);
+
   const config = {
     type: Phaser.AUTO,
     scale:{
@@ -51,63 +56,37 @@ export function updateBounds(x, y, width, height){
 function setSceneContext(context){
   sceneContext = context;
   global.scene = sceneContext;
-  // LevelController.setContext(context);
-  // SpawnController.setContext(context);
+  SpawnController.setContext(context);
 }
 
 function preload() {
   setSceneContext(this);
-  
-  // this.load.image('blood', img_blood);
-  // LevelController.preload();
-  // SpawnController.preload();
+  SpawnController.preload(this);
+}
 
-  this.load.setBaseURL('http://labs.phaser.io');
+export function updatePet(petInfo){
+  console.log('Game.updatePet: ', petInfo);
+  SpawnController.setPetInfo(petInfo.id, petInfo);
+}
 
-  this.load.image('sky', 'assets/skies/space3.png');
-  this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-  this.load.image('red', 'assets/particles/red.png');
+export function updatePetAnimationLabel(petId, animationLabel){
+  // console.log('updatePetAnimationLabel: ', animationLabel);
+  SpawnController.updatePetAnimationLabel(petId, animationLabel);
+}
 
-  
+export function spawnPet(){
+  SpawnController.spawnPet('bario')
 }
 
 function create() {
-  this.add.image(400, 300, 'sky');
+  console.log('Phaser.create()')
 
-  var particles = this.add.particles('red');
+  global.spawnController = SpawnController;
 
-  var emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: 'ADD'
-  });
-
-  var logo = this.physics.add.image(400, 100, 'logo');
-
-  logo.setVelocity(100, 200);
-  logo.setBounce(1, 1);
-  logo.setCollideWorldBounds(true);
-
-  emitter.startFollow(logo);
-
-
-
-  //- make the level
-  // platforms = LevelController.create();
-  
-  //- make the enemies
-  // let spawnGroups = SpawnController.create(this, enemies);
-
-  // this.physics.add.collider(spawnGroups.enemies, platforms);
-  // this.physics.add.collider(spawnGroups.items, platforms);
-  // this.physics.add.overlap(spawnGroups.enemies, spawnGroups.items, touchItem, null, this);
-
-  // this.input.on('gameobjectdown', onObjectClicked);
-  // this.input.on('pointerdown', onSceneClicked);
-
-  // setupMouseEmitter();
+  let spawnGroups = SpawnController.create(this);
+  spawnPet();
 }
 
 function update (){
-  // SpawnController.update();
+  SpawnController.update();
 }

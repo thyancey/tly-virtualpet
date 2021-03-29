@@ -1,0 +1,302 @@
+﻿{
+  "frames": [
+    {
+      "filename": "bario0000",
+      "frame": {"x":0,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0001",
+      "frame": {"x":20,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0002",
+      "frame": {"x":40,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0003",
+      "frame": {"x":60,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0004",
+      "frame": {"x":80,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0005",
+      "frame": {"x":100,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0006",
+      "frame": {"x":120,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0007",
+      "frame": {"x":140,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0008",
+      "frame": {"x":160,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0009",
+      "frame": {"x":180,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0010",
+      "frame": {"x":200,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0011",
+      "frame": {"x":220,"y":0,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    
+    {
+      "filename": "bario0012",
+      "frame": {"x":0,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0013",
+      "frame": {"x":20,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0014",
+      "frame": {"x":40,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0015",
+      "frame": {"x":60,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0016",
+      "frame": {"x":80,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0017",
+      "frame": {"x":100,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0018",
+      "frame": {"x":120,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0019",
+      "frame": {"x":140,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0020",
+      "frame": {"x":160,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0021",
+      "frame": {"x":180,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0022",
+      "frame": {"x":200,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0023",
+      "frame": {"x":220,"y":35,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    
+    {
+      "filename": "bario0024",
+      "frame": {"x":0,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0025",
+      "frame": {"x":20,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0026",
+      "frame": {"x":40,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0027",
+      "frame": {"x":60,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0028",
+      "frame": {"x":80,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0029",
+      "frame": {"x":100,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0030",
+      "frame": {"x":120,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0031",
+      "frame": {"x":140,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0032",
+      "frame": {"x":160,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0033",
+      "frame": {"x":180,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0034",
+      "frame": {"x":200,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    },
+    {
+      "filename": "bario0035",
+      "frame": {"x":220,"y":70,"w":20,"h":35},
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {"x":0,"y":0,"w":20,"h":35},
+      "sourceSize": {"w":20,"h":35}
+    }
+  ],
+  "meta": {
+    "app": "Adobe Flash CS6",
+    "version": "12.0.0.481",
+    "image": "bario-bg.png",
+    "format": "RGBA8888",
+    "size": {"w":220,"h":35},
+    "scale": "1"
+  }
+}

@@ -145,7 +145,7 @@
   ],
   "behaviors": {
     "DEFAULT": { "animations": [ "Idle_Little" ] },
-    "DEAD": { "animations": [ "Dead" ] },
+    "DEAD": { "animations": [ "Dead_Little" ] },
     "IDLE_BIG": { "animations": [ "Idle_Big" ] },
     "WALK_BIG": { "animations": [ "Walk_Big" ] },
     "JUMP_BIG": { "animations": [ "Jump_Big" ] },
@@ -180,7 +180,7 @@
     }
   ],
   "animations":{
-    "Dead":{
+    "Dead_Little":{
       "sprite": "Little",
       "speed": 10,
       "dir": 1,
@@ -276,6 +276,106 @@
       }
     }
   ],
+  "atlas":{
+    "sprites":{
+      "MAIN":{
+        "data": "main-atlas.json",
+        "image": "main-complete.png",
+        "scale": 5.0,
+        "frameDims": [ 20, 35 ],
+        "defaults":{
+          "animation":{
+            "frameRate": 10,
+            "repeat": -1
+          },
+          "frameObj":{
+            "prefix": "anim",
+            "zeroPad": 4
+          }
+        }
+      }
+    },
+    "animations":{
+      "Walk_Big":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [14, 15, 16]
+        }
+      },
+      "Jump_Big":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [18]
+        }
+      },
+      "Idle_Big":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [12]
+        }
+      },
+      "Duck_Big":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [13]
+        }
+      },
+      "Walk_Fire":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [26, 27, 28]
+        }
+      },
+      "Jump_Fire":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [30]
+        }
+      },
+      "Idle_Fire":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [24]
+        }
+      },
+      "Duck_Fire":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [25]
+        }
+      },
+      "Walk_Little":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [2, 3, 4]
+        }
+      },
+      "Jump_Little":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [6]
+        }
+      },
+      "Idle_Little":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [1]
+        }
+      },
+      "Duck_Little":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [1]
+        }
+      },
+      "Dead_Little":{
+        "sprite": "MAIN",
+        "frameObj":{
+          "frames": [11]
+        }
+      }
+    }
+  },
   "sprites":{
     "Big":{
       "type": "Sprite_Animated",

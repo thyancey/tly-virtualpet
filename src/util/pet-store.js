@@ -157,7 +157,7 @@ export const parsePetData = (id, petDef, savedPet, savedData, manifest) => {
     isAlive: savedData.isAlive,
     stats: initialStats.map(s => formatSavedStatObj(s))
   }
-  console.log('personality', petDef.personality)
+  // console.log('personality', petDef.personality)
 
   petDef.personality = { ...DEFAULT_PERSONALITY, ...petDef.personality };
 
