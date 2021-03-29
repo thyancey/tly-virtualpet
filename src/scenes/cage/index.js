@@ -13,12 +13,12 @@ import {
 
 import Scene from './components/scene';
 
+import PhaserComponent from './phaser';
+
 const S = {};
 S.Cage = styled.div`
   position:relative;
 
-  width:100%;
-  height:100%;
 
   color: ${themeGet('color', 'blue')};
 
@@ -53,7 +53,14 @@ class Cage extends Component {
   }
 
   onResize(){
-    this.updateCanvasDims();
+    this.updateRedundantDims();
+  }
+
+  updateRedundantDims(){
+    this.setState({
+      containerWidth: window.innerWidth,
+      containerHeight: window.innerHeight
+    })
   }
 
   updateCanvasDims(){
@@ -74,12 +81,14 @@ class Cage extends Component {
     const { 
       activePetId
     } = this.props;
+    global.cage = this;
 
     if(!activePetId){
       return null;
     }else{
       return(
-        <S.Cage ref={this.containerRef} >
+        <S.Cage ref={this.containerRef} style={{ width: this.state.containerWidth, height: this.state.containerHeight }}>
+          <PhaserComponent id="1" width={this.state.containerWidth} height={this.state.containerHeight}/>
           <Pet 
             activePetId={activePetId} 
             containerWidth={this.state.containerWidth}
