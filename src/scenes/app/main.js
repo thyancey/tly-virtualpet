@@ -28,20 +28,16 @@ S.CageContainer = styled.div`
   right:0;
   bottom:0;
   left:0;
-`;
-
-S.Stuff = styled.div`
-  display:flex;
-  flex-direction:row;
-
-  /* allow canvas clicks under menu elements */
-  pointer-events:none;
+  z-index:-1;
 `;
 
 S.InfoContainer = styled.div`
+  /* allow canvas clicks under menu elements */
+  pointer-events:none;
+
   margin:1rem;
-  flex:1;
   z-index:1;
+  margin-top:5rem;
 `;
 
 class Main extends Component {
@@ -63,11 +59,9 @@ class Main extends Component {
     return(
       <S.Main>
         <S.Stage>
-          <S.Stuff>
-            <S.InfoContainer  id="info-container">
-              <Info />
-            </S.InfoContainer>
-          </S.Stuff>
+          <S.InfoContainer  id="info-container">
+            <Info />
+          </S.InfoContainer>
           <S.CageContainer>
             <Cage />
           </S.CageContainer>

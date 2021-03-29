@@ -159,6 +159,7 @@ class PetStats extends Component {
   }
 
   resetPet(id){
+    console.log('resetters')
     this.props.resetPet(id);
     this.props.ping();
   }
@@ -218,9 +219,12 @@ class PetStats extends Component {
             );
           }
         })}
+        {/* <S.ResetContainer> */}
+        {/* </S.ResetContainer> */}
         
         <S.InfoButton>
           <LilButton text={'info'} onClick={e => this.onToggleShowInfo()} />
+          <LilButton text={'Reset Pet'} onClick={() => this.resetPet(activePet.id)} style={{backgroundColor: getColor('red')}} />
         </S.InfoButton>
         <S.Info showInfo={this.state.isInfoOpen}>
           <p>{'Activities'}</p>
@@ -247,9 +251,6 @@ class PetStats extends Component {
             )}
           <hr/>
 
-          <div>
-            <Button text={'RESET PET'} onClick={() => this.resetPet(activePet.id)} style={{backgroundColor: getColor('red')}} />
-          </div>
         </S.Info>
         
         <S.FooterUi>
