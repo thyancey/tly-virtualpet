@@ -161,7 +161,7 @@
   },  
   "statEvents":[
     {
-      "id":"E_POWER",
+      "id":"E_POWER_DOWN",
       "label": "Power down!",
       "statEffects":[
         { "id":"power", "immediate":-1 }
@@ -170,7 +170,7 @@
       "cooldown": 100
     },
     {
-      "id":"E_POWER",
+      "id":"E_POWER_UP",
       "label": "Power up!",
       "statEffects":[
         { "id":"power", "immediate":1 }
@@ -259,6 +259,23 @@
       "frames": [6]
     }
   },
+  "items":[
+    {
+      "id": "mushroom",
+      "count": 3,
+      "statEvent": "E_POWER_UP",
+      "cooldown": 100,
+      "spriteInfo":{
+        "type": "Sprite_Animated",
+        "imageUrl": "item-shroom.png",
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 1, 1 ],
+        "cells": [ 20, 35 ]
+      }
+    }
+  ],
   "sprites":{
     "Big":{
       "type": "Sprite_Animated",

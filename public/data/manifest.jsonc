@@ -17,10 +17,10 @@
         { "id": "shroomKingdom", "url": "data/scenes/shroom-kingdom" }
       ]
     },
-    {
-      "type": "items",
-      "items": []
-    },
+    // {
+    //   "type": "items",
+    //   "items": []
+    // },
     {
       "type": "pets",
       "items": [
