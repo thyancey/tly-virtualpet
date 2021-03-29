@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 import { themeGet, getColor, shadeColor, getBreakpoint } from '@themes/';
 
-import { Button } from '@components/ui/button';
+import { LilButton, Button } from '@components/ui/button';
 
 import PanelBase from './components/panel-base';
 import PanelPetSelection from './components/panel-petselection';
@@ -57,13 +57,13 @@ S.MainPanel = styled.div`
 S.PanelContainer = styled.div`
   width:100%;
   height:100%;
-  /* padding: 2rem; */
+  overflow-y:auto;
 `;
 
 S.ResetButton = styled.div`
-  position:absolute;
-  right:1rem;
-  bottom:1rem;
+  /* position:absolute; */
+  /* right:1rem; */
+  /* bottom:1rem; */
   button{
     background-color: ${getColor('black')};
 
@@ -76,16 +76,11 @@ S.ResetButton = styled.div`
   }
 `
 S.MenuButton = styled.div`
-  margin:1rem;
-  top:1rem;
   z-index:2;
-  right:calc(100% + 2rem);
   position:absolute;
 
-  button{
-    padding:1.5rem 2rem;
-    margin:0;
-  }
+  top:.5rem;
+  right:calc(100% + 2rem);
 `;
 
 S.PanelBg = styled.div`
@@ -111,7 +106,7 @@ class MenuPanel extends Component {
       <S.Menu id="menu" >
         <S.MainPanel id="main-panel" isOpen={this.props.isOpen}>
           <S.MenuButton>
-            <Button text={'menu'} onClick={() => this.props.onToggleMenu()}/>
+            <LilButton text={'menu'} onClick={() => this.props.onToggleMenu()}/>
           </S.MenuButton>
           <S.PanelContainer>
             <PanelBase label="Pet Selection">

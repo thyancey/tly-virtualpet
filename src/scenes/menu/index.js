@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button } from '@components/ui/button';
+import { LilButton } from '@components/ui/button';
 
 
 import Menu from './menu-panel';
@@ -15,14 +15,8 @@ S.MenuContainer = styled.div`
 
 S.MenuButton = styled.div`
   position:absolute;
-  right:0;
-  top:0;
-  margin:1rem;
-
-  button{
-    padding:1.5rem 2rem;
-    margin:0;
-  }
+  right:.5rem;
+  top:.5rem;
 `;
 
 class MenuController extends Component {
@@ -44,7 +38,7 @@ class MenuController extends Component {
     return(
       <S.MenuContainer id="menu-container" >
         <S.MenuButton>
-          <Button text={'menu'} onClick={() => this.onToggleMenu()}/>
+          <LilButton text={'menu'} onClick={() => this.onToggleMenu()}/>
         </S.MenuButton>
 
         <Menu isOpen={this.state.isOpen} onToggleMenu={f => this.onToggleMenu(f)}/>

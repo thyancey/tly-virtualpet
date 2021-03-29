@@ -1,0 +1,297 @@
+{
+  "id": "bario",
+  "type": "8bit",
+  "animal": "Spanish Plummer",
+  "name": "Bario",
+  "scene": "shroomKingdom",
+  "thumbnail": "thumbnail.jpg",
+  "personality":{
+    "thinkRange": [ 500, 2000 ],
+    "doRange": [ 1000, 5000 ],
+    "jumpChance": 0.02,
+    "jumpForce": 0.8,
+    "maxVx": 3,
+    "xForce": 1,
+    "yForce": 1
+  },
+  "stats":[
+    {
+      "id": "level",
+      "type": "number",
+      "value": 64.0,
+      "perSecond": 0.0,
+      "max": 100.0,
+      "fullIsGood": true
+    },
+    {
+      "id": "xp",
+      "type": "number",
+      "value": 888.0,
+      "perSecond": 0.0,
+      "max": 20000.0,
+      "fullIsGood": true
+    },
+    {
+      "id": "power",
+      "label": "Power",
+      "value": 1.0,
+      "perSecond": 0.0,
+      "max": 3.0,
+      "doesKill": true,
+      "fullIsGood": true,
+      "effects":[
+        { "when": "=_1", "then": "POWER_LITTLE" },
+        { "when": "=_2", "then": "POWER_BIG" },
+        { "when": "=_3", "then": "POWER_FIRE" }
+      ]
+    }
+  ],
+  "moods":{
+    "POWER_LITTLE":  { "label": "quick & tiny", "moodType": -1 },
+    "POWER_BIG":  { "label": "like I ate a mushroom", "moodType": 1 },
+    "POWER_FIRE":  { "label": "like I ate a fire flower", "moodType": 1 }
+  },
+  "moodSwings":[
+    {
+      "when":[
+        { "type":"status", "isDead": true }
+      ],
+      "then": "DEAD"
+    },
+
+    {
+      "when":[
+        { "type": "activity", "activity": "DUCKING" },
+        { "type": "moods", "moods": [ "POWER_FIRE" ] }
+      ],
+      "then": "DUCK_FIRE"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "DUCKING" },
+        { "type": "moods", "moods": [ "POWER_BIG" ] }
+      ],
+      "then": "DUCK_BIG"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "DUCKING" },
+        { "type": "moods", "moods": [ "POWER_LITTLE" ] }
+      ],
+      "then": "DUCK_LITTLE"
+    },
+
+    {
+      "when":[
+        { "type": "activity", "activity": "JUMPING" },
+        { "type": "moods", "moods": [ "POWER_FIRE" ] }
+      ],
+      "then": "JUMP_FIRE"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "JUMPING" },
+        { "type": "moods", "moods": [ "POWER_BIG" ] }
+      ],
+      "then": "JUMP_BIG"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "JUMPING" },
+        { "type": "moods", "moods": [ "POWER_LITTLE" ] }
+      ],
+      "then": "JUMP_LITTLE"
+    },
+
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" },
+        { "type": "moods", "moods": [ "POWER_FIRE" ] }
+      ],
+      "then": "WALK_FIRE"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" },
+        { "type": "moods", "moods": [ "POWER_BIG" ] }
+      ],
+      "then": "WALK_BIG"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" },
+        { "type": "moods", "moods": [ "POWER_LITTLE" ] }
+      ],
+      "then": "WALK_LITTLE"
+    },
+
+    {
+      "when":[ { "type": "moods", "moods": [ "POWER_FIRE" ] }],
+      "then": "IDLE_FIRE"
+    },
+    {
+      "when":[ { "type": "moods", "moods": [ "POWER_BIG" ] }],
+      "then": "IDLE_BIG"
+    },
+    {
+      "when":[ { "type": "moods", "moods": [ "POWER_LITTLE" ] }],
+      "then": "IDLE_LITTLE"
+    },
+
+    {
+      "when":[],
+      "then": "IDLE_LITTLE"
+    }
+  ],
+  "behaviors": {
+    "DEFAULT": { "animations": [ "Idle_Little" ] },
+    "DEAD": { "animations": [ "Dead" ] },
+    "IDLE_BIG": { "animations": [ "Idle_Big" ] },
+    "WALK_BIG": { "animations": [ "Walk_Big" ] },
+    "JUMP_BIG": { "animations": [ "Jump_Big" ] },
+    "DUCK_BIG": { "animations": [ "Duck_Big" ] },
+    "IDLE_FIRE": { "animations": [ "Idle_Fire" ] },
+    "WALK_FIRE": { "animations": [ "Walk_Fire" ] },
+    "JUMP_FIRE": { "animations": [ "Jump_Fire" ] },
+    "DUCK_FIRE": { "animations": [ "Duck_Fire" ] },
+    "IDLE_LITTLE": { "animations": [ "Idle_Little" ] },
+    "WALK_LITTLE": { "animations": [ "Walk_Little" ] },
+    "JUMP_LITTLE": { "animations": [ "Jump_Little" ] },
+    "DUCK_LITTLE": { "animations": [ "Duck_Little" ] }
+  },  
+  "statEvents":[
+    {
+      "id":"E_POWER",
+      "label": "Power down!",
+      "statEffects":[
+        { "id":"power", "immediate":-1 }
+      ],
+      "type":"event",
+      "cooldown": 100
+    },
+    {
+      "id":"E_POWER",
+      "label": "Power up!",
+      "statEffects":[
+        { "id":"power", "immediate":1 }
+      ],
+      "type":"event",
+      "cooldown": 100
+    }
+  ],
+  "animations":{
+    "Dead":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [ 11 ]
+    },
+    "Idle_Little":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Duck_Little":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Walk_Little":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [2,3,4]
+    },
+    "Jump_Little":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [6]
+    },
+    "Idle_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [0]
+    },
+    "Duck_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Walk_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [2,3,4]
+    },
+    "Jump_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [6]
+    },
+    "Idle_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [0]
+    },
+    "Duck_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Walk_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [2,3,4]
+    },
+    "Jump_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [6]
+    }
+  },
+  "sprites":{
+    "Big":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bario-big.png",
+      "spriteInfo":{
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 11, 1 ],
+        "cells": [ 20, 35 ]
+      }
+    },
+    "Fire":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bario-fire.png",
+      "spriteInfo":{
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 11, 1 ],
+        "cells": [ 20, 35 ]
+      }
+    },
+    "Little":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bario-little.png",
+      "spriteInfo":{
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 12, 1 ],
+        "cells": [ 20, 35 ]
+      }
+    }
+  }
+}

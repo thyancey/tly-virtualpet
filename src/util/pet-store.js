@@ -9,7 +9,8 @@ export const DEFAULT_PERSONALITY = {
   "jumpChance": 0.01,
   "jumpForce": 0.8,
   "xForce": 1.0,
-  "yForce": 1.0
+  "yForce": 1.0,
+  "maxVx": 2.0
 }
 
 const store = {

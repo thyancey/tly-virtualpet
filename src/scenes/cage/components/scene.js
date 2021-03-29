@@ -75,7 +75,6 @@ class Scene extends Component {
       return null;
     }else{
       const bgImage = activeScene.background.imageUrl ? activeScene.background.imageUrl : null;
-      // const bgPosition = activeScene.background.backgroundPosition ? activeScene.background.backgroundPosition : '0';
       const type = activeScene.type;
       /*
         TODO, using styled components with background-image was causing flickering for some reason (not because of re-render)
@@ -89,7 +88,7 @@ class Scene extends Component {
             </S.SceneFloor>
           )}
           <S.SceneBackground style={{ backgroundColor: activeScene.background.color }} >
-            <div className={'background-image'} style={{ backgroundImage: `url(${bgImage})` }} />
+            <div className={'background-image'} style={{ backgroundImage: `url(${bgImage})`, ...activeScene.background.styles }} />
           </S.SceneBackground>
         </S.Scene>
       );

@@ -201,7 +201,6 @@ class Pet extends Component {
   }
 
   movePet(dX, dY, frameRatio){
-    
     this.vX += ((dX * frameRatio) * this.props.personality.xForce);
     this.vY += ((dY * frameRatio) * this.props.personality.yForce);
 
@@ -330,7 +329,7 @@ class Pet extends Component {
     if(this.vX > -1 && this.vX < 1){
       this.vX = 0;
     }else{
-      this.vX = clamp((this.vX * DRAG_X), -maxPetSpeed, maxPetSpeed);
+      this.vX = clamp((this.vX * DRAG_X), -this.props.personality.maxVx, this.props.personality.maxVx);
       // this.vX *= DRAG_X;
     }
 
@@ -465,6 +464,10 @@ class Pet extends Component {
     }
     if(!prevState.isOnGround && this.state.isOnGround){
       this.props.removeActivity('JUMPING');
+    }
+
+    if(prevProps.behavior !== 'DEAD' && this.props.behavior === 'DEAD'){
+      this.jumpPet(20)
     }
     // console.log('posX', this.state.posX)
   }

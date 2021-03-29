@@ -62,7 +62,7 @@ class Cage extends Component {
         x: clamp((this.containerRef.current.offsetWidth / 1000), .3, 1),
         y: clamp((this.containerRef.current.offsetHeight / 1000), .3, 1)
       }
-      global.spriteScale = squishers.x < squishers.y ? squishers.x : squishers.y;
+      // global.spriteScale = squishers.x < squishers.y ? squishers.x : squishers.y;
       this.setState({
         containerWidth: this.containerRef.current.offsetWidth,
         containerHeight: this.containerRef.current.offsetHeight
