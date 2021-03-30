@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
-import Pet from './pet.js';
+import Pet from './pet';
 import { throttle } from 'throttle-debounce';
 
 const groups = {};
 const gPetInfo = {};
 let sceneContext;
 const THROTTLE_SPEED = 150;
+
 
 const setContext = (context) => {
   sceneContext = context;
@@ -154,6 +155,7 @@ const updatePetActivities = (id, data) => {
     }
   });
 }
+
 
 const exports = {
   setContext,

@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
-import { throttle } from 'throttle-debounce';
-import PetBrain from '@components/pet/pet-brain';
-import { ContactSupportOutlined } from '@material-ui/icons';
+import PetBrain from './pet-brain';
+import Events from '../event-emitter';
 
 
 const LAZY_STATS = {
@@ -12,9 +11,8 @@ const LAZY_STATS = {
   roamChance: .01
 }
 
-
 class Entity extends Phaser.Physics.Arcade.Sprite {
-  constructor (scene, physicsGroup, spawnData, petInfo) {
+  constructor (scene, physicsGroup, spawnData) {
     super(scene, spawnData.x, spawnData.y, spawnData.id);
     console.log('Pet.Constructor ', spawnData.id, spawnData.petInfo);
 
@@ -50,6 +48,10 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     this.isAlive = true;
     this.personality = spawnData.petInfo.data.personality;
     this.activities = [];
+
+    
+    this.petBrain = new PetBrain(this.onBrainDoComplete.bind(this), this.onBrainThinkComplete.bind(this));
+    this.petBrain.setPersonality(this.petInfo.data.personality);
   }
 
 
@@ -63,16 +65,67 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     }
 
     
-    if(this.isAlive && this.hasActivity('ROAMING')){
+    if(this.isAlive){
       this.checkRoamingStuff();
     }
   }
 
   throttledUpdate(keysDown = []){
+
+    if(this.isAlive){
+      // if you wanna turn off thinking for some reason (ex, user input)
+      // this.petBrain.pullThePlug();
+      this.petBrain.think([], []);
+    }
+
+
     // console.log('throttledUpdate');
+
+    /* RIGHT NOW, used for sending status back to the react app */
+    let activities = [];
+    if(!this.body.onFloor() && Math.abs(this.body.velocity.y) > .5){
+      activities.push('JUMPING');
+    }
+    if(Math.abs(this.body.velocity.x) > .5){
+      activities.push('WALKING');
+    }
+    if(this.isRoaming){
+      activities.push('ROAMING');
+    }
+
+    this.sendActivities(activities);
   }
 
+
+
+  onBrainDoComplete(){
+    this.stopRoaming();
+  }
+
+  onBrainThinkComplete(){
+    this.startRoaming();
+  }
+
+  startRoaming(){
+    this.isRoaming = true;
+  }
+
+  stopRoaming(forced){
+    this.isRoaming = false;
+  }
+
+
+
+
+
+
+
+
+
+
+
   updateActivities(activities){
+    // console.log('updateActivities', activities)
     this.activities = activities;
   }
 
@@ -89,20 +142,17 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
   }
 
   checkRoamingStuff(){
-    // console.log(this.body.velocity.x)
     
     if(this.body.onWall()){
       this.flipAndMove(1);
     }else{
-      if(this.hasActivity('JUMPING')){
-        this.jump(20);
-      }
-      // if(Math.random() < this.personality.jumpChance){
-      //   this.jump(20);
-      // }
-  
-      if(this.body.onFloor()){
-        this.keepRoaming(1);
+      if(this.body.onFloor() && this.hasActivity('ROAMING')){
+        //idle movements
+        if(Math.random() < this.personality.jumpChance){
+          this.jump(20);
+        }else{
+          this.keepRoaming(1);
+        }
       }
     }
   }
@@ -126,12 +176,10 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
   jump(mod = 0){
     if(this.body.onFloor()){
-      this.setVelocityY(-1 * LAZY_STATS.jumpHeight)
+      this.setVelocityY(-1 * LAZY_STATS.jumpHeight);
+      // console.log('JUMP')
+      // this.addActivity('JUMPING');
     }
-    // if(this.state.isOnGround){
-      // this.props.addActivity('JUMPING');
-      // this.vY -= amount * this.props.personality.jumpForce;
-    // }
   }
 
   move(modifier){
@@ -145,7 +193,28 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
   playAnimation(animKey){
     // console.log('playAnimation', animKey)
-    this.anims.play(animKey).setScale(this.spriteScale).setOrigin(0);
+    if(this.curAnimation !== animKey){
+      this.curAnimation = animKey;
+      this.anims.play(animKey).setScale(this.spriteScale).setOrigin(0);
+    }
+  }
+
+  addActivity(activity){
+    if(!this.hasActivity(activity)){
+      // console.log('pet.emit', 'addActivity')
+      Events.emit('interface', 'addActivity', activity);
+    }
+  }
+
+  sendActivities(activities){
+    Events.emit('sendStatus', activities);
+  }
+
+  removeActivity(activity){
+    if(this.hasActivity(activity)){
+      console.log('removiong with ', this.activities)
+      Events.emit('interface', 'removeActivity', activity);
+    }
   }
 }
 

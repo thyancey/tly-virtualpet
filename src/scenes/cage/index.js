@@ -5,8 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { themeGet } from '@themes/';
 import { clamp } from '@util/tools';
-
-import Pet from '../../components/pet';
 import { 
   selectActivePetId
 } from '../../store/selectors';
@@ -89,11 +87,6 @@ class Cage extends Component {
       return(
         <S.Cage ref={this.containerRef} style={{ width: this.state.containerWidth, height: this.state.containerHeight }}>
           <PhaserComponent id="1" width={this.state.containerWidth} height={this.state.containerHeight}/>
-          <Pet 
-            activePetId={activePetId} 
-            containerWidth={this.state.containerWidth}
-            containerHeight={this.state.containerHeight}
-            />
           <Scene />
         </S.Cage>
       );

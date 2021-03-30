@@ -6,7 +6,7 @@
   "scene": "shroomKingdom",
   "thumbnail": "thumbnail.jpg",
   "personality":{
-    "thinkRange": [ 500, 2000 ],
+    "thinkRange": [ 2000, 6000 ],
     "doRange": [ 1000, 5000 ],
     "jumpChance": 0.005,
     "jumpForce": 0.8,

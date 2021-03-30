@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import SpawnController from './spawn.js';
+import Events from './event-emitter';
 
 let game;
 let sceneContext;
@@ -31,7 +32,7 @@ export const createGame = (jsonData) => {
     }
   };
 
-  game = new Phaser.Game(config);
+  global.game = new Phaser.Game(config);
 }
 global.stopGame = () => {
   sceneContext.scene.stop();
@@ -75,6 +76,16 @@ export function spawnPet(){
   SpawnController.spawnPet('bario')
 }
 
+function onInterface(event, data){
+  // console.log('onInterface', event, data)
+  global.game.onInterface && global.game.onInterface(event, data)
+}
+
+function onSendStatus(data){
+  // console.log('onInterface', event, data)
+  global.game.onInterface && global.game.onInterface('sendStatus', data)
+}
+
 function create() {
   console.log('Phaser.create()')
 
@@ -82,6 +93,10 @@ function create() {
 
   let spawnGroups = SpawnController.create(this);
   spawnPet();
+
+  Events.on('interface', onInterface, this);
+  Events.on('sendStatus', onSendStatus, this);
+
 }
 
 function update (){

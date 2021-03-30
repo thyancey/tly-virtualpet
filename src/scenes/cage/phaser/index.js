@@ -18,6 +18,12 @@ import {
   selectActivePetActivities,
 } from '@store/selectors';
 
+import {
+  addActivity,
+  setActivities,
+  removeActivity
+} from '@store/actions/pet';
+
 const S = {};
 S.PhaserContainer = styled.div`
   display:block;
@@ -31,6 +37,39 @@ class PhaserComponent extends Component {
 
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
     updatePet(this.props.pet);
+
+    // global.emitter = EventDispatcher.getInstance();
+    // window.setTimeout(() => {
+    //   global.emmiter.on('SOMETHING', this.onEmitter);
+
+    // }, 6000)
+
+    // global.addEventListener('phaser.interface', function (e, d) {
+    //   console.log('addActivity', e, d)
+    // });
+
+    console.log('game is ', global.game)
+  
+    global.game.onInterface = (event, payload) => {
+      switch(event){
+        case 'addActivity': this.props.addActivity(payload);
+          break;
+        case 'removeActivity': this.props.removeActivity(payload);
+          break;
+        case 'sendStatus': this.onSendStatus(payload);
+          break;
+        default: console.error('invalid interface command', event);
+      }
+    }
+  }
+
+  onSendStatus(data){
+    this.props.setActivities(data);
+    // console.log('onSendStatus', data)
+  }
+
+  onEmitter(e){
+    console.error('onEmitter', e)
   }
 
   componentDidUpdate(prevProps){
@@ -64,7 +103,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(
-    {},
+    { addActivity, removeActivity, setActivities },
     dispatch
   )
 );

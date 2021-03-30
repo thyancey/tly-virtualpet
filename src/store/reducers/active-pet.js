@@ -4,6 +4,7 @@ import {
 import { 
   addActivity,
   removeActivity,
+  setActivities,
   forceBehavior,
   augmentStat,
   resetPet,
@@ -79,6 +80,15 @@ export default handleActions({
       ...state,
       activities: state.activities.filter(a => a !== activity)
     }
+  },
+
+  [setActivities.toString()]: (state, action) => {
+    const activities = action.payload;
+    // console.log('addActivity > ', activity);
+    return {
+      ...state,
+      activities: activities
+    } 
   },
 
   [forceBehavior.toString()]: (state, action) => {
