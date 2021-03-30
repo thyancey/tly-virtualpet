@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import SpawnController from './spawn.js';
+import SceneController from './scene.js';
 import Events from './event-emitter';
 
 let game;
@@ -50,17 +51,24 @@ export function updateBounds(x, y, width, height){
 function setSceneContext(context){
   sceneContext = context;
   global.scene = sceneContext;
+  SceneController.setContext(context);
   SpawnController.setContext(context);
 }
 
 function preload() {
   setSceneContext(this);
+  SceneController.preload(this);
   SpawnController.preload(this);
 }
 
 export function updatePet(petInfo){
   console.log('Game.updatePet: ', petInfo);
   SpawnController.setPetInfo(petInfo.id, petInfo);
+}
+
+export function updateScene(sceneInfo){
+  console.log('Game.updateScene: ', sceneInfo);
+  SceneController.setSceneInfo(sceneInfo);
 }
 
 export function updatePetAnimationLabel(petId, data){
@@ -91,12 +99,28 @@ function create() {
 
   global.spawnController = SpawnController;
 
+  let sceneGroups = SceneController.create(this);
   let spawnGroups = SpawnController.create(this);
+  
+  this.physics.add.collider(spawnGroups.pets, sceneGroups.floor, null, collider_petsAndFloor, this);
+  
   spawnPet();
 
   Events.on('interface', onInterface, this);
   Events.on('sendStatus', onSendStatus, this);
+}
 
+
+function collider_petsAndFloor(pet, floor){
+  return true;
+  /*
+  // to ignore floor when jumping or something
+  if(pet.isGoingUp()){
+    return false;
+  }else{
+    return true;
+  }
+  */
 }
 
 function update (){

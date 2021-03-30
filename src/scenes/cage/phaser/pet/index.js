@@ -14,12 +14,13 @@ const LAZY_STATS = {
 class Entity extends Phaser.Physics.Arcade.Sprite {
   constructor (scene, physicsGroup, spawnData) {
     super(scene, spawnData.x, spawnData.y, spawnData.id);
-    console.log('Pet.Constructor ', spawnData.id, spawnData.petInfo);
+    // console.log('Pet.Constructor ', spawnData.id, spawnData.petInfo);
 
     this.id = spawnData.petInfo.id;
     this.stats = spawnData.stats || {};
     this.petInfo = spawnData.petInfo;
     this.spriteScale = this.petInfo?.data?.atlas?.sprites?.MAIN?.scale || 1;
+    this.canSendUpdates = spawnData.canSendUpdates;
     const frameDims = this.petInfo?.data?.atlas?.sprites?.MAIN?.frameDims || [ 0, 0 ];
     // this.spriteFramerate = this.petInfo?.data?.atlas?.sprites?.Main?.framerate || 10;
 
@@ -81,22 +82,22 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
     // console.log('throttledUpdate');
 
-    /* RIGHT NOW, used for sending status back to the react app */
-    let activities = [];
-    if(!this.body.onFloor() && Math.abs(this.body.velocity.y) > .5){
-      activities.push('JUMPING');
+    if(this.canSendUpdates){
+      /* RIGHT NOW, used for sending status back to the react app */
+      let activities = [];
+      if(!this.body.onFloor() && Math.abs(this.body.velocity.y) > .5){
+        activities.push('JUMPING');
+      }
+      if(Math.abs(this.body.velocity.x) > .5){
+        activities.push('WALKING');
+      }
+      if(this.isRoaming){
+        activities.push('ROAMING');
+      }
+  
+      this.sendActivities(activities);
     }
-    if(Math.abs(this.body.velocity.x) > .5){
-      activities.push('WALKING');
-    }
-    if(this.isRoaming){
-      activities.push('ROAMING');
-    }
-
-    this.sendActivities(activities);
   }
-
-
 
   onBrainDoComplete(){
     this.stopRoaming();
@@ -113,16 +114,6 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
   stopRoaming(forced){
     this.isRoaming = false;
   }
-
-
-
-
-
-
-
-
-
-
 
   updateActivities(activities){
     // console.log('updateActivities', activities)

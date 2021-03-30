@@ -127,17 +127,25 @@ const throttledUpdate = throttle(THROTTLE_SPEED, false, onThrottledUpdate);
 
 
 const spawnPet = (id, petInfo) => {
-  spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo);
+  spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo, true);
+  // spawnClones(() => { spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo, false) }, 10)
 }
 
-const spawnIt = (EntityRef, id, position, stats, petInfo) => {
-  console.log('Spawn.spawnIt: ', id, petInfo)
+const spawnClones = (command, count) => {
+  for(let i = 0; i < count; i++){
+    command();
+  }
+}
+
+const spawnIt = (EntityRef, id, position, stats, petInfo, canSendUpdates = false) => {
+  // console.log('Spawn.spawnIt: ', id, petInfo)
   return new EntityRef(sceneContext, groups.pets, {
     id: id,
     x: position.x,
     y: position.y,
     stats: stats,
-    petInfo: petInfo
+    petInfo: petInfo,
+    canSendUpdates: canSendUpdates
   });
 }
 

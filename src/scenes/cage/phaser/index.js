@@ -7,6 +7,7 @@ import {
   createGame, 
   updateBounds, 
   updatePet, 
+  updateScene,
   updatePetAnimationLabel,
   updatePetActivities
 } from './game';
@@ -16,6 +17,7 @@ import {
   selectActivePetId,
   selectActivePetAnimation,
   selectActivePetActivities,
+  selectActiveScene
 } from '@store/selectors';
 
 import {
@@ -37,6 +39,7 @@ class PhaserComponent extends Component {
 
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
     updatePet(this.props.pet);
+    updateScene(this.props.activeScene);
 
     // global.emitter = EventDispatcher.getInstance();
     // window.setTimeout(() => {
@@ -99,6 +102,7 @@ const mapStateToProps = (state) => ({
   pet: selectActivePet(state),
   animation: selectActivePetAnimation(state),
   activities: selectActivePetActivities(state),
+  activeScene: selectActiveScene(state)
 });
 
 const mapDispatchToProps = dispatch => (
