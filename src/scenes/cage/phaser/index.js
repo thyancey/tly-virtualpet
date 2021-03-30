@@ -3,12 +3,19 @@ import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { createGame, updateBounds, updatePet, updatePetAnimationLabel } from './game';
+import { 
+  createGame, 
+  updateBounds, 
+  updatePet, 
+  updatePetAnimationLabel,
+  updatePetActivities
+} from './game';
 import { debounce } from 'throttle-debounce';
 import { 
   selectActivePet,
   selectActivePetId,
-  selectActivePetAnimation
+  selectActivePetAnimation,
+  selectActivePetActivities,
 } from '@store/selectors';
 
 const S = {};
@@ -36,6 +43,7 @@ class PhaserComponent extends Component {
     }
 
     if(prevProps.animation !== this.props.animation){
+      updatePetActivities(this.props.petId, this.props.activities)
       updatePetAnimationLabel(this.props.petId, this.props.animation.label);
     }
   }
@@ -50,7 +58,8 @@ class PhaserComponent extends Component {
 const mapStateToProps = (state) => ({
   petId: selectActivePetId(state),
   pet: selectActivePet(state),
-  animation: selectActivePetAnimation(state)
+  animation: selectActivePetAnimation(state),
+  activities: selectActivePetActivities(state),
 });
 
 const mapDispatchToProps = dispatch => (

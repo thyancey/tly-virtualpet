@@ -7,12 +7,6 @@ let sceneContext;
 export const createGame = (jsonData) => {
   console.log('Phaser.createGame, jsonData:', jsonData);
 
-  // SpawnController.setDefinitions([
-  //   {
-  //     id: 'bario'
-  //   }
-  // ]);
-
   const config = {
     type: Phaser.AUTO,
     scale:{
@@ -20,15 +14,14 @@ export const createGame = (jsonData) => {
       mode: Phaser.Scale.RESIZE,
       autoCenter: Phaser.Scale.CENTER_BOTH,
       width: 900,
-      height: 500,
+      height: 500
     },
     autoRound: false,
-    backgroundColor: 0xFF0000,
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 800 },
-            debug: false
+            debug: true
         }
     },
     scene: {
@@ -69,10 +62,14 @@ export function updatePet(petInfo){
   SpawnController.setPetInfo(petInfo.id, petInfo);
 }
 
-export function updatePetAnimationLabel(petId, animationLabel){
-  // console.log('updatePetAnimationLabel: ', animationLabel);
-  SpawnController.updatePetAnimationLabel(petId, animationLabel);
+export function updatePetAnimationLabel(petId, data){
+  SpawnController.updatePetAnimationLabel(petId, data);
 }
+
+export function updatePetActivities(petId, data){
+  SpawnController.updatePetActivities(petId, data);
+}
+
 
 export function spawnPet(){
   SpawnController.spawnPet('bario')

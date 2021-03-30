@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
 import Pet from './pet.js';
+import { throttle } from 'throttle-debounce';
 
 const groups = {};
 const gPetInfo = {};
 let sceneContext;
+const THROTTLE_SPEED = 150;
 
 const setContext = (context) => {
   sceneContext = context;
@@ -111,7 +113,16 @@ const update = () => {
   groups.pets.children.each(entity => {
     entity.update();
   });
+  
+  throttledUpdate();
 }
+
+const onThrottledUpdate = () => {
+  groups.pets.children.each(entity => {
+    entity.throttledUpdate();
+  });
+}
+const throttledUpdate = throttle(THROTTLE_SPEED, false, onThrottledUpdate);
 
 
 const spawnPet = (id, petInfo) => {
@@ -136,6 +147,13 @@ const updatePetAnimationLabel = (id, label) => {
     }
   });
 }
+const updatePetActivities = (id, data) => {
+  groups?.pets?.children?.each(entity => {
+    if(entity.id === id){
+      entity.updateActivities(data);
+    }
+  });
+}
 
 const exports = {
   setContext,
@@ -143,6 +161,7 @@ const exports = {
   create,
   update,
   updatePetAnimationLabel,
+  updatePetActivities,
   setPetInfo,
   spawnPet
 }

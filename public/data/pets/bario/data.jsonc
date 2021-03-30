@@ -8,7 +8,7 @@
   "personality":{
     "thinkRange": [ 500, 2000 ],
     "doRange": [ 1000, 5000 ],
-    "jumpChance": 0.02,
+    "jumpChance": 0.005,
     "jumpForce": 0.8,
     "maxVx": 3,
     "xForce": 1,

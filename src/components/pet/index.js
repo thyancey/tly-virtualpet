@@ -515,15 +515,9 @@ class Pet extends Component {
     //- some error happened
 
     if(!animation ) return null;
-    window.ani = animation;
 
     let width = this.state.adjustedWidth;
     let height = this.state.adjustedHeight;
-
-    // console.log('petX', this.state.posX)
-    // console.log('maxX', this.state.maxX)
-    // console.log('personality', this.props.personality)
-    global.p = this;
 
     let drawCommands = [];
     if(animation.type){
