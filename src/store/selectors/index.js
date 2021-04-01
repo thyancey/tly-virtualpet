@@ -58,7 +58,6 @@ export const selectNextExternalItem = createSelector(
   }
 );
 
-
 export const selectIsLoadingComplete = createSelector(
   [getDataLoadComplete],
   (loadingComplete = false) => {
@@ -125,7 +124,6 @@ export const selectActiveScene = createSelector(
   }
 );
 
-
 export const selectActiveCage = createSelector(
   [selectActivePetData],
   (activePetData) => {
@@ -165,74 +163,22 @@ export const selectActiveSceneFloorOffset = createSelector(
   }
 );
 
-const getFallbackValue = (graphic, spriteInfo, defaultValue) => {
-  if(graphic !== undefined){
-    return graphic;
-  }else if(spriteInfo !== undefined){
-    return spriteInfo;
-  }else{
-    return defaultValue;
-  }
-}
-
-const createSpriteObj = (label, overlayLabel, graphic, sprite, assetDir = '') => {
-  sprite.spriteInfo = sprite.spriteInfo || {};
-
-  let faceDirection;
-  if(graphic.faceDirection !== undefined){
-    faceDirection = graphic.faceDirection;
-  }else if(sprite.spriteInfo.faceDirection !== undefined){
-    faceDirection = sprite.spriteInfo.faceDirection;
-  }else{
-    faceDirection = true;
-  }
-
-  
-  let orientation;
-  if(graphic.orientation !== undefined){
-    orientation = graphic.orientation;
-  }else if(sprite.spriteInfo.orientation !== undefined){
-    orientation = sprite.spriteInfo.orientation;
-  }else{
-    orientation = 1;
-  }
-
-  const imageUrl = `${assetDir}/${sprite.imageUrl}`;
-  let overlayUrl = null;
-  if(overlayLabel){
-    overlayUrl = sprite.overlays?.[overlayLabel];
-    if(overlayUrl){
-      overlayUrl = `${assetDir}/${overlayUrl}`;
-    }
-  }
-
-  return {
-    type: sprite.type,
-    imageUrl: imageUrl,
-    overlayUrl: overlayUrl,
-    label: label,
-    spriteInfo:{
-      speed: graphic.speed || sprite.spriteInfo.speed || 1,
-      faceDirection: faceDirection,
-      orientation: orientation,
-      dir: graphic.dir || sprite.spriteInfo.dir || 1,
-      scale: getFallbackValue(graphic.scale, sprite.spriteInfo.scale, 1),
-      frames: getFallbackValue(graphic.frames, sprite.spriteInfo.frames),
-      frame: getFallbackValue(graphic.frame, sprite.spriteInfo.frame),
-      grid: sprite.spriteInfo.grid,
-      cells: sprite.spriteInfo.cells,
-      hitboxOffset: sprite.spriteInfo.hitboxOffset || [0, 0]
-    }
-  };
-}
-
-
 export const selectActivePetActivities = createSelector(
   [selectActivePet],
   (activePet) => {
     if(!activePet) return null;
     
     return activePet.activities;
+  }
+);
+
+/* TODO: this shouldnt be necessary, work on updating the monad for the regular activities array */
+export const selectActivePetActivitesString = createSelector(
+  [selectActivePetActivities],
+  (petActivities) => {
+    if(!petActivities) return null;
+    
+    return petActivities.join(',');
   }
 );
 
@@ -257,8 +203,7 @@ export const selectActiveSceneStyles = createSelector(
     }
     return activeScene.styles;
   }
-)
-
+);
 
 export const selectActiveMoods = createSelector(
   [selectActivePet, selectActiveDeltaStats],
@@ -284,8 +229,7 @@ const evaluateModifier = (whenObj, statObj) => {
   }else{
     return null;
   }
-
-}
+};
 
 const getActiveMoods = (whenMoods, statObj) => {
 
@@ -296,7 +240,7 @@ const getActiveMoods = (whenMoods, statObj) => {
   }
 
   return matchedMoods;
-}
+};
 
 const getFullStatEffectObj = (moods, stat) => {
   // console.log(stat, moods);
@@ -309,7 +253,7 @@ const getFullStatEffectObj = (moods, stat) => {
       ...moods[effect.then]
     }
   }));
-}
+};
 
 const getDeltaStatsArray = (activePet, statRules) => {
   if(!activePet || !activePet.id) return [];
@@ -335,7 +279,6 @@ const getDeltaStatsArray = (activePet, statRules) => {
     }
   });
 } 
-
 
 export const evaluateMoods = (whenMoods, currentMoods) => {
   let moodsMatched = [];
@@ -399,7 +342,7 @@ export const evaluateWhen = (when, moodSwingData) => {
       return null;
     }
   }
-}
+};
 
 export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
   let behavior = null;
@@ -432,21 +375,21 @@ export const checkMoodSwingForBehavior = (moodSwings, moodSwingData) => {
   };
   
   return behavior || 'ERROR';
-}
+};
 
 export const selectActivePetDefinition = createSelector(
   [selectActivePet],
   (activePet) => {
     return getPetDefinition(activePet?.id);
   }
-)
+);
 
 export const selectActivePetPersonality = createSelector(
   [selectActivePetDefinition],
   (petDef) => {
     return petDef?.personality
   }
-)
+);
 
 export const selectActivePetBehavior = createSelector(
   [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveMoods, getForcedBehavior],
@@ -480,38 +423,30 @@ export const selectActivePetBehavior = createSelector(
   }
 );
 
-export const selectActivePetAnimation = createSelector(
+export const selectActivePetAnimationLabel = createSelector(
   [selectActivePet, selectActivePetBehavior],
   (activePet, behavior) => {
     if(!activePet) return null;
 
-    const aData = activePet.data;
-    const statusObj = aData.behaviors[behavior] || aData.behaviors.DEFAULT;
-    const sprites = aData.sprites;
+    /* example statusObj
+      "JUMP_LITTLE": { "animations": [ "Jump_Little" ] },
+    */
+    const statusObj = activePet.data.behaviors[behavior] || activePet.data.behaviors.DEFAULT;
 
     if(!statusObj){
       console.error(`Error getting behavior ${behavior}`);
       return null;
     }
+
+    /* behaviors allow for a random set of animations.. if that was ever wanted */
     const animIdx = Math.floor(Math.random() * statusObj.animations.length)
     const animationLabel = statusObj.animations[animIdx];
-    const overlayLabel = statusObj.overlay || null;
 
-    const foundAnimation = aData.animations[animationLabel];
-    if(foundAnimation){
-      const sprite = sprites[foundAnimation.sprite];
-
-      if(animationLabel && foundAnimation && sprite){
-        const spriteObj = createSpriteObj(animationLabel, overlayLabel, foundAnimation, sprite, `${aData.dir}/assets`);
-        return spriteObj;
-      }else{
-        console.error(`Error getting spriteObj for ${animationLabel}`);
-        return null;
-      }
-    }else{
-      console.error(`Error getting graphic for ${animationLabel}`);
-      return null;
+    if(!animationLabel){
+      console.error(`Error getting animationLabel for Pet "${activePet.id}" and Behavior "${behavior}"`);
     }
+
+    return animationLabel;
   }
 );
 

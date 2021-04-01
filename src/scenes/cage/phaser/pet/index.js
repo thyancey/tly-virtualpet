@@ -19,10 +19,12 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     this.id = spawnData.petInfo.id;
     this.stats = spawnData.stats || {};
     this.petInfo = spawnData.petInfo;
-    this.spriteScale = this.petInfo?.data?.atlas?.sprites?.MAIN?.scale || 1;
+    const firstSheetKey = Object.keys(this.petInfo?.data?.sprites)[0];
+
+    this.spriteScale = this.petInfo.data.sprites[firstSheetKey].scale || 1;
     this.canSendUpdates = spawnData.canSendUpdates;
-    const frameDims = this.petInfo?.data?.atlas?.sprites?.MAIN?.frameDims || [ 0, 0 ];
-    // this.spriteFramerate = this.petInfo?.data?.atlas?.sprites?.Main?.framerate || 10;
+    const frameDims = this.petInfo.data.sprites[firstSheetKey].frameDims || [ 0, 0 ];
+    // this.spriteFramerate = this.petInfo?.data?.sprites?.Main?.framerate || 10;
 
     //- custom properties
 
@@ -183,7 +185,6 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
   // }
 
   playAnimation(animKey){
-    // console.log('playAnimation', animKey)
     if(this.curAnimation !== animKey){
       this.curAnimation = animKey;
       this.anims.play(animKey).setScale(this.spriteScale).setOrigin(0);

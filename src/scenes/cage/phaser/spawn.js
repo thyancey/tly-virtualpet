@@ -17,10 +17,12 @@ const setPetInfo = (id, petInfo) => {
   if(gPetInfo[id]){
     console.error(`Spawn.setPetInfo: already set for ${id}`);
   }else {
-    const sprites = registerSprites(id, petInfo.data?.atlas);
+    const sprites = registerSprites(id, petInfo.data.sprites);
+
+    console.log("petInfo", petInfo)
 
     gPetInfo[id] = {
-      atlas: petInfo.data.atlas,
+      animations: petInfo.data.animations,
       petInfo: petInfo,
       sprites: sprites
     };
@@ -32,15 +34,16 @@ const getPetInfo = id => {
   return gPetInfo[id] || null;
 }
 
-const registerSprites = (id, atlasInfo) => {
-  const sprites = atlasInfo.sprites;
+const registerSprites = (id, sprites) => {
   let spriteDefs = {};
+
+  console.log('register', id)
 
   Object.keys(sprites).forEach(spriteKey => {
     spriteDefs[spriteKey] = {
       id: spriteKey,
-      image: `./data/pets/bario/assets/${sprites[spriteKey].image}`, 
-      data: `./data/pets/bario/assets/${sprites[spriteKey].data}`,
+      image: `./data/pets/${id}/assets/${sprites[spriteKey].image}`, 
+      data: `./data/pets/${id}/assets/${sprites[spriteKey].data}`,
       defaults: sprites[spriteKey].defaults || { animation: {}, frameObj: {} }
     };
   });
@@ -61,7 +64,7 @@ const getCleanAnimationDef = (given, defaults) => {
 
 const createSprites = (sceneContext) => {
   Object.keys(gPetInfo).forEach(petKey => {
-    createSpritesForPet(petKey, getPetInfo(petKey).sprites, getPetInfo(petKey).atlas.animations, sceneContext)
+    createSpritesForPet(petKey, getPetInfo(petKey).sprites, getPetInfo(petKey).animations, sceneContext)
   });
 }
 
@@ -152,6 +155,7 @@ const spawnIt = (EntityRef, id, position, stats, petInfo, canSendUpdates = false
 const updatePetAnimationLabel = (id, label) => {
   groups?.pets?.children?.each(entity => {
     if(entity.id === id){
+      // console.log('playAnimation', label)
       entity.playAnimation(label);
     }
   });

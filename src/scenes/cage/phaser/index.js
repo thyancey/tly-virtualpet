@@ -15,8 +15,9 @@ import { debounce } from 'throttle-debounce';
 import { 
   selectActivePet,
   selectActivePetId,
-  selectActivePetAnimation,
+  selectActivePetAnimationLabel,
   selectActivePetActivities,
+  selectActivePetActivitesString,
   selectActiveScene
 } from '@store/selectors';
 
@@ -84,9 +85,12 @@ class PhaserComponent extends Component {
       updatePet(this.props.pet);
     }
 
-    if(prevProps.animation !== this.props.animation){
+    if(prevProps.activitiesString !== this.props.activitiesString){
       updatePetActivities(this.props.petId, this.props.activities)
-      updatePetAnimationLabel(this.props.petId, this.props.animation.label);
+    }
+
+    if(prevProps.animationLabel !== this.props.animationLabel){
+      updatePetAnimationLabel(this.props.petId, this.props.animationLabel);
     }
   }
 
@@ -100,8 +104,9 @@ class PhaserComponent extends Component {
 const mapStateToProps = (state) => ({
   petId: selectActivePetId(state),
   pet: selectActivePet(state),
-  animation: selectActivePetAnimation(state),
+  animationLabel: selectActivePetAnimationLabel(state),
   activities: selectActivePetActivities(state),
+  activitiesString: selectActivePetActivitesString(state),
   activeScene: selectActiveScene(state)
 });
 
