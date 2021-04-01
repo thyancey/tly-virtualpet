@@ -5,6 +5,7 @@ import Events from './event-emitter';
 
 let game;
 let sceneContext;
+let activePetId = null;
 
 export const createGame = (jsonData) => {
   console.log('Phaser.createGame, jsonData:', jsonData);
@@ -63,6 +64,7 @@ function preload() {
 
 export function updatePet(petInfo){
   console.log('Game.updatePet: ', petInfo);
+  activePetId = petInfo.id;
   SpawnController.setPetInfo(petInfo.id, petInfo);
 }
 
@@ -81,7 +83,7 @@ export function updatePetActivities(petId, data){
 
 
 export function spawnPet(){
-  SpawnController.spawnPet('bario')
+  SpawnController.spawnPet(activePetId);
 }
 
 function onInterface(event, data){
