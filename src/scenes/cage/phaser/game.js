@@ -5,6 +5,7 @@ import Events from './event-emitter';
 
 let game;
 let sceneContext;
+let gameLoaded = false;
 let activePetId = null;
 
 export const createGame = (jsonData) => {
@@ -62,10 +63,14 @@ function preload() {
   SpawnController.preload(this);
 }
 
-export function updatePet(petInfo){
-  console.log('Game.updatePet: ', petInfo);
+export function changePet(petInfo){
+  // console.log('Game.changePet: ', petInfo);
   activePetId = petInfo.id;
   SpawnController.setPetInfo(petInfo.id, petInfo);
+
+  if(gameLoaded){
+    spawnPet(petInfo.id);
+  }
 }
 
 export function updateScene(sceneInfo){
@@ -81,9 +86,13 @@ export function updatePetActivities(petId, data){
   SpawnController.updatePetActivities(petId, data);
 }
 
+export function updatePetMortality(petId, isAlive){
+  SpawnController.updatePetMortality(petId, isAlive);
+}
 
-export function spawnPet(){
-  SpawnController.spawnPet(activePetId);
+
+export function spawnPet(petId){
+  SpawnController.spawnPet(petId);
 }
 
 function onInterface(event, data){
@@ -106,10 +115,12 @@ function create() {
   
   this.physics.add.collider(spawnGroups.pets, sceneGroups.floor, null, collider_petsAndFloor, this);
   
-  spawnPet();
+  spawnPet(activePetId);
 
   Events.on('interface', onInterface, this);
   Events.on('sendStatus', onSendStatus, this);
+
+  gameLoaded = true;
 }
 
 

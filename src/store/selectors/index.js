@@ -439,7 +439,7 @@ export const selectActivePetAnimationLabel = createSelector(
     }
 
     /* behaviors allow for a random set of animations.. if that was ever wanted */
-    const animIdx = Math.floor(Math.random() * statusObj.animations.length)
+    const animIdx = Math.floor(Math.random() * statusObj.animations.length);
     const animationLabel = statusObj.animations[animIdx];
 
     if(!animationLabel){

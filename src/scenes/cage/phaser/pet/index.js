@@ -14,7 +14,6 @@ const LAZY_STATS = {
 class Entity extends Phaser.Physics.Arcade.Sprite {
   constructor (scene, physicsGroup, spawnData) {
     super(scene, spawnData.x, spawnData.y, spawnData.id);
-    // console.log('Pet.Constructor ', spawnData.id, spawnData.petInfo);
 
     this.id = spawnData.petInfo.id;
     this.stats = spawnData.stats || {};
@@ -55,6 +54,7 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     
     this.petBrain = new PetBrain(this.onBrainDoComplete.bind(this), this.onBrainThinkComplete.bind(this));
     this.petBrain.setPersonality(this.petInfo.data.personality);
+    this.petBrain.setActive();
   }
 
 
@@ -122,6 +122,15 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     this.activities = activities;
   }
 
+  updateMortality(isAlive){
+    this.isAlive = isAlive;
+    if(isAlive){
+      this.petBrain.setActive(true);
+    }else{
+      this.petBrain.setActive(false);
+    }
+  }
+
   hasActivity(activity){
     return this.activities.indexOf(activity) > -1;
   }
@@ -182,9 +191,10 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
   // hasActivity(activityKey){
   //   return this.activities.indexOf(activityKey) > -1
-  // }
+  // }[]
 
   playAnimation(animKey){
+    // console.log('playAnimation:', this.id)
     if(this.curAnimation !== animKey){
       this.curAnimation = animKey;
       this.anims.play(animKey).setScale(this.spriteScale).setOrigin(0);

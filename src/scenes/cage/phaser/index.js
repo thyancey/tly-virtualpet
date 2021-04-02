@@ -6,10 +6,11 @@ import { connect } from 'react-redux';
 import { 
   createGame, 
   updateBounds, 
-  updatePet, 
+  changePet, 
   updateScene,
   updatePetAnimationLabel,
-  updatePetActivities
+  updatePetActivities,
+  updatePetMortality
 } from './game';
 import { debounce } from 'throttle-debounce';
 import { 
@@ -39,21 +40,9 @@ class PhaserComponent extends Component {
     });
 
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
-    updatePet(this.props.pet);
+    changePet(this.props.pet);
     updateScene(this.props.activeScene);
 
-    // global.emitter = EventDispatcher.getInstance();
-    // window.setTimeout(() => {
-    //   global.emmiter.on('SOMETHING', this.onEmitter);
-
-    // }, 6000)
-
-    // global.addEventListener('phaser.interface', function (e, d) {
-    //   console.log('addActivity', e, d)
-    // });
-
-    console.log('game is ', global.game)
-  
     global.game.onInterface = (event, payload) => {
       switch(event){
         case 'addActivity': this.props.addActivity(payload);
@@ -69,7 +58,6 @@ class PhaserComponent extends Component {
 
   onSendStatus(data){
     this.props.setActivities(data);
-    // console.log('onSendStatus', data)
   }
 
   onEmitter(e){
@@ -82,7 +70,7 @@ class PhaserComponent extends Component {
     }
 
     if(prevProps.petId !== this.props.petId){
-      updatePet(this.props.pet);
+      changePet(this.props.pet);
     }
 
     if(prevProps.activitiesString !== this.props.activitiesString){
@@ -91,6 +79,11 @@ class PhaserComponent extends Component {
 
     if(prevProps.animationLabel !== this.props.animationLabel){
       updatePetAnimationLabel(this.props.petId, this.props.animationLabel);
+    }
+
+    
+    if(prevProps.pet?.isAlive !== this.props.pet?.isAlive){
+      updatePetMortality(this.props.petId, this.props.pet?.isAlive);
     }
   }
 

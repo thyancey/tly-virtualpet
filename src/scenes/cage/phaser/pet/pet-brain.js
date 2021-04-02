@@ -24,6 +24,7 @@ class PetBrain {
 
     this.timer = null;
     this.status = STATUS.BRAINDEAD;
+    this.isActive = false;
   }
 
   getStatus(){
@@ -64,6 +65,10 @@ class PetBrain {
     }
   }
 
+  setActive(state = true){
+    this.isActive = state;
+  }
+
   setPersonality(personality){
     this.personality = { ...this.getPersonality(), ...personality };
   }
@@ -102,16 +107,20 @@ class PetBrain {
 
     switch (this.status){
       case STATUS.THINKING: 
-        // trigger the DO
-        this.onThinkComplete && this.onThinkComplete();
-        callback && callback();
-        this.startDoing();
+        if(this.isActive){
+          // trigger the DO
+          this.onThinkComplete && this.onThinkComplete();
+          callback && callback();
+          this.startDoing();
+        }
         break;
       case STATUS.DOING:
-        // trigger the THINK
-        this.onDoComplete && this.onDoComplete();
-        callback && callback();
-        this.startThinking();
+        if(this.isActive){
+          // trigger the THINK
+          this.onDoComplete && this.onDoComplete();
+          callback && callback();
+          this.startThinking();
+        }
       break;
       case STATUS.BRAINDEAD:
         // do nothing, shouldnt be here anyways
@@ -135,7 +144,7 @@ export default PetBrain;
     based on [ input, status ] then [ moods, stats, ]
     decide next: X
     start it:
-      - animation
+      - animation[]
       - activity
   (dynamic time)
     idle animation, 

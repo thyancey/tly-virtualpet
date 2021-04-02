@@ -144,20 +144,20 @@
     }
   ],
   "behaviors": {
-    "DEFAULT": { "animations": [ "Idle_Little" ] },
-    "DEAD": { "animations": [ "Dead_Little" ] },
-    "IDLE_BIG": { "animations": [ "Idle_Big" ] },
-    "WALK_BIG": { "animations": [ "Walk_Big" ] },
-    "JUMP_BIG": { "animations": [ "Jump_Big" ] },
-    "DUCK_BIG": { "animations": [ "Duck_Big" ] },
-    "IDLE_FIRE": { "animations": [ "Idle_Fire" ] },
-    "WALK_FIRE": { "animations": [ "Walk_Fire" ] },
-    "JUMP_FIRE": { "animations": [ "Jump_Fire" ] },
-    "DUCK_FIRE": { "animations": [ "Duck_Fire" ] },
-    "IDLE_LITTLE": { "animations": [ "Idle_Little" ] },
-    "WALK_LITTLE": { "animations": [ "Walk_Little" ] },
-    "JUMP_LITTLE": { "animations": [ "Jump_Little" ] },
-    "DUCK_LITTLE": { "animations": [ "Duck_Little" ] }
+    "DEFAULT": { "animations": [ "Idle_Little2" ] },
+    "DEAD": { "animations": [ "Dead_Little2" ] },
+    "IDLE_BIG": { "animations": [ "Idle_Big2" ] },
+    "WALK_BIG": { "animations": [ "Walk_Big2" ] },
+    "JUMP_BIG": { "animations": [ "Jump_Big2" ] },
+    "DUCK_BIG": { "animations": [ "Duck_Big2" ] },
+    "IDLE_FIRE": { "animations": [ "Idle_Fire2" ] },
+    "WALK_FIRE": { "animations": [ "Walk_Fire2" ] },
+    "JUMP_FIRE": { "animations": [ "Jump_Fire2" ] },
+    "DUCK_FIRE": { "animations": [ "Duck_Fire2" ] },
+    "IDLE_LITTLE": { "animations": [ "Idle_Little2" ] },
+    "WALK_LITTLE": { "animations": [ "Walk_Little2" ] },
+    "JUMP_LITTLE": { "animations": [ "Jump_Little2" ] },
+    "DUCK_LITTLE": { "animations": [ "Duck_Little2" ] }
   },  
   "statEvents":[
     {
@@ -180,9 +180,9 @@
     }
   ],
   "sprites":{
-    "MAIN":{
-      "data": "main-atlas.json",
-      "image": "main-complete.png",
+    "LARIO":{
+      "data": "main.json",
+      "image": "main.png",
       "scale": 5.0,
       "frameDims": [ 20, 35 ],
       "faceDirection": true,
@@ -200,80 +200,80 @@
     }
   },
   "animations":{
-    "Walk_Big":{
-      "sprite": "MAIN",
+    "Walk_Big2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [14, 15, 16]
       }
     },
-    "Jump_Big":{
-      "sprite": "MAIN",
+    "Jump_Big2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [18]
       }
     },
-    "Idle_Big":{
-      "sprite": "MAIN",
+    "Idle_Big2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [12]
       }
     },
-    "Duck_Big":{
-      "sprite": "MAIN",
+    "Duck_Big2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [13]
       }
     },
-    "Walk_Fire":{
-      "sprite": "MAIN",
+    "Walk_Fire2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [26, 27, 28]
       }
     },
-    "Jump_Fire":{
-      "sprite": "MAIN",
+    "Jump_Fire2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [30]
       }
     },
-    "Idle_Fire":{
-      "sprite": "MAIN",
+    "Idle_Fire2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [24]
       }
     },
-    "Duck_Fire":{
-      "sprite": "MAIN",
+    "Duck_Fire2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [25]
       }
     },
-    "Walk_Little":{
-      "sprite": "MAIN",
+    "Walk_Little2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [2, 3, 4]
       }
     },
-    "Jump_Little":{
-      "sprite": "MAIN",
+    "Jump_Little2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [6]
       }
     },
-    "Idle_Little":{
-      "sprite": "MAIN",
+    "Idle_Little2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [1]
       }
     },
-    "Duck_Little":{
-      "sprite": "MAIN",
+    "Duck_Little2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [1]
       }
     },
-    "Dead_Little":{
-      "sprite": "MAIN",
+    "Dead_Little2":{
+      "sprite": "LARIO",
       "frameObj":{
         "frames": [11]
       }

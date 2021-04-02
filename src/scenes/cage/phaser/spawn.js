@@ -1,32 +1,51 @@
-import Phaser from 'phaser';
 import Pet from './pet';
 import { throttle } from 'throttle-debounce';
 
 const groups = {};
 const gPetInfo = {};
 let sceneContext;
+let preloadCompleted = false;
 const THROTTLE_SPEED = 150;
-
 
 const setContext = (context) => {
   sceneContext = context;
 }
 
 const setPetInfo = (id, petInfo) => {
-  console.log('Spawn.setPetInfo: ', petInfo);
-  if(gPetInfo[id]){
-    console.error(`Spawn.setPetInfo: already set for ${id}`);
-  }else {
+  // console.log('Spawn.setPetInfo: ', petInfo);
+  if(!gPetInfo[id]){
     const sprites = registerSprites(id, petInfo.data.sprites);
-
-    console.log("petInfo", petInfo)
 
     gPetInfo[id] = {
       animations: petInfo.data.animations,
       petInfo: petInfo,
       sprites: sprites
     };
+
+    if(preloadCompleted){
+      loadPetImagesAfterPreload(petInfo.id);
+    }
+  }else {
+    // when you've loaded a pet before, so just skip around
   }
+}
+
+const loadPetImagesAfterPreload = id => {
+  const spriteDefs = getPetInfo(id).sprites;
+  Object.keys(spriteDefs).forEach(spriteDefKey => {
+    sceneContext.load.atlas(
+      spriteDefs[spriteDefKey].id, 
+      spriteDefs[spriteDefKey].image, 
+      spriteDefs[spriteDefKey].data
+    );
+  });
+
+  sceneContext.load.once('complete', () => onPetImagesReloadComplete(id));
+  sceneContext.load.start();
+}
+
+const onPetImagesReloadComplete = petId => {
+  createSpritesForPetId(petId);
 }
 
 const getPetInfo = id => {
@@ -36,8 +55,6 @@ const getPetInfo = id => {
 
 const registerSprites = (id, sprites) => {
   let spriteDefs = {};
-
-  console.log('register', id)
 
   Object.keys(sprites).forEach(spriteKey => {
     spriteDefs[spriteKey] = {
@@ -62,13 +79,18 @@ const getCleanAnimationDef = (given, defaults) => {
   }
 }
 
-const createSprites = (sceneContext) => {
-  Object.keys(gPetInfo).forEach(petKey => {
-    createSpritesForPet(petKey, getPetInfo(petKey).sprites, getPetInfo(petKey).animations, sceneContext)
+const createSprites = () => {
+  Object.keys(gPetInfo).forEach(petId => {
+    createSpritesForPetId(petId);
   });
 }
 
+const createSpritesForPetId = (petId) => {
+  createSpritesForPet(petId, getPetInfo(petId).sprites, getPetInfo(petId).animations, sceneContext)
+}
+
 const createSpritesForPet = (petId, spriteDefs, animationDefs, sceneContext) => {
+  // console.log('creating sprites for ', petId);
 
   Object.keys(animationDefs).forEach(animationKey => {
     const spriteId = animationDefs[animationKey].sprite;
@@ -87,6 +109,8 @@ const createSpritesForPet = (petId, spriteDefs, animationDefs, sceneContext) => 
 
 const preload = (sceneContext) => {
   preloadSprites(sceneContext);
+
+  preloadCompleted = true;
 }
 
 const preloadSprites = (sceneContext) => {
@@ -96,6 +120,7 @@ const preloadSprites = (sceneContext) => {
 }
 
 const preloadSpritesForPet = (spriteDefs, sceneContext) => {
+  console.log('preloadSprites for ', spriteDefs)
   Object.keys(spriteDefs).forEach(spriteDefKey => {
     sceneContext.load.atlas(
       spriteDefs[spriteDefKey].id, 
@@ -106,15 +131,14 @@ const preloadSpritesForPet = (spriteDefs, sceneContext) => {
 }
 
 const create = (sceneContext) => {
-  console.log('> spawn.create');
-  createSprites(sceneContext);
+  createSprites();
 
   groups.pets = sceneContext.physics.add.group();
   return groups;
 }
 
 const update = () => {
-  groups.pets.children.each(entity => {
+  groups.pets?.children.iterate(entity => {
     entity.update();
   });
   
@@ -122,14 +146,15 @@ const update = () => {
 }
 
 const onThrottledUpdate = () => {
-  groups.pets.children.each(entity => {
+  groups.pets?.children.iterate(entity => {
     entity.throttledUpdate();
   });
 }
 const throttledUpdate = throttle(THROTTLE_SPEED, false, onThrottledUpdate);
 
-
-const spawnPet = (id, petInfo) => {
+/* right now, there should be only one pet at a time. in the future, support multiples */
+const spawnPet = (id) => {
+  despawnEverything();
   spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo, true);
   // spawnClones(() => { spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo, false) }, 10)
 }
@@ -140,8 +165,14 @@ const spawnClones = (command, count) => {
   }
 }
 
+const despawnEverything = () => {
+  groups.pets?.children.iterate(child => {
+    child.destroy();
+  });
+}
+
 const spawnIt = (EntityRef, id, position, stats, petInfo, canSendUpdates = false) => {
-  // console.log('Spawn.spawnIt: ', id, petInfo)
+  console.log('Spawn.spawnIt: ', id, petInfo);
   return new EntityRef(sceneContext, groups.pets, {
     id: id,
     x: position.x,
@@ -153,7 +184,7 @@ const spawnIt = (EntityRef, id, position, stats, petInfo, canSendUpdates = false
 }
 
 const updatePetAnimationLabel = (id, label) => {
-  groups?.pets?.children?.each(entity => {
+  groups.pets?.children.iterate(entity => {
     if(entity.id === id){
       // console.log('playAnimation', label)
       entity.playAnimation(label);
@@ -161,9 +192,16 @@ const updatePetAnimationLabel = (id, label) => {
   });
 }
 const updatePetActivities = (id, data) => {
-  groups?.pets?.children?.each(entity => {
+  groups.pets?.children.iterate(entity => {
     if(entity.id === id){
       entity.updateActivities(data);
+    }
+  });
+}
+const updatePetMortality = (id, isAlive) => {
+  groups.pets?.children.iterate(entity => {
+    if(entity.id === id){
+      entity.updateMortality(isAlive);
     }
   });
 }
@@ -176,6 +214,7 @@ const exports = {
   update,
   updatePetAnimationLabel,
   updatePetActivities,
+  updatePetMortality,
   setPetInfo,
   spawnPet
 }
