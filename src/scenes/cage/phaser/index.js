@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import { throttledLog } from '@util/logger';
 import { 
   createGame, 
   updateBounds, 
-  changePet, 
+  alterPet,
   updateScene,
   updatePetAnimationLabel,
   updatePetActivities,
@@ -14,11 +14,11 @@ import {
 } from './game';
 import { debounce } from 'throttle-debounce';
 import { 
-  selectActivePet,
-  selectActivePetId,
+  selectActivePetGraphics,
   selectActivePetAnimationLabel,
+  selectActivePetIsAlive,
+  selectPhaserPet,
   selectActivePetActivities,
-  selectActivePetActivitesString,
   selectActiveScene
 } from '@store/selectors';
 
@@ -40,7 +40,8 @@ class PhaserComponent extends Component {
     });
 
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
-    changePet(this.props.pet);
+    // changePet(this.props.activePet, this.props.activePetGraphics);
+    alterPet(this.props.phaserPet);
     updateScene(this.props.activeScene);
 
     global.game.onInterface = (event, payload) => {
@@ -56,8 +57,8 @@ class PhaserComponent extends Component {
     }
   }
 
-  onSendStatus(data){
-    this.props.setActivities(data);
+  onSendStatus(activities){
+    this.props.setActivities(activities);
   }
 
   onEmitter(e){
@@ -69,21 +70,22 @@ class PhaserComponent extends Component {
       this.debouncedUpdateBounds(0, 0, this.props.width, this.props.height);
     }
 
-    if(prevProps.petId !== this.props.petId){
-      changePet(this.props.pet);
+    if(prevProps.phaserPet !== this.props.phaserPet){
+      console.log('>>>> phaserPet')
+      // console.log('phaserPet', this.props.phaserPet);
+      alterPet(this.props.phaserPet);
     }
 
-    if(prevProps.activitiesString !== this.props.activitiesString){
-      updatePetActivities(this.props.petId, this.props.activities)
+    if(prevProps.activePetIsAlive !== this.props.activePetIsAlive){
+      updatePetMortality(this.props.phaserPet.id, this.props.activePetIsAlive);
+    }
+
+    if(prevProps.activePetActivities !== this.props.activePetActivities){
+      updatePetActivities(this.props.phaserPet.id, this.props.activePetActivities)
     }
 
     if(prevProps.animationLabel !== this.props.animationLabel){
-      updatePetAnimationLabel(this.props.petId, this.props.animationLabel);
-    }
-
-    
-    if(prevProps.pet?.isAlive !== this.props.pet?.isAlive){
-      updatePetMortality(this.props.petId, this.props.pet?.isAlive);
+      updatePetAnimationLabel(this.props.phaserPet.id, this.props.animationLabel);
     }
   }
 
@@ -95,11 +97,11 @@ class PhaserComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  petId: selectActivePetId(state),
-  pet: selectActivePet(state),
+  phaserPet: selectPhaserPet(state),
+  activePetGraphics: selectActivePetGraphics(state),
+  activePetIsAlive: selectActivePetIsAlive(state),
   animationLabel: selectActivePetAnimationLabel(state),
-  activities: selectActivePetActivities(state),
-  activitiesString: selectActivePetActivitesString(state),
+  activePetActivities: selectActivePetActivities(state),
   activeScene: selectActiveScene(state)
 });
 

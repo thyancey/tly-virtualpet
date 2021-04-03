@@ -11,27 +11,27 @@ const setContext = (context) => {
   sceneContext = context;
 }
 
-const setPetInfo = (id, petInfo) => {
-  // console.log('Spawn.setPetInfo: ', petInfo);
+const alterPetInfo = (id, phaserPetDef) => {
   if(!gPetInfo[id]){
-    const sprites = registerSprites(id, petInfo.data.sprites);
+    gPetInfo[id] = { 
+      ...phaserPetDef,
+      registeredSprites: registerSprites(id, phaserPetDef.sprites)
+    }
 
-    gPetInfo[id] = {
-      animations: petInfo.data.animations,
-      petInfo: petInfo,
-      sprites: sprites
-    };
+    console.log('registered', gPetInfo[id])
+    console.log('registered', gPetInfo[id].registeredSprites)
 
     if(preloadCompleted){
-      loadPetImagesAfterPreload(petInfo.id);
+      loadPetImagesAfterPreload(phaserPetDef.id);
     }
   }else {
     // when you've loaded a pet before, so just skip around
   }
 }
 
+
 const loadPetImagesAfterPreload = id => {
-  const spriteDefs = getPetInfo(id).sprites;
+  const spriteDefs = getPetInfo(id).registeredSprites;
   Object.keys(spriteDefs).forEach(spriteDefKey => {
     sceneContext.load.atlas(
       spriteDefs[spriteDefKey].id, 
@@ -55,7 +55,6 @@ const getPetInfo = id => {
 
 const registerSprites = (id, sprites) => {
   let spriteDefs = {};
-
   Object.keys(sprites).forEach(spriteKey => {
     spriteDefs[spriteKey] = {
       id: spriteKey,
@@ -115,17 +114,16 @@ const preload = (sceneContext) => {
 
 const preloadSprites = (sceneContext) => {
   Object.keys(gPetInfo).forEach(petKey => {
-    preloadSpritesForPet(getPetInfo(petKey).sprites, sceneContext)
+    preloadSpritesForPet(getPetInfo(petKey).registeredSprites, sceneContext)
   });
 }
 
-const preloadSpritesForPet = (spriteDefs, sceneContext) => {
-  console.log('preloadSprites for ', spriteDefs)
-  Object.keys(spriteDefs).forEach(spriteDefKey => {
+const preloadSpritesForPet = (registeredSprites, sceneContext) => {
+  Object.keys(registeredSprites).forEach(spriteDefKey => {
     sceneContext.load.atlas(
-      spriteDefs[spriteDefKey].id, 
-      spriteDefs[spriteDefKey].image, 
-      spriteDefs[spriteDefKey].data
+      registeredSprites[spriteDefKey].id, 
+      registeredSprites[spriteDefKey].image, 
+      registeredSprites[spriteDefKey].data
     );
   });
 }
@@ -155,7 +153,7 @@ const throttledUpdate = throttle(THROTTLE_SPEED, false, onThrottledUpdate);
 /* right now, there should be only one pet at a time. in the future, support multiples */
 const spawnPet = (id) => {
   despawnEverything();
-  spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo, true);
+  spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id), true);
   // spawnClones(() => { spawnIt(Pet.Entity, id, { x: 100, y: 0 }, {}, getPetInfo(id).petInfo, false) }, 10)
 }
 
@@ -215,7 +213,7 @@ const exports = {
   updatePetAnimationLabel,
   updatePetActivities,
   updatePetMortality,
-  setPetInfo,
+  alterPetInfo,
   spawnPet
 }
 export default exports;

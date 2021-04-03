@@ -84,11 +84,15 @@ export default handleActions({
 
   [setActivities.toString()]: (state, action) => {
     const activities = action.payload;
-    // console.log('addActivity > ', activity);
-    return {
-      ...state,
-      activities: activities
-    } 
+    // console.log('setActivities > ', activities);
+    if(activities.sort().join(',') !== state.activities.join(',')){
+      return {
+        ...state,
+        activities: activities.sort()
+      } 
+    }else{
+      return state;
+    }
   },
 
   [forceBehavior.toString()]: (state, action) => {

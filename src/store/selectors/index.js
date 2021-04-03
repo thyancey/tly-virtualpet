@@ -108,6 +108,36 @@ export const selectActivePet = createSelector(
   }
 );
 
+
+export const selectActivePetGraphics = createSelector(
+  [selectActivePetData],
+  (activePetData) => {
+    if(!activePetData) return null;
+
+    return {
+      sprites: activePetData.sprites,
+      animations: activePetData.animations
+    }
+  }
+);
+
+
+export const selectActivePetStatus = createSelector(
+  [getActivePet],
+  (activePet) => {
+    if(!activePet) return null;
+
+    return activePet;
+  }
+);
+
+export const selectActivePetIsAlive = createSelector(
+  [getActivePet],
+  (activePet) => {
+    return activePet.isAlive || false;
+  }
+);
+
 export const selectActiveScene = createSelector(
   [selectActivePetData],
   (activePetData) => {
@@ -164,21 +194,11 @@ export const selectActiveSceneFloorOffset = createSelector(
 );
 
 export const selectActivePetActivities = createSelector(
-  [selectActivePet],
+  [selectActivePetStatus],
   (activePet) => {
     if(!activePet) return null;
     
     return activePet.activities;
-  }
-);
-
-/* TODO: this shouldnt be necessary, work on updating the monad for the regular activities array */
-export const selectActivePetActivitesString = createSelector(
-  [selectActivePetActivities],
-  (petActivities) => {
-    if(!petActivities) return null;
-    
-    return petActivities.join(',');
   }
 );
 
@@ -206,9 +226,9 @@ export const selectActiveSceneStyles = createSelector(
 );
 
 export const selectActiveMoods = createSelector(
-  [selectActivePet, selectActiveDeltaStats],
-  (activePet, deltaStats) => {
-    if(!activePet || !deltaStats) return [];
+  [selectActiveDeltaStats],
+  (deltaStats) => {
+    if(!deltaStats) return [];
 
     let activeMoods = [];
     deltaStats.forEach(stat => {
@@ -392,13 +412,13 @@ export const selectActivePetPersonality = createSelector(
 );
 
 export const selectActivePetBehavior = createSelector(
-  [selectActivePet, selectActiveDeltaStats, selectActivePetActivities, selectActiveMoods, getForcedBehavior],
-  (activePet, deltaStats, activities, activeMoods, forcedBehavior) => {
+  [selectActivePetStatus, selectActiveDeltaStats, selectActivePetActivities, selectActiveMoods, getForcedBehavior],
+  (petStatus, deltaStats, activities, activeMoods, forcedBehavior) => {
     // console.log('selectActivePetBehavior');
-    if(!activePet || !activePet.id){
+    if(!petStatus || !petStatus.id){
       return 'PET NOT FOUND';
     }
-    const petDef = getPetDefinition(activePet.id);
+    const petDef = getPetDefinition(petStatus.id);
     if(!petDef){
       return 'PET DEFINTION NOT FOUND';
     }
@@ -407,7 +427,7 @@ export const selectActivePetBehavior = createSelector(
       return forcedBehavior;
     }else{
       const status = {
-        isDead: (activePet && !activePet.isAlive) ? true : false
+        isDead: !petStatus.isAlive
       }
   
       const newBehavior = checkMoodSwingForBehavior(petDef.moodSwings, {
@@ -447,6 +467,24 @@ export const selectActivePetAnimationLabel = createSelector(
     }
 
     return animationLabel;
+  }
+);
+
+// id
+// sprites
+// animation
+// personality
+export const selectPhaserPet = createSelector(
+  [selectActivePetId, selectActivePetGraphics, selectActivePetPersonality],
+  (id, graphics, personality) => {
+    console.log('selectPhaserPet');
+
+    return {
+      id: id,
+      sprites: graphics.sprites,
+      animations: graphics.animations,
+      personality: personality
+    }
   }
 );
 

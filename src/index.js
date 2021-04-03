@@ -13,7 +13,7 @@ import Logger, { init as initLogger } from './util/logger';
 
 global.store = store;
 initLogger(0);
-global.logger = Logger;
+global.Logger = Logger;
 
 ReactDOM.render(
   <Provider store={store}>

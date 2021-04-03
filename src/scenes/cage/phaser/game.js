@@ -63,13 +63,13 @@ function preload() {
   SpawnController.preload(this);
 }
 
-export function changePet(petInfo){
-  // console.log('Game.changePet: ', petInfo);
-  activePetId = petInfo.id;
-  SpawnController.setPetInfo(petInfo.id, petInfo);
+export function alterPet(phaserPetDef){
+  // console.log('Game.phaserPetDef: ', phaserPetDef);
+  activePetId = phaserPetDef.id;
+  SpawnController.alterPetInfo(phaserPetDef.id, phaserPetDef);
 
   if(gameLoaded){
-    spawnPet(petInfo.id);
+    spawnPet(phaserPetDef.id);
   }
 }
 

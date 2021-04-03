@@ -17,13 +17,13 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
     this.id = spawnData.petInfo.id;
     this.stats = spawnData.stats || {};
-    this.petInfo = spawnData.petInfo;
-    const firstSheetKey = Object.keys(this.petInfo?.data?.sprites)[0];
+    console.log('spawned with petInfo', spawnData.petInfo)
+    const firstSheetKey = Object.keys( spawnData.petInfo?.sprites)[0];
 
-    this.spriteScale = this.petInfo.data.sprites[firstSheetKey].scale || 1;
+    this.spriteScale =  spawnData.petInfo.sprites[firstSheetKey].scale || 1;
+    const frameDims =  spawnData.petInfo.sprites[firstSheetKey].frameDims || [ 0, 0 ];
+    // this.spriteFramerate = spawnData.petInfo?.sprites?.Main?.framerate || 10;
     this.canSendUpdates = spawnData.canSendUpdates;
-    const frameDims = this.petInfo.data.sprites[firstSheetKey].frameDims || [ 0, 0 ];
-    // this.spriteFramerate = this.petInfo?.data?.sprites?.Main?.framerate || 10;
 
     //- custom properties
 
@@ -48,12 +48,12 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
     global.pet = this;
     this.isAlive = true;
-    this.personality = spawnData.petInfo.data.personality;
+    this.personality = spawnData.petInfo.personality;
     this.activities = [];
 
     
     this.petBrain = new PetBrain(this.onBrainDoComplete.bind(this), this.onBrainThinkComplete.bind(this));
-    this.petBrain.setPersonality(this.petInfo.data.personality);
+    this.petBrain.setPersonality(this.personality);
     this.petBrain.setActive();
   }
 
