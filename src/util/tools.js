@@ -13,7 +13,12 @@ export const clamp = (val, min, max) => {
 }
 
 export const randBetween = range => {
+  // console.log('rB', range)
   return range[0] + (Math.random() * (range[1] - range[0]));
+}
+
+export const randBetweenThese = (arg1, arg2) => {
+  return randBetween([arg1, arg2]);
 }
 
 export const isObj = obj => {

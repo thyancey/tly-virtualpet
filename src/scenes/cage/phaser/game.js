@@ -48,6 +48,8 @@ global.startGame = () => {
 export function updateBounds(x, y, width, height){
   sceneContext.physics.world.setBounds(x, y, width, height, true, true, true, true);
   sceneContext.cameras.main.setBounds(x, y, width, height, true, true, true, true);
+
+  SceneController.updateBounds(x, y, width, height);
 }
 
 function setSceneContext(context){
@@ -76,6 +78,7 @@ export function alterPet(phaserPetDef){
 export function updateScene(sceneInfo){
   console.log('Game.updateScene: ', sceneInfo);
   SceneController.setSceneInfo(sceneInfo);
+  global.sc = SceneController;
 }
 
 export function updatePetAnimationLabel(petId, data){
@@ -113,7 +116,9 @@ function create() {
   let sceneGroups = SceneController.create(this);
   let spawnGroups = SpawnController.create(this);
   
-  this.physics.add.collider(spawnGroups.pets, sceneGroups.floor, null, collider_petsAndFloor, this);
+  // this.physics.add.collider(spawnGroups.pets, [ sceneGroups.floor, sceneGroups.platforms ], null, collider_petsAndFloor, this);
+  this.physics.add.collider(spawnGroups.pets, sceneGroups.floors, null, collider_petsAndFloors, this);
+  this.physics.add.collider(spawnGroups.pets, sceneGroups.platforms, null, collider_petsAndPlatforms, this);
   
   spawnPet(activePetId);
 
@@ -124,7 +129,10 @@ function create() {
 }
 
 
-function collider_petsAndFloor(pet, floor){
+function collider_petsAndFloors(pet, floors){
+  return true;
+}
+function collider_petsAndPlatforms(pet, floors){
   return true;
   /*
   // to ignore floor when jumping or something

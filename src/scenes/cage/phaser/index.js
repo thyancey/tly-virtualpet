@@ -40,6 +40,7 @@ class PhaserComponent extends Component {
     });
 
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
+    this.debouncedUpdateBounds(0, 0, this.props.width, this.props.height);
     // changePet(this.props.activePet, this.props.activePetGraphics);
     alterPet(this.props.phaserPet);
     updateScene(this.props.activeScene);
@@ -86,6 +87,10 @@ class PhaserComponent extends Component {
 
     if(prevProps.animationLabel !== this.props.animationLabel){
       updatePetAnimationLabel(this.props.phaserPet.id, this.props.animationLabel);
+    }
+
+    if(prevProps.activeScene !== this.props.activeScene){
+      updateScene(this.props.activeScene)
     }
   }
 

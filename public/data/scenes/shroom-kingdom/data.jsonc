@@ -1,8 +1,25 @@
 {
   "id": "shroomKingdom",
   "floor": {
-    "height": "130"
+    "height": 125.0
   },
+  "platforms":{
+    "type": "rando",
+    "count": 5,
+    "xBuffer": [ 40, 40 ],
+    "width": [ 150, 300 ],
+    "height": [ 5, 100 ]
+  },
+  // "platforms":{
+  //   "type": "stairs",
+  //   "count": 5,
+  //   "offsetX":300,
+  //   "offsetY":40,
+  //   "height": 40,
+  //   "width": 800,
+  //   "spread": 300,
+  //   "elevation": 25
+  // },
   "type":"responsive",
   "cage":{
     "x":"0",
@@ -15,6 +32,14 @@
   "background":{
     "color": "#3D3D3D",
     "imageUrl": "bg.png",
+    "size": [ 545, 545 ],
+    "spriteScale":2,
+    "scale":{
+      // "width":"stretch",
+      "width":"auto",
+      // "height":"stretch",
+      "height":"auto"
+    },
     "styles":{
       "backgroundPosition": "0% 100%",
       "backgroundSize": "1090px 1090px",
