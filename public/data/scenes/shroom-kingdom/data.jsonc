@@ -1,25 +1,27 @@
 {
   "id": "shroomKingdom",
   "floor": {
-    "height": 125.0
+    "height": 125.0,
+    "texture": "brick"
   },
   "platforms":{
+    "count": 4,
+    "texture": "brick",
     "type": "rando",
-    "count": 5,
-    "xBuffer": [ 40, 40 ],
-    "width": [ 150, 300 ],
-    "height": [ 5, 100 ]
+    "xBuffer": [ 64, 64 ],
+    "width": [ 64, 192 ],
+    "height": [ 64, 192 ],
+    "snap": 64
   },
-  // "platforms":{
-  //   "type": "stairs",
-  //   "count": 5,
-  //   "offsetX":300,
-  //   "offsetY":40,
-  //   "height": 40,
-  //   "width": 800,
-  //   "spread": 300,
-  //   "elevation": 25
-  // },
+  "textures":{
+    "brick":{
+      "id":"brick",
+      "imageUrl":"brick.png",
+      "width":32,
+      "height":32,
+      "spriteScale":2
+    }
+  },
   "type":"responsive",
   "cage":{
     "x":"0",

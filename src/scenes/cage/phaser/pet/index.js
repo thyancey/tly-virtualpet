@@ -22,7 +22,11 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
 
     this.spriteScale =  spawnData.petInfo.sprites[firstSheetKey].scale || 1;
     const frameDims =  spawnData.petInfo.sprites[firstSheetKey].frameDims || [ 0, 0 ];
-    // this.spriteFramerate = spawnData.petInfo?.sprites?.Main?.framerate || 10;
+
+    // maybe remove later? adjusts hitbox for sprite
+    const frameSqueeze =  spawnData.petInfo.sprites[firstSheetKey].frameSqueeze || { x: 0, y: 0, w: 0, h: 0 };
+
+    // sends updates back to redux (activities, etc)
     this.canSendUpdates = spawnData.canSendUpdates;
 
     //- custom properties
@@ -41,9 +45,9 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     this.allowGravity = false;
 
     //- squeeze in hit box from edge of sprite
-    this.body.setSize(frameDims[0], frameDims[1]);
-    this.body.offset.x = 0;
-    this.body.offset.y = 0;
+    this.body.setSize(frameDims[0] + frameSqueeze.w, frameDims[1] + frameSqueeze.h);
+    this.body.offset.x = frameSqueeze.x;
+    this.body.offset.y = frameSqueeze.y;
     this.body.setDrag(LAZY_STATS.drag);
 
     global.pet = this;
