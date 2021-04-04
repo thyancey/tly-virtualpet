@@ -29,7 +29,6 @@ const alterPetInfo = (id, phaserPetDef) => {
   }
 }
 
-
 const loadPetImagesAfterPreload = id => {
   const spriteDefs = getPetInfo(id).registeredSprites;
   Object.keys(spriteDefs).forEach(spriteDefKey => {
