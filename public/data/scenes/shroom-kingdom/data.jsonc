@@ -4,19 +4,43 @@
     "height": 125.0,
     "texture": "brick"
   },
-  "platforms":{
-    "count": 4,
-    "texture": "brick",
-    "type": "rando",
-    "xBuffer": [ 64, 64 ],
-    "width": [ 64, 192 ],
-    "height": [ 64, 192 ],
-    "snap": 64
-  },
+  /* 
+    later platform groups appear on top
+    some values can be values or a range to pick between "valOrRand"
+    "stairs" and "rando" are only types and have their own rules
+  */
+  "platforms":[
+    {
+      "type": "rando",
+      "texture": "brick",
+      "count": 4,
+      "xBuffer": { "left": 64, "right": 64 },
+      "width": [ 64, 192 ],  //valOrRand
+      "height": [ 64, 192 ],  //valOrRand
+      "snap": 64
+    },
+    {
+      "type": "stairs",
+      "texture": "metal",
+      "count": 6,
+      "size": 64,
+      "snap": 64,
+      "x": [ 320, 1600 ],  //valOrRand
+      "stepX": 1, //valOrRand
+      "stepY": [1, 2] //valOrRand
+    }
+  ],
   "textures":{
     "brick":{
       "id":"brick",
       "imageUrl":"brick.png",
+      "width":32,
+      "height":32,
+      "spriteScale":2
+    },
+    "metal":{
+      "id":"metal",
+      "imageUrl":"metal.png",
       "width":32,
       "height":32,
       "spriteScale":2

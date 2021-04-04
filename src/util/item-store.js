@@ -8,9 +8,8 @@ const store = {
 
 export const setFromSceneManifest = (data, manifest) => {
   // console.log('setFromSceneManifest', data, manifest);
-  const converted = convertStringsToNumbersInDeepObj(data);
-  const complete = prefixValueInDeepObj('imageUrl', `${manifest.url}/assets/`, converted);
-
+  // const converted = convertStringsToNumbersInDeepObj(data);
+  const complete = prefixValueInDeepObj('imageUrl', `${manifest.url}/assets/`, data);
   addSceneDefinition(complete);
 }
 

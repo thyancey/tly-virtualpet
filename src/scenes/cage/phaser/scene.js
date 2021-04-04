@@ -1,4 +1,5 @@
-import { randBetweenThese } from "../../../util/tools";
+import { ContactsOutlined } from "@material-ui/icons";
+import { getValOrRandRange, randBetween } from "../../../util/tools";
 
 let sceneContext;
 const ALPHA_TEXTURE = 1;
@@ -19,7 +20,6 @@ const preload = () => {
   sceneContext.load.image('bg', gSceneInfo.background.imageUrl);
   console.log(gSceneInfo);
   Object.keys(gSceneInfo.textures).forEach(spriteName => {
-    console.log('makin', getTextureId(spriteName))
     sceneContext.load.image(getTextureId(spriteName), gSceneInfo.textures[spriteName].imageUrl);
   });
 }
@@ -57,8 +57,6 @@ const stretchToBounds = () => {
     gBg.displayHeight = bg.size[1] * (bg.spriteScale || 1);
   }
 
-  
-  console.log('gGameBounds', gGameBounds)
   //diff between image and page height
   let diff = gBg.displayHeight - gGameBounds.h;
   gBg.y = -diff;
@@ -82,46 +80,78 @@ const positionFloor = gameBounds => {
 
 const positionPlatforms = (gameBounds) => {
   let floorY = gameBounds.h - gSceneInfo.floor.height;
-  let pParams = gSceneInfo.platforms;
 
-  group_platforms.forEach((pObj, i) => {
+  group_platforms.forEach((pGroup, p) => {
+    let pParams = gSceneInfo.platforms[p];
+    
+    if(pParams.type === 'rando'){
+      positionPlatformGroup_rando(pGroup, pParams, floorY, gameBounds.w)
+    }else if(pParams.type === 'stairs'){
+      positionPlatformGroup_stairs(pGroup, pParams, floorY, gameBounds.w)
+    } else{
+      console.log('invalid type ', pParams.type)
+    }
+  })
+}
+
+// can make random stairs, needs an "up and down" type of thing and needs to get the full widths correct when x becomes random
+const positionPlatformGroup_stairs = (pGroup, pParams, floorY) => {
+  let xOffset = getValOrRandRange(pParams.x) || 0;
+
+  pGroup.forEach((pObj, i) => {
+    let stepX = getValOrRandRange(pParams.stepX, 1) || 0;
+    let stepY = getValOrRandRange(pParams.stepY, 1) || 0;
+
+    let size = {
+      x: stepX * pParams.size,
+      y: stepY * pParams.size
+    }
+
     let p = pObj.body;
     let tex = pObj.texture;
 
-    if(pParams.type === 'stairs'){
-      let mods = {
-        x:i,
-        y:i,
-        w:1,
-        h:1
-      }
+    let pW = size.x * (pGroup.length - i);
+    let pH = size.y;
 
-      setPlatformToPosition(p, tex, {
-        x: pParams.spread * mods.x + pParams.offsetX,
-        y: floorY - pParams.offsetY - pParams.elevation * mods.y,
-        w: pParams.width * mods.w,
-        h: pParams.height * mods.h
-      });
-    }else if(pParams.type === 'rando'){
-      let pW = randBetweenThese(pParams.width[0], pParams.width[1]);
-      let pH = randBetweenThese(pParams.height[0], pParams.height[1]);
-
-      let values = {
-        x: randBetweenThese(pParams.xBuffer[0], gameBounds.w - pW - pParams.xBuffer[1]),
-        y: pH,
-        w: pW,
-        h: pH
-      };
-      
-
-      if(pParams.snap){
-        values = snapValues(values, pParams.snap);
-      }
-      values.y = floorY - values.y;
-
-      setPlatformToPosition(p, tex, values);
+    let values = {
+      x: xOffset + size.x * i, 
+      y: pParams.size * (i) + size.y,
+      w: pW,
+      h: pH
+    };
+    
+    if(pParams.snap){
+      values = snapValues(values, pParams.snap);
     }
-  })
+    values.y = floorY - values.y;
+
+    setPlatformToPosition(p, tex, values);
+  });
+}
+
+const positionPlatformGroup_rando = (pGroup, pParams, floorY, gameWidth) => {
+  pGroup.forEach((pObj, i) => {
+    let p = pObj.body;
+    let tex = pObj.texture;
+
+    let pW = getValOrRandRange(pParams.width);
+    let pH = getValOrRandRange(pParams.height);
+
+    let values = {
+      x: randBetween([ pParams.xBuffer.left, gameWidth - pW - pParams.xBuffer.right ]),
+      y: pH,
+      w: pW,
+      h: pH
+    };
+    
+    if(pParams.snap){
+      values = snapValues(values, pParams.snap);
+    }
+    values.y = floorY - values.y;
+
+    setPlatformToPosition(p, tex, values);
+
+  });
 }
 
 const roundSnap = (value, snap) => snap * Math.round(value / snap);
@@ -170,8 +200,10 @@ const create = (levelData) => {
 
   group_floors.push(makePlatform(physGroup_floors, getSpriteDef(gSceneInfo.floor.texture)));
 
+  global.infoo = gSceneInfo;
   // just for testin
-  makePlatforms(physGroup_platforms, getSpriteDef(gSceneInfo.platforms.texture), gSceneInfo.platforms.count)
+  makePlatforms(physGroup_platforms, gSceneInfo.platforms);
+  // makePlatformGroup(physGroup_platforms, getSpriteDef(gSceneInfo.platforms[0].texture), gSceneInfo.platforms[0].count)
 
   // bg image
   gBg = sceneContext.add.tileSprite(0, 0, 545, 545, 'bg').setOrigin(0, 0).setDepth(-1);
@@ -182,11 +214,18 @@ const create = (levelData) => {
   }
 }
 
-const makePlatforms = (floor, textureDef, count) => {
+const makePlatforms = (group, platformDefs) => {
+  platformDefs.forEach(platformDef => {
+    const textureDef = gSceneInfo.textures[platformDef.texture];
+    group_platforms.push(makePlatformGroup(group, textureDef, platformDef.count));
+  });
+}
+const makePlatformGroup = (group, textureDef, count) => {
+  let plattys = []
   for(let i = 0; i < count; i++){
-    group_platforms.push(makePlatform(floor, textureDef));
+    plattys.push(makePlatform(group, textureDef));
   }
-  global.gps = group_platforms
+  return plattys;
 }
 
 const makePlatform = (group, textureDef) => {

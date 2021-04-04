@@ -12,7 +12,7 @@ export const clamp = (val, min, max) => {
   return Math.min(Math.max(val, min), max);
 }
 
-export const randBetween = range => {
+export const randBetween = (range) => {
   // console.log('rB', range)
   return range[0] + (Math.random() * (range[1] - range[0]));
 }
@@ -21,8 +21,25 @@ export const randBetweenThese = (arg1, arg2) => {
   return randBetween([arg1, arg2]);
 }
 
+export const getValOrRandRange = (valOrRange, snap) => {
+  let result;
+  if(!Array.isArray(valOrRange)){
+    result = valOrRange;
+  }else{
+    result = valOrRange[0] + (Math.random() * (valOrRange[1] - valOrRange[0]));
+  }
+  
+  if(snap !== undefined){
+    return roundSnap(result, snap);
+  }else{
+    return result;
+  }
+}
+
+export const roundSnap = (value, snap) => snap * Math.round(value / snap);
+
 export const isObj = obj => {
-  return typeof obj === 'object' && obj !== null;
+  return typeof obj === 'object' && obj !== null && !Array.isArray(obj);
 }
 
 export const convertStringsToNumbersInDeepObj = parsedObj => {
