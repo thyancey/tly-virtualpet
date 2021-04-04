@@ -142,13 +142,12 @@ export const selectActiveScene = createSelector(
   [selectActivePetData],
   (activePetData) => {
     if(!activePetData) return null;
-    // console.log('selectActiveScene', activePetData);
-
     const sceneId = activePetData.scene;
     const scene = getSceneDefinition(sceneId);
     if(scene){
       return scene;
     }else{
+      console.error(`could not select scene ${sceneId}`);
       return null;
     }
   }

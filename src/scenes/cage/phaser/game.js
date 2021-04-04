@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import SpawnController from './spawn.js';
-import SceneController from './scene.js';
+import SpawnController from './spawn';
+import SceneController from './scene';
 import Events from './event-emitter';
 
 let game;
@@ -25,7 +25,7 @@ export const createGame = (jsonData) => {
         default: 'arcade',
         arcade: {
             gravity: { y: 800 },
-            debug: false
+            debug: true
         }
     },
     scene: {

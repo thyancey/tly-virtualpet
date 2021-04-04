@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { throttledLog } from '@util/logger';
+
 import { 
   createGame, 
   updateBounds, 
@@ -42,6 +42,7 @@ class PhaserComponent extends Component {
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
     this.debouncedUpdateBounds(0, 0, this.props.width, this.props.height);
     // changePet(this.props.activePet, this.props.activePetGraphics);
+    console.log('this.props', this.props)
     alterPet(this.props.phaserPet);
     updateScene(this.props.activeScene);
 

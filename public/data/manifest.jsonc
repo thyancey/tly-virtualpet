@@ -14,7 +14,8 @@
         { "id": "magnadoodle", "url": "data/scenes/magnadoodle" },
         { "id": "outside", "url": "data/scenes/outside" },
         { "id": "dump", "url": "data/scenes/dump" },
-        { "id": "shroomKingdom", "url": "data/scenes/shroom-kingdom" }
+        { "id": "shroomKingdom", "url": "data/scenes/shroom-kingdom" },
+        { "id": "shroomSewer", "url": "data/scenes/shroom-sewer" }
       ]
     },
     // {
