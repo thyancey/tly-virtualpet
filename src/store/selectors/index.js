@@ -153,21 +153,6 @@ export const selectActiveScene = createSelector(
   }
 );
 
-export const selectActiveCage = createSelector(
-  [selectActivePetData],
-  (activePetData) => {
-    if(!activePetData) return null;
-
-    const sceneId = activePetData.scene;
-    const scene = getSceneDefinition(sceneId);
-    if(scene && scene.cage){
-      return scene.cage;
-    }else{
-      return null;
-    }
-  }
-);
-
 export const selectActiveSceneType = createSelector(
   [selectActivePetData],
   (activePetData) => {

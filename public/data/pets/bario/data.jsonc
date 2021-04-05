@@ -180,9 +180,9 @@
     }
   ],
   "sprites":{
-    "MAIN":{
-      "data": "main-atlas.json",
-      "image": "main-complete.png",
+    "p_bario_default":{
+      "data": "default.json",
+      "image": "default.png",
       "scale": 5.0,
       "frameDims": [ 20, 35 ],
       "frameSqueeze": { "x": 2, "y": -1, "w": -4, "h": -1 },
@@ -202,79 +202,79 @@
   },
   "animations":{
     "Walk_Big":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [14, 15, 16]
       }
     },
     "Jump_Big":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [18]
       }
     },
     "Idle_Big":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [12]
       }
     },
     "Duck_Big":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [13]
       }
     },
     "Walk_Fire":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [26, 27, 28]
       }
     },
     "Jump_Fire":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [30]
       }
     },
     "Idle_Fire":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [24]
       }
     },
     "Duck_Fire":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [25]
       }
     },
     "Walk_Little":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [2, 3, 4]
       }
     },
     "Jump_Little":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [6]
       }
     },
     "Idle_Little":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [1]
       }
     },
     "Duck_Little":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [1]
       }
     },
     "Dead_Little":{
-      "sprite": "MAIN",
+      "sprite": "p_bario_default",
       "frameObj":{
         "frames": [11]
       }

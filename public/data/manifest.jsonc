@@ -18,10 +18,12 @@
         { "id": "shroomSewer", "url": "data/scenes/shroom-sewer" }
       ]
     },
-    // {
-    //   "type": "items",
-    //   "items": []
-    // },
+    {
+      "type": "items",
+      "items": [
+        { "id": "mushroom", "url": "data/items/mushroom" }
+      ]
+    },
     {
       "type": "pets",
       "items": [

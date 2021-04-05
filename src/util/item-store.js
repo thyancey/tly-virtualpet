@@ -12,14 +12,23 @@ export const setFromSceneManifest = (data, manifest) => {
   const complete = prefixValueInDeepObj('imageUrl', `${manifest.url}/assets/`, data);
   addSceneDefinition(complete);
 }
-
 export const addSceneDefinition = (newDefinition) => {
   // console.log('adding new scene definition', newDefinition);
   store.scenes.push(newDefinition);
 }
-
 export const getSceneDefinition = id => {
   return store.scenes.find(p => p.id === id) || null;
+}
+
+export const setFromItemManifest = (data, manifest) => {
+  // console.log('setFromItemManifest', data, manifest);
+  // const converted = convertStringsToNumbersInDeepObj(data);
+  const complete = prefixValueInDeepObj('imageUrl', `${manifest.url}/assets/`, data);
+  addItemDefinition(complete);
+}
+export const addItemDefinition = (newDefinition) => {
+  // console.log('adding new item definition', newDefinition);
+  store.items.push(newDefinition);
 }
 export const getItemDefinition = id => {
   return store.items.find(p => p.id === id) || null;

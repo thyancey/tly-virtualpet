@@ -1,5 +1,6 @@
 {
   "id": "shroomKingdom",
+  "type":"responsive",
   "floor": {
     "height": 125.0,
     "texture": "brick"
@@ -45,15 +46,6 @@
       "height":32,
       "spriteScale":2
     }
-  },
-  "type":"responsive",
-  "cage":{
-    "x":"0",
-    "y":"0",
-    "width":"100%",
-    "height":"100%",
-    "rotation":"0",
-    "floor": "-110"
   },
   "background":{
     "color": "#3D3D3D",

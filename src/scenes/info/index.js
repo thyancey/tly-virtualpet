@@ -197,7 +197,7 @@ class PetStats extends Component {
       moods,
       activities
     } = this.props;
-    if(!activePet || !sceneStyles) return null;
+    if(!activePet) return null;
 
     const petData = activePet.data;
     const behaviorIds = Object.keys(petData.behaviors);

@@ -1,0 +1,51 @@
+{
+  "id": "mushroom",
+  "type": "8bit",
+  "name": "Standard Mushroom",
+  "thumbnail": "thumbnail.jpg",
+  "behaviors": {
+    "DEFAULT": { "animations": [ "Idle" ] },
+    "IDLE": { "animations": [ "Idle" ] },
+    "EXPIRED": { "animations": [ "Idle" ] }
+  },  
+  "statEvents":[
+    {
+      "id":"E_POWER_UP",
+      "label": "Power up!",
+      "statEffects":[
+        { "id":"power", "immediate":1 }
+      ],
+      "type":"event",
+      "cooldown": 100
+    }
+  ],
+  "sprites":{
+    "i_mushroom_default":{
+      "data": "default.json",
+      "image": "default.png",
+      "scale": 5.0,
+      "frameDims": [ 16, 16 ],
+      "frameSqueeze": { "x": 0, "y": 0, "w": 0, "h": 0 },
+      "faceDirection": true,
+      "orientation": 1,
+      "defaults":{
+        "animation":{
+          "frameRate": 10,
+          "repeat": -1
+        },
+        "frameObj":{
+          "prefix": "anim",
+          "zeroPad": 3
+        }
+      }
+    }
+  },
+  "animations":{
+    "Idle":{
+      "sprite": "i_mushroom_default",
+      "frameObj":{
+        "frames": [0]
+      }
+    }
+  }
+}

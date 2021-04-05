@@ -13,7 +13,7 @@ import { handleActions } from 'redux-actions';
 
 import { clamp } from '@util/tools';
 import { getPetDefinition, setFromPetManifest } from '@util/pet-store';
-import { setFromSceneManifest } from '@util/item-store';
+import { setFromSceneManifest, setFromItemManifest } from '@util/item-store';
 import { getNextManifestData, setManifestStages } from '@util/manifest-helper';
 
 const VALID_KEYS = [ 'title', 'stages' ];
@@ -91,6 +91,8 @@ export default handleActions({
     // console.log('manifestItem', manifest)
     if(manifest.type === 'pets'){
       setFromPetManifest(manifest.id, data, manifest)
+    }else if(manifest.type === 'items'){
+      setFromItemManifest(data, manifest);
     }else{
       setFromSceneManifest(data, manifest);
     }
