@@ -19,6 +19,7 @@ export const getForcedBehavior = state => state.activePet.forcedBehavior || null
 export const getActivePetStats = state => state.activePet.stats || null;
 export const getActivePet = state => state.activePet || null;
 export const getPing = state => state.data.ping || 0;
+export const getItems = state => state.data.items || [];
 
 export const selectSettingPingRate = createSelector(
   [getSettings],
@@ -135,6 +136,13 @@ export const selectActivePetIsAlive = createSelector(
   [getActivePet],
   (activePet) => {
     return activePet.isAlive || false;
+  }
+);
+
+export const selectActiveItems = createSelector(
+  [getItems],
+  (items) => {
+    return Object.keys(items).map(itemId => items[itemId]);
   }
 );
 

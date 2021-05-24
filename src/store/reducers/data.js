@@ -5,6 +5,7 @@ import {
   setActivePetType,
   setActivePetId,
   setSettingsValue,
+  setItems,
   ping
 } from '../actions';
 import { setTransition } from '../actions/transition';
@@ -173,6 +174,19 @@ export default handleActions({
       return {
         ...state
       }
+    }
+  },
+
+  [setItems.toString()]: (state, action) => {
+    console.log('setItems', action.payload);
+    let items = state.items || {};
+    action.payload.forEach(i => {
+      items[i.id] = i;
+    });
+
+    return {
+      ...state,
+      items: items
     }
   },
 

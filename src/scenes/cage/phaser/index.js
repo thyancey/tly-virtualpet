@@ -7,6 +7,7 @@ import {
   createGame, 
   updateBounds, 
   alterPet,
+  alterItems,
   updateScene,
   updatePetAnimationLabel,
   updatePetActivities,
@@ -19,13 +20,15 @@ import {
   selectActivePetIsAlive,
   selectPhaserPet,
   selectActivePetActivities,
-  selectActiveScene
+  selectActiveScene,
+  selectActiveItems
 } from '@store/selectors';
 
 import {
   addActivity,
   setActivities,
-  removeActivity
+  removeActivity,
+  augmentStats
 } from '@store/actions/pet';
 
 const S = {};
@@ -42,7 +45,7 @@ class PhaserComponent extends Component {
     this.debouncedUpdateBounds = debounce(500, false, updateBounds);
     this.debouncedUpdateBounds(0, 0, this.props.width, this.props.height);
     // changePet(this.props.activePet, this.props.activePetGraphics);
-    console.log('this.props', this.props)
+    alterItems(this.props.activeItems);
     alterPet(this.props.phaserPet);
     updateScene(this.props.activeScene);
 
@@ -51,6 +54,8 @@ class PhaserComponent extends Component {
         case 'addActivity': this.props.addActivity(payload);
           break;
         case 'removeActivity': this.props.removeActivity(payload);
+          break;
+        case 'augmentStats': this.props.augmentStats(payload);
           break;
         case 'sendStatus': this.onSendStatus(payload);
           break;
@@ -73,8 +78,8 @@ class PhaserComponent extends Component {
     }
 
     if(prevProps.phaserPet !== this.props.phaserPet){
-      console.log('>>>> phaserPet')
       // console.log('phaserPet', this.props.phaserPet);
+      alterItems(global.itemStore.getItems());
       alterPet(this.props.phaserPet);
     }
 
@@ -108,12 +113,13 @@ const mapStateToProps = (state) => ({
   activePetIsAlive: selectActivePetIsAlive(state),
   animationLabel: selectActivePetAnimationLabel(state),
   activePetActivities: selectActivePetActivities(state),
-  activeScene: selectActiveScene(state)
+  activeScene: selectActiveScene(state),
+  activeItems: selectActiveItems(state)
 });
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(
-    { addActivity, removeActivity, setActivities },
+    { addActivity, removeActivity, setActivities, augmentStats },
     dispatch
   )
 );

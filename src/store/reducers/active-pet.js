@@ -7,6 +7,7 @@ import {
   setActivities,
   forceBehavior,
   augmentStat,
+  augmentStats,
   resetPet,
   killPet,
   clickPet
@@ -55,6 +56,13 @@ export default handleActions({
 
   [augmentStat.toString()]: (state, action) => {
     augmentPetStat(state.id, action.payload.id, action.payload.value);
+    return state;
+  },
+
+  [augmentStats.toString()]: (state, action) => {
+    action.payload.forEach(statObj => {
+      augmentPetStat(state.id, statObj.id, statObj.value);
+    })
     return state;
   },
 

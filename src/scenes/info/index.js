@@ -153,7 +153,6 @@ class PetStats extends Component {
   }
 
   updateStat(id, val){
-    console.log('updateStat', id, val)
     this.props.augmentStat(id, val);
     this.props.ping();
   }

@@ -7,4 +7,5 @@ export const setSettingsValue = createAction('SET_SETTINGS_VALUE');
 export const setOtherData = createAction('SET_OTHER_DATA');
 export const setActivePetType = createAction('SET_ACTIVE_PET_TYPE');
 export const setActivePetId = createAction('SET_ACTIVE_PET_ID');
+export const setItems = createAction('SET_ITEMS');
 export const ping = createAction('PING');

@@ -25,7 +25,7 @@ export const createGame = (jsonData) => {
         default: 'arcade',
         arcade: {
             gravity: { y: 800 },
-            debug: true
+            debug: false
         }
     },
     scene: {
@@ -43,6 +43,14 @@ global.stopGame = () => {
 
 global.startGame = () => {
   sceneContext.scene.start();
+}
+
+global.spawnItem = () => {
+  const coords = { 
+    x: Math.random() * window.innerWidth, 
+    y: 100
+  };
+  spawnItem('mushroom', coords);
 }
 
 export function updateBounds(x, y, width, height){
@@ -65,8 +73,11 @@ function preload() {
   SpawnController.preload(this);
 }
 
+export function alterItems(itemDefs){
+  SpawnController.alterItemsInfo(itemDefs);
+}
+
 export function alterPet(phaserPetDef){
-  // console.log('Game.phaserPetDef: ', phaserPetDef);
   activePetId = phaserPetDef.id;
   SpawnController.alterPetInfo(phaserPetDef.id, phaserPetDef);
 
@@ -76,7 +87,6 @@ export function alterPet(phaserPetDef){
 }
 
 export function updateScene(sceneInfo){
-  console.log('Game.updateScene: ', sceneInfo);
   SceneController.setSceneInfo(sceneInfo);
   global.sc = SceneController;
 }
@@ -93,8 +103,13 @@ export function updatePetMortality(petId, isAlive){
   SpawnController.updatePetMortality(petId, isAlive);
 }
 
+export function spawnItem(itemId, coords){
+  console.log('Game.spawnItem', itemId, coords);
+  SpawnController.spawnItemId(itemId, coords);
+}
 
 export function spawnPet(petId){
+  console.log('Game.spawnPet');
   SpawnController.spawnPet(petId);
 }
 
@@ -117,8 +132,11 @@ function create() {
   let spawnGroups = SpawnController.create(this);
   
   // this.physics.add.collider(spawnGroups.pets, [ sceneGroups.floor, sceneGroups.platforms ], null, collider_petsAndFloor, this);
-  this.physics.add.collider(spawnGroups.pets, sceneGroups.floors, null, collider_petsAndFloors, this);
-  this.physics.add.collider(spawnGroups.pets, sceneGroups.platforms, null, collider_petsAndPlatforms, this);
+  this.physics.add.collider(spawnGroups.pets, sceneGroups.floors, null, collider_thingsAndFloors, this);
+  this.physics.add.collider(spawnGroups.pets, sceneGroups.platforms, null, collider_thingsAndPlatforms, this);
+  this.physics.add.collider(spawnGroups.items, sceneGroups.floors, null, collider_thingsAndFloors, this);
+  this.physics.add.collider(spawnGroups.items, sceneGroups.platforms, null, collider_thingsAndPlatforms, this);
+  this.physics.add.collider(spawnGroups.items, spawnGroups.pets, null, collider_itemsAndPets, this);
   
   spawnPet(activePetId);
 
@@ -128,11 +146,17 @@ function create() {
   gameLoaded = true;
 }
 
+function collider_itemsAndPets(item, pet){
+  const itemEffects = item.getItemEffects();
+  pet.applyItemEffects(itemEffects);
+  item.destroy();
+  return false;
+}
 
-function collider_petsAndFloors(pet, floors){
+function collider_thingsAndFloors(itemOrPet, floors){
   return true;
 }
-function collider_petsAndPlatforms(pet, floors){
+function collider_thingsAndPlatforms(itemOrPet, floors){
   return true;
   /*
   // to ignore floor when jumping or something

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Route, withRouter, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { setActivePetId, loadExternalItem } from '@store/actions';
+import { setActivePetId, loadExternalItem, setItems } from '@store/actions';
 import { selectPetFromSearchQuery } from '@store/selectors/routes';
 import { selectIsLoadingComplete} from '@store/selectors';
 import { saveAllPetStatsToCookieNow } from '@util/pet-store';
@@ -51,6 +51,7 @@ class AppContainer extends Component {
 
   onLoadComplete(){
     console.log('Load complete.');
+    this.props.setItems(global.itemStore.getItems());
     this.loadDeeplinkedPet();
   }
 
@@ -93,7 +94,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    { setActivePetId, loadExternalItem },
+    { setActivePetId, loadExternalItem, setItems },
     dispatch
   );
 

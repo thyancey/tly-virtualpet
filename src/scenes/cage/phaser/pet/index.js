@@ -77,7 +77,7 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  throttledUpdate(keysDown = []){
+  throttledUpdate(){
 
     if(this.isAlive){
       // if you wanna turn off thinking for some reason (ex, user input)
@@ -197,8 +197,14 @@ class Entity extends Phaser.Physics.Arcade.Sprite {
   //   return this.activities.indexOf(activityKey) > -1
   // }[]
 
+  applyItemEffects(itemEffects){
+    console.log('pet.applyItemEffect', itemEffects);
+    console.log('doin', itemEffects);
+    Events.emit('interface', 'augmentStats', itemEffects);
+  }
+
   playAnimation(animKey){
-    // console.log('playAnimation:', this.id)
+    // console.log('playAnimation:', this.id, animKey)
     if(this.curAnimation !== animKey){
       this.curAnimation = animKey;
       this.anims.play(animKey).setScale(this.spriteScale).setOrigin(0);

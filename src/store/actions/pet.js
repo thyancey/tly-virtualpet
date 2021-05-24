@@ -13,3 +13,5 @@ export const augmentStat = createAction('AUGMENT_STAT', (id, value) => ({
   id: id,
   value: value
 }));
+
+export const augmentStats = createAction('AUGMENT_STATS');
