@@ -1,0 +1,30 @@
+{
+  "id": "outside",
+  "floor": {
+    "height": "150",
+    "imageUrl": "floor_grass.png"
+  },
+  "type":"responsive",
+  "cage":{
+    "x":"0",
+    "y":"0",
+    "width":"100%",
+    "height":"100%",
+    "rotation":"0",
+    "floor": "-50"
+  },
+  "background":{
+    "color": "#ffffff",
+    "imageUrl": "bg_win95.jpg",
+    "backgroundPosition": "50% 0%"
+  },
+  "styles":{
+    "id": "default",
+    "text": "black",
+    "bars":{
+      "good": "#51f249",
+      "bad": "#F55658",
+      "neutral": "#1fb9f3"
+    }
+  }
+}

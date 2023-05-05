@@ -1,0 +1,172 @@
+{
+  "id": "raccoon",
+  "type": "samples",
+  "animal": "Raccoon",
+  "name": "Racky",
+  "scene": "dump",
+  "thumbnail": "thumbnail.jpg",
+  "personality":{
+    "thinkRange": [ 2000, 4000 ],
+    "doRange": [ 1000, 10000 ],
+    "jumpChance": 0.01,
+    "jumpForce": 0.5,
+    "xForce": 0.7,
+    "yForce": 1
+  },
+  "stats":[
+    {
+      "id": "level",
+      "type": "number",
+      "value": 64.0,
+      "perSecond": 0.0,
+      "max": 100.0,
+      "fullIsGood": true
+    },
+    {
+      "id": "xp",
+      "type": "number",
+      "value": 888.0,
+      "perSecond": 0.0,
+      "max": 20000.0,
+      "fullIsGood": true
+    },
+    {
+      "id": "bellyTrash",
+      "label": "Belly Trash",
+      "value": 100.0,
+      "perSecond": -1.0,
+      "max": 500.0,
+      "doesKill": true,
+      "fullIsGood": true,
+      "effects":[
+        { "when": "<_50%", "then": "MOOD_HUNGRY" },
+        { "when": ">=_75%", "then": "MOOD_FULL" }
+      ]
+    }
+  ],
+  "moods":{
+    "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+    "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 }
+  },
+  "moodSwings":[
+    {
+      "when":[
+        { "type":"status", "isDead": true }
+      ],
+      "then": "DEAD"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "DUCKING" }
+      ],
+      "then": "EAT"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "JUMPING" }
+      ],
+      "then": "JUMP"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" },
+        { "type":"moods", "moods": [ "MOOD_FULL" ] }
+      ],
+      "then": "WALK_HAPPY"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_FULL" ] }
+      ],
+      "then": "IDLE_HAPPY"
+    },
+    {
+      "when":[],
+      "then": "IDLE"
+    }
+  ],
+  "behaviors": {
+    "DEFAULT": { "animations": [ "Idle" ] },
+    "IDLE": { "animations": [ "Idle" ] },
+    "IDLE_HAPPY": { "animations": [ "Idle_Happy" ] },
+    "WALK": { "animations": [ "Walk" ] },
+    "WALK_HAPPY": { "animations": [ "Walk_Happy" ] },
+    "EAT": { "animations": [ "Eat" ] },
+    "JUMP": { "animations": [ "JumpUp" ] },
+    "DEAD": { "animations": [ "Dead" ] }
+  },  
+  "statEvents":[
+    {
+      "id":"E_FEED",
+      "label": "Give trash",
+      "statEffects":[
+        { "id":"bellyTrash", "immediate":20 }
+      ],
+      "type":"event",
+      "cooldown": 100
+    }
+  ],
+  "animations":{
+    "Idle":{
+      "sprite": "Main",
+      "speed": 15,
+      "dir": 1,
+      "frames": [0, 1]
+    },
+    "Idle_Happy":{
+      "sprite": "Main",
+      "speed": 30,
+      "dir": 1,
+      "frames": [12, 13]
+    },
+    "Walk":{
+      "sprite": "Main",
+      "speed": 15,
+      "dir": 1,
+      "frames": [2, 1, 3, 1]
+    },
+    "Walk_Happy":{
+      "sprite": "Main",
+      "speed": 15,
+      "dir": 1,
+      "frames": [10, 11]
+    },
+    "JumpUp":{
+      "sprite": "Main",
+      "speed": 15,
+      "dir": 1,
+      "frames": [5]
+    },
+    "Eat":{
+      "sprite": "Main",
+      "speed": 15,
+      "dir": 1,
+      "frames": [8,9]
+    },
+    "Dead":{
+      "sprite": "Main",
+      "speed": 15,
+      "dir": 1,
+      "frames": [ 14, 15 ]
+    }
+  },
+  "sprites":{
+    "Main":{
+      "type": "Sprite_Animated",
+      "imageUrl": "main.png",
+      "spriteInfo":{
+        "scale": 3,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 5, 4 ],
+        "cells": [ 56, 56 ]
+      }
+    }
+  }
+}

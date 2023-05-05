@@ -1,0 +1,84 @@
+{
+  "id": "shroomSewer",
+  "floor": {
+    "height": 125.0,
+    "texture": "brick"
+  },
+  /* 
+    later platform groups appear on top
+    some values can be values or a range to pick between "valOrRand"
+    "stairs" and "rando" are only types and have their own rules
+  */
+  "platforms":[
+    {
+      "type": "rando",
+      "texture": "brick", //- not required
+      "count": 6,
+      "xBuffer": { "left": 64, "right": 64 },
+      "width": [ 64, 64 ],  //valOrRand
+      "height": [ 64, 192 ],  //valOrRand
+      "snap": 64
+    },
+    {
+      "type": "stairs",
+      "texture": "metal", //- not required
+      "count": 2,
+      "size": 64,
+      "snap": 64,
+      "x": [ 320, 1600 ],  //valOrRand
+      "stepX": 1, //valOrRand
+      "stepY": 1 //valOrRand
+    }
+  ],
+  "textures":{
+    "brick":{
+      "id":"brick",
+      "imageUrl":"brick.png",
+      "width":32,
+      "height":32,
+      "spriteScale":2
+    },
+    "metal":{
+      "id":"metal",
+      "imageUrl":"metal.png",
+      "width":32,
+      "height":32,
+      "spriteScale":2
+    }
+  },
+  "type":"responsive",
+  "cage":{
+    "x":"0",
+    "y":"0",
+    "width":"100%",
+    "height":"100%",
+    "rotation":"0",
+    "floor": "-110"
+  },
+  "background":{
+    "color": "#3D3D3D",
+    "imageUrl": "bg.png",
+    "size": [ 545, 545 ],
+    "spriteScale":2,
+    "scale":{
+      // "width":"stretch",
+      "width":"auto",
+      // "height":"stretch",
+      "height":"auto"
+    },
+    "styles":{
+      "backgroundPosition": "0% 100%",
+      "backgroundSize": "1090px 1090px",
+      "backgroundRepeat": "repeat-x"
+    }
+  },
+  "styles":{
+    "id": "default",
+    "text": "black",
+    "bars":{
+      "good": "#51f249",
+      "bad": "#F55658",
+      "neutral": "#1fb9f3"
+    }
+  }
+}

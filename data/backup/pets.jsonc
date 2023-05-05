@@ -1,0 +1,656 @@
+{
+  "pets": [
+    /*
+    {
+      "id": "hotdoug",
+      "type": "samples",
+      "animal": "Hot Dog",
+      "name": "Hot Doug",
+      "scene": "magnadoodle",
+      "thumbnail": "./pets/hot-doug_thumbnail.jpg",
+      "behaviors": {
+        "DEFAULT": { "animations": [ "hd_idle" ], "overlay": "example" },
+        "IDLE": { "animations": [ "hd_idle" ], "overlay": "example" },
+        "EAT": { "animations": [ "hd_eat" ], "overlay": "example" },
+        "WALK": { "animations": [ "hd_walk" ], "overlay": "example" },
+        "LIL_IDLE": { "animations": [ "hd_lil_idle" ], "overlay": "example" },
+        "LIL_WALK": { "animations": [ "hd_lil_walk" ], "overlay": "example" },
+        "DEAD": { "animations": [ "hd_dead" ], "overlay": "example" },
+        "IDLE_DYING": { "animations": [ "hd_idle" ], "overlay": "green" },
+        "EAT_DYING": { "animations": [ "hd_eat" ], "overlay": "green" },
+        "WALK_DYING": { "animations": [ "hd_walk" ], "overlay": "green" },
+        "LIL_IDLE_DYING": { "animations": [ "hd_lil_idle" ], "overlay": "green" },
+        "LIL_WALK_DYING": { "animations": [ "hd_lil_walk" ], "overlay": "green" }
+      },
+      "moods":{
+        "MOOD_EVOLVE": { "label": "Evolve", "moodType": 1 },
+        "MOOD_POWERUP": { "label": "Power UP!", "moodType": 1},
+        "MOOD_OLD": { "label": "old and stinky", "moodType": -1},
+        "MOOD_FRESH": { "label": "FRESH", "moodType": 1},
+        "MOOD_TINY": { "label": "like a Vienna Sausage", "moodType": 0},
+        "MOOD_LARGE": { "label": "awful chonky", "moodType": 0}
+      },
+      "moodSwings":[
+        {
+          "when":[
+            { "type":"status", "isDead": true }
+          ],
+          "then": "DEAD"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_TINY", "MOOD_OLD" ] },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "LIL_WALK_DYING"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_TINY" ] },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "LIL_WALK"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_TINY", "MOOD_OLD" ] }
+          ],
+          "then": "LIL_IDLE_DYING"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_TINY" ] }
+          ],
+          "then": "LIL_IDLE"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
+            { "type": "activity", "activity": "EATING" }
+          ],
+          "then": "EAT_DYING"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "EATING" }
+          ],
+          "then": "EAT"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
+            { "type": "activity", "activity": "WALKING" },
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_WALK_DYING"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK_DYING"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "WALKING" },
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_WALK"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] },
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_IDLE_DYING"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_OLD" ] }
+          ],
+          "then": "IDLE_DYING"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "LIL_IDLE"
+        },
+        {
+          "when":[],
+          "then": "IDLE"
+        }
+      ],
+      "statz":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "2",
+            "perSecond": "0",
+            "max": "10",
+            "effects":[
+              { "when": ">=_10", "then": "MOOD_EVOLVE" }
+            ]
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "300",
+            "perSecond": "0",
+            "max": "500",
+            "effects":[
+              { "when": "<_90%", "then": "MOOD_POWERUP" }
+            ]
+          },
+          { 
+            "id":"shelflife",
+            "label":"Shelf Life",
+            "value": "100",
+            "perSecond": "-1",
+            "max": "100",
+            "fullIsGood": true,
+            "doesKill": true,
+            "effects":[
+              { "when": "<_33%", "then": "MOOD_OLD" },
+              { "when": ">_80%", "then": "MOOD_FRESH" }
+            ]
+          },
+          { 
+            "id":"meatyness",
+            "label":"MEATYNESS",
+            "value": "50",
+            "perSecond": "-1",
+            "max": "150",
+            "fullIsGood": true,
+            "doesKill": false,
+            "effects":[
+              { "when": "<=_30%", "then": "MOOD_TINY" },
+              { "when": ">=_70%", "then": "MOOD_LARGE" }
+            ]
+          }
+        ]
+      },
+      "graphics":{
+        "hd_idle":{
+          "sprite": "HotDoug",
+          "speed": "50",
+          "frames": [ 0, 13 ]
+        },
+        "hd_eat":{
+          "sprite": "HotDoug",
+          "speed": "20",
+          "frames": [ 18, 17, 11, 17, 11, 18 ]
+        },
+        "hd_walk":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 2, 4, 3, 2, 0 ]
+        },
+        "hd_lil_idle":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 7 ]
+        },
+        "hd_lil_walk":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 7, 8, 9, 8, 7 ]
+        },
+        "hd_lil_emerge":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 6, 9, 10, 4, 14 ]
+        },
+        "hd_dead":{
+          "sprite": "HotDoug",
+          "speed": "30",
+          "frames": [ 12 ]
+        }
+      }
+    },
+    {
+      "id": "neenya",
+      "type": "megupets",
+      "animal": "Ninja",
+      "name": "Neenya",
+      "scene": "outside",
+      "thumbnail": "./pets/neenya_thumbnail.jpg",
+      "behaviors": {
+        "DEFAULT": { "animations": [ "idle_01" ], "overlay": "happy" },
+        "IDLE_HAPPY": { "animations": [ "idle_01" ], "overlay": "happy" },
+        "IDLE_SAD": { "animations": [ "idle_sad" ], "overlay": "sad" },
+        "DEAD": { "animations": [ "dead" ], "overlay": "sad" },
+        "WALK_HAPPY": { "animations": [ "walk" ], "overlay": "happy" },
+        "WALK_SAD": { "animations": [ "walk" ], "overlay": "sad" },
+        "RUN_HAPPY": { "animations": [ "run" ], "overlay": "happy"  },
+        "RUN_SAD": { "animations": [ "run" ], "overlay": "sad"  },
+        "DUCK": { "animations": [ "duck" ], "overlay": "happy"  },
+        "ANGRY": { "animations": [ "angry" ], "overlay": "happy"  },
+        "DYING_HAPPY": { "animations": [ "dying" ], "overlay": "happy"  },
+        "DYING_SAD": { "animations": [ "dying" ], "overlay": "sad"  }
+      },
+      "moods":{
+        "MOOD_POWERUP":  { "label": "Power UP", "moodType": 1 },
+        "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+        "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 },
+        "MOOD_EXPOSED":  { "label": "Exposed", "moodType": -1 },
+        "MOOD_SNEAKY": { "label": "Sneaky", "moodType": 1 }
+      },
+      "moodSwings":[
+        {
+          "when":[
+            { "type":"status", "isDead": true }
+          ],
+          "then": "DEAD"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_SNEAKY" ] },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "RUN_HAPPY"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] },
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK_SAD"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK_HAPPY"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "DUCKING" }
+          ],
+          "then": "DUCK"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] }
+          ],
+          "then": "ANGRY"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] }
+          ],
+          "then": "IDLE_SAD"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_EXPOSED" ] }
+          ],
+          "then": "IDLE_SAD"
+        },
+        {
+          "when":[],
+          "then": "IDLE_HAPPY"
+        }
+      ],
+      "statz":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "2",
+            "perSecond": "0",
+            "max": "10",
+            "effects":[]
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "300",
+            "perSecond": "0",
+            "max": "500",
+            "effects":[
+              { "when": ">=_100%", "then": "MOOD_POWERUP" }
+            ]
+          },
+          { 
+            "id":"hunger",
+            "label":"Hunger",
+            "value": "0",
+            "perSecond": ".5",
+            "max": "67",
+            "fullIsGood": false,
+            "doesKill": true,
+            "effects":[
+              { "when": "<_35%", "then": "MOOD_FULL" },
+              { "when": ">_75%", "then": "MOOD_HUNGRY" }
+            ]
+          },
+          { 
+            "id":"stealth",
+            "label":"Stealth",
+            "value": "50",
+            "perSecond": "-1",
+            "max": "126",
+            "fullIsGood": true,
+            "doesKill": false,
+            "effects":[
+              { "when": "<_30%", "then": "MOOD_EXPOSED" },
+              { "when": ">_50%", "then": "MOOD_SNEAKY" }
+            ]
+          }
+        ]
+      },
+      "graphics":{
+        "idle_01":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 0, 8 ]
+        },
+        "idle_sad":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 10 ]
+        },
+        "dead":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 13, 14 ]
+        },
+        "walk":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 1, 2 ]
+        },
+        "run":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 6, 7 ]
+        },
+        "duck":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 11 ]
+        },
+        "angry":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 4, 5 ]
+        },
+        "dying":{
+          "sprite": "Neenya",
+          "speed": "15",
+          "frames": [ 9, 10, 11, 12, 13, 14 ]
+        }
+      }
+    },
+    {
+      "id": "rizzo-raccoon",
+      "type": "samples",
+      "animal": "Raccoon",
+      "name": "Rizzo",
+      "scene": "outside",
+      "thumbnail": "./pets/raccoon_thumbnail.jpg",
+      "behaviors": {
+        "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
+        "IDLE": { "animations": [ "Raccoon_Idle1" ] },
+        "SAD": { "animations": [ "Raccoon_Still" ] },
+        "CASTIN": { "animations": [ "Raccoon_Castin" ] },
+        "NANA_RAGE": { "animations": [ "Raccoon_NanaRage1" ] },
+        "WALK": { "animations": [ "Raccoon_Walk1" ] },
+        "DEAD": { "animations": [ "Raccoon_Dead1" ] }
+      },
+      "moods":{
+        "MOOD_MANA_HIGH": { "label": "Nana'd up", "moodType": 1 },
+        "MOOD_MANA_MEDIUM": { "label": "makin ba na na na na", "moodType": 1 },
+        "MOOD_MANA_LOW": { "label": "bananamanaless", "moodType": -1},
+        "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+        "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 }
+      },
+      "moodSwings":[
+        {
+          "when":[
+            { "type":"status", "isDead": true }
+          ],
+          "then": "DEAD"
+        },
+        {
+          "when":[
+            { "type": "activity", "activity": "WALKING" }
+          ],
+          "then": "WALK"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_HUNGRY" ] }
+          ],
+          "then": "SAD"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_MANA_FULL" ] }
+          ],
+          "then": "NANA_RAGE"
+        },
+        {
+          "when":[
+            { "type":"moods", "moods": [ "MOOD_MANA_MEDIUM" ] }
+          ],
+          "then": "CASTIN"
+        }
+      ],
+      "statz":{
+        "timestamp": null,
+        "stats": [
+          {
+            "id": "level",
+            "type": "number",
+            "value": "64",
+            "perSecond": "0",
+            "max": "100",
+            "fullIsGood": true
+          },
+          {
+            "id": "xp",
+            "type": "number",
+            "value": "888",
+            "perSecond": "0",
+            "max": "20000",
+            "fullIsGood": true
+          },
+          {
+            "id": "hunger",
+            "value": "0",
+            "perSecond": "1",
+            "max": "500",
+            "doesKill": true,
+            "fullIsGood": false,
+            "effects":[
+              { "when": ">=_25%", "then": "MOOD_HUNGRY" },
+              { "when": "<=_5%", "then": "MOOD_FULL" }
+            ]
+          },
+          { 
+            "id":"mana",
+            "label":"Banana Mana",
+            "value": "1",
+            "perSecond": "3",
+            "max": "200",
+            "fullIsGood": true,
+            "doesKill": true,
+            "effects":[
+              { "when": ">=_90%", "then": "MOOD_MANA_HIGH" },
+              { "when": ">_50%", "then": "MOOD_MANA_MEDIUM" },
+              { "when": "<=_33%", "then": "MOOD_MANA_LOW" }
+            ]
+          }
+        ]
+      },
+      "graphics":{
+        "Raccoon_NanaRage1":{
+          "sprite": "Raccoon",
+          "speed": "2",
+          "dir": 1,
+          "frames": [0, 1, 2, 3]
+        },
+        "Raccoon_Still":{
+          "sprite": "Raccoon",
+          "speed": "50",
+          "dir": 1,
+          "frames": [0]
+        },
+        "Raccoon_Idle1":{
+          "sprite": "Raccoon",
+          "speed": "50",
+          "dir": 1,
+          "frames": [0, 3]
+        },
+        "Raccoon_Castin":{
+          "sprite": "Raccoon",
+          "speed": "10",
+          "dir": 1,
+          "frames": [0, 1, 2, 3]
+        },
+        "Raccoon_Walk1":{
+          "sprite": "Raccoon",
+          "speed": "20",
+          "dir": 1,
+          "frames": [4, 5]
+        },
+        "Raccoon_Dead1":{
+          "sprite": "Raccoon",
+          "speed": "20",
+          "dir": 1,
+          "frames": [6, 7, 8]
+        }
+      }
+    }
+    */
+  ],
+  
+  "sprites":{
+    "HotDoug":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/hot-doug.png",
+      "overlays": {
+        "example": "./pets/hot-doug-overlay-examples.png",
+        "green": "./pets/hot-doug-overlay-green.png"
+      },
+      "spriteInfo":{
+        "scale": ".8",
+        "orientation": -1,
+        "grid": [ 6, 4 ],
+        "cells": [ 400, 533 ],
+        "hitboxOffset": [ 60, 0 ] 
+      }
+    },
+    "Neenya":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/neenya-body.png",
+      "overlays": {
+        "sad": "./pets/neenya-sad.png",
+        "happy": "./pets/neenya-happy.png"
+      },
+      "spriteInfo":{
+        "scale": 1,
+        "grid": [ 3, 5 ],
+        "cells": [ 166, 168 ]
+      }
+    },
+    "Dino":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/dino.png",
+      "spriteInfo":{
+        "scale": 2,
+        "grid": [ 2, 2 ],
+        "cells": [ 134, 62 ]
+      }
+    },
+    "TLJ_Swoop":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/tlj/anim-idle.jpg",
+      "spriteInfo":{
+        "scale": ".8",
+        "faceDirection": false,
+        "grid": [ 4, 4 ],
+        "cells": [ 1000, 1000 ]
+      }
+    },
+    "TLJ_Flap":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/tlj/anim-flap.jpg",
+      "spriteInfo":{
+        "scale": ".8",
+        "faceDirection": false,
+        "grid": [ 4, 2 ],
+        "cells": [ 1000, 1000 ]
+      }
+    },
+    "Bocado":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/bocado-1.png",
+      "spriteInfo":{
+        "scale": ".5",
+        "grid": [ 9, 5 ],
+        "faceDirection": true,
+        "orientation": -1,
+        "cells": [ 418, 461 ]
+      }
+    },
+    "Beaver":{
+      "type": "Sprite_Still",
+      "imageUrl": "./pets/rodent-beaver.jpg",
+      "spriteInfo":{
+        "faceDirection": true,
+        "orientation": -1,
+        "grid": [ 1, 1 ],
+        "cells": [ 500, 500 ],
+        "frame": 0
+      }
+    },
+    "BeaverDead":{
+      "type": "Sprite_Still",
+      "imageUrl": "./pets/rodent-beaver-dead.jpg",
+      "spriteInfo":{
+        "faceDirection": true,
+        "orientation": -1,
+        "grid": [ 1, 1 ],
+        "cells": [ 500, 500 ],
+        "frame": 0
+      }
+    },
+    "Raccoon":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/raccoon.png",
+      "spriteInfo":{
+        "scale": ".8",
+        "faceDirection": true,
+        "grid": [ 3, 3 ],
+        "cells": [ 400, 500 ]
+      }
+    },
+    "SpinSquare":{
+      "type": "SpinSquare"
+    },
+    "MonaLisa":{
+      "type": "Sprite_Animated",
+      "imageUrl": "./pets/painting-monalisa.jpg",
+      "spriteInfo":{
+        "scale": ".8",
+        "faceDirection": true,
+        "orientation": -1,
+        "grid": [ 2, 2 ],
+        "cells": [ 600, 894 ]
+      }
+    }
+  }
+}

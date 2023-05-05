@@ -1,0 +1,40 @@
+{
+  "title": "custom title here",
+  /*
+    pingRate
+    how often in milliseconds to check behavior/stat loop
+    integer, can be "50" - "5000", but why would you want that
+
+    http://thomasyancey.com/projects/virtualpet-external/pets/rizzo-raccoon
+  */
+  "stages":[
+    {
+      "type": "scenes",
+      "items": [
+        { "id": "magnadoodle", "url": "data/scenes/magnadoodle" },
+        { "id": "outside", "url": "data/scenes/outside" },
+        { "id": "dump", "url": "data/scenes/dump" },
+        { "id": "shroomKingdom", "url": "data/scenes/shroom-kingdom" },
+        { "id": "shroomSewer", "url": "data/scenes/shroom-sewer" }
+      ]
+    },
+    {
+      "type": "items",
+      "items": [
+        { "id": "mushroom", "url": "data/items/mushroom" }
+      ]
+    },
+    {
+      "type": "pets",
+      "items": [
+        // { "id": "neenya", "url": "data/pets/neenya" },
+        // { "id": "bunchie", "url": "data/pets/bunchie" },
+        { "id": "bario", "url": "data/pets/bario" },
+        { "id": "lario", "url": "data/pets/lario" }
+        // { "id": "raccoon", "url": "data/pets/raccoon" },
+        // { "id": "rizzo-raccoon", "url": "data/pets/rizzo-raccoon" },
+        // { "id": "hotdoug", "url": "data/pets/hot-doug" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+
+{
+  "id": "neenya",
+  "type": "megupets",
+  "animal": "Ninja",
+  "name": "Neenya",
+  "scene": "outside",
+  "thumbnail": "thumbnail.jpg",
+  "stats":[
+    {
+      "id": "level",
+      "type": "number",
+      "value": 2.0,
+      "perSecond": 0.0,
+      "max": 10.0,
+      "effects":[]
+    },
+    {
+      "id": "xp",
+      "type": "number",
+      "value": 300.0,
+      "perSecond": 0.0,
+      "max": 500.0,
+      "effects":[
+        { "when": ">=_100%", "then": "MOOD_POWERUP" }
+      ]
+    },
+    { 
+      "id":"hunger",
+      "label":"Hunger",
+      "value": 0.0,
+      "perSecond": 0.5,
+      "max": 67.0,
+      "fullIsGood": false,
+      "doesKill": true,
+      "effects":[
+        { "when": "<_35%", "then": "MOOD_FULL" },
+        { "when": ">_75%", "then": "MOOD_HUNGRY" }
+      ]
+    },
+    { 
+      "id":"stealth",
+      "label":"Stealth",
+      "value": 50.0,
+      "perSecond": -1.0,
+      "max": 126.0,
+      "fullIsGood": true,
+      "doesKill": false,
+      "effects":[
+        { "when": "<_30%", "then": "MOOD_EXPOSED" },
+        { "when": ">_50%", "then": "MOOD_SNEAKY" }
+      ]
+    }
+  ],
+  /*
+  "actionBinding":{
+    "WALK": {
+      "activities": [ "WALKING" ],
+      "statEvents": []
+    },
+    "JUMP": {
+      "activities": [ "JUMPING" ],
+      "statEvents": []
+    },
+    "DUCK": {
+      "activities": [],
+      "statEvents": [ ]
+    },
+    "CLICK": {
+      "activities": [],
+      "statEvents": [ "POKE" ]
+    }
+  },
+  */
+  "statEvents":[
+    {
+      "id":"E_POKE",
+      "label": "Poke",
+      "statEffects":[
+        { "id":"stealth", "immediate":-5.0 }
+      ],
+      "type":"event",
+      "cooldown": 0
+    },
+    {
+      "id":"E_SNEAK",
+      "label": "Sneak",
+      "statEffects":[
+        { "id":"stealth", "perSecond":-1.0 }
+      ],
+      "type":"hold",
+      "cooldown": 0
+    },
+    {
+      "id":"E_SMOKEBOMB",
+      "label": "Smoke Bomb",
+      "statEffects":[
+        { "id":"stealth", "immediate":35.0 }
+      ],
+      "type":"event",
+      "cooldown": 6000
+    },
+    {
+      "id":"E_EAT",
+      "label": "Eat",
+      "statEffects":[
+        { "id":"hunger", "immediate":-10.0, "perSecond":-1.0, "duration":6000 },
+        { "id":"stealth", "immediate":-10.0, "perSecond":-1.0, "duration":6000 }
+        //{ "id":"stealth", "perSecond":2.0, "duration":6000 } //- from cronchin on chips
+      ],
+      "type":"stack",
+      "cooldown": 1000
+    }
+  ],
+  "moods":{
+    "MOOD_POWERUP":  { "label": "Power UP", "moodType": 1 },
+    "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+    "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 },
+    "MOOD_EXPOSED":  { "label": "Exposed", "moodType": -1 },
+    "MOOD_SNEAKY": { "label": "Sneaky", "moodType": 1 }
+  },
+  "moodSwings":[
+    {
+      "when":[
+        { "type":"status", "isDead": true }
+      ],
+      "then": "DEAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_SNEAKY" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "RUN_HAPPY"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_HUNGRY" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK_SAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_EXPOSED" ] },
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK_SAD"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK_HAPPY"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "DUCKING" }
+      ],
+      "then": "DUCK"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] }
+      ],
+      "then": "ANGRY"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_HUNGRY", "MOOD_EXPOSED" ] }
+      ],
+      "then": "IDLE_SAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_EXPOSED" ] }
+      ],
+      "then": "IDLE_SAD"
+    },
+    {
+      "when":[],
+      "then": "IDLE_HAPPY"
+    }
+  ],
+  "behaviors": {
+    "DEFAULT": { "animations": [ "idle_01" ], "overlay": "happy" },
+    "IDLE_HAPPY": { "animations": [ "idle_01" ], "overlay": "happy" },
+    "IDLE_SAD": { "animations": [ "idle_sad" ], "overlay": "sad" },
+    "DEAD": { "animations": [ "dead" ], "overlay": "sad" },
+    "WALK_HAPPY": { "animations": [ "walk" ], "overlay": "happy" },
+    "WALK_SAD": { "animations": [ "walk" ], "overlay": "sad" },
+    "RUN_HAPPY": { "animations": [ "run" ], "overlay": "happy"  },
+    "RUN_SAD": { "animations": [ "run" ], "overlay": "sad"  },
+    "DUCK": { "animations": [ "duck" ], "overlay": "happy"  },
+    "ANGRY": { "animations": [ "angry" ], "overlay": "happy"  },
+    "DYING_HAPPY": { "animations": [ "dying" ], "overlay": "happy"  },
+    "DYING_SAD": { "animations": [ "dying" ], "overlay": "sad"  }
+  },
+  "animations":{
+    "idle_01":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 0, 8 ]
+    },
+    "idle_sad":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 10 ]
+    },
+    "dead":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 13, 14 ]
+    },
+    "walk":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 1, 2 ]
+    },
+    "run":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 6, 7 ]
+    },
+    "duck":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 11 ]
+    },
+    "angry":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 4, 5 ]
+    },
+    "dying":{
+      "sprite": "Neenya",
+      "speed": 15.0,
+      "frames": [ 9, 10, 11, 12, 13, 14 ]
+    }
+  },
+  "sprites":{
+    "Neenya":{
+      "type": "Sprite_Animated",
+      "imageUrl": "neenya-body.png",
+      "overlays": {
+        "sad": "neenya-sad.png",
+        "happy": "neenya-happy.png"
+      },
+      "spriteInfo":{
+        "scale": 1,
+        "grid": [ 3, 5 ],
+        "cells": [ 166, 168 ]
+      }
+    }
+  }
+}

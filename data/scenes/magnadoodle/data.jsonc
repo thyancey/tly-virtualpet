@@ -1,0 +1,30 @@
+{
+  "id": "magnadoodle",
+  "floor": {
+    "height": "150"
+  },      
+  "type":"static",
+  "cage":{
+    "x":"604.8",
+    "y":"457.8",
+    "xCenter":"-50",
+    "yCenter":"-20",
+    "width":"680",
+    "height":"500",
+    "rotation":"-11",
+    "floor": "-20"
+  },
+  "background":{
+    "color": "#1F1258",
+    "imageUrl": "magnadoodle_bg.jpg"
+  },
+  "styles":{
+    "id": "default",
+    "text": "black",
+    "bars":{
+      "good": "#51f249",
+      "bad": "#F55658",
+      "neutral": "#1fb9f3"
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "id": "rizzo-raccoon",
+  "type": "samples",
+  "animal": "Raccoon",
+  "name": "Rizzo",
+  "scene": "outside",
+  "thumbnail": "thumbnail.jpg",
+  "personality":{
+    "thinkRange": [ 500, 1000 ],
+    "doRange": [ 5000, 10000 ],
+    "jumpChance": 0.005,
+    "jumpForce": 0.4
+  },
+  "stats":[
+    {
+      "id": "level",
+      "type": "number",
+      "value": 64.0,
+      "perSecond": 0.0,
+      "max": 100.0,
+      "fullIsGood": true
+    },
+    {
+      "id": "xp",
+      "type": "number",
+      "value": 888.0,
+      "perSecond": 0.0,
+      "max": 20000.0,
+      "fullIsGood": true
+    },
+    {
+      "id": "hunger",
+      "value": 0.0,
+      "perSecond": 1.0,
+      "max": 500.0,
+      "doesKill": true,
+      "fullIsGood": false,
+      "effects":[
+        { "when": ">=_25%", "then": "MOOD_HUNGRY" },
+        { "when": "<=_5%", "then": "MOOD_FULL" }
+      ]
+    },
+    { 
+      "id":"mana",
+      "label":"Banana Mana",
+      "value": 1.0,
+      "perSecond": 3.0,
+      "max": 200.0,
+      "fullIsGood": true,
+      "doesKill": true,
+      "effects":[
+        { "when": ">=_90%", "then": "MOOD_MANA_HIGH" },
+        { "when": ">_50%", "then": "MOOD_MANA_MEDIUM" },
+        { "when": "<=_33%", "then": "MOOD_MANA_LOW" }
+      ]
+    }
+  ],
+  "moods":{
+    "MOOD_MANA_HIGH": { "label": "Nana'd up", "moodType": 1 },
+    "MOOD_MANA_MEDIUM": { "label": "makin ba na na na na", "moodType": 1 },
+    "MOOD_MANA_LOW": { "label": "bananamanaless", "moodType": -1},
+    "MOOD_FULL":  { "label": "Full", "moodType": 1 },
+    "MOOD_HUNGRY":  { "label": "Hungry", "moodType": -1 }
+  },
+  "moodSwings":[
+    {
+      "when":[
+        { "type":"status", "isDead": true }
+      ],
+      "then": "DEAD"
+    },
+    {
+      "when":[
+        { "type": "activity", "activity": "WALKING" }
+      ],
+      "then": "WALK"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_HUNGRY" ] }
+      ],
+      "then": "SAD"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_MANA_FULL" ] }
+      ],
+      "then": "NANA_RAGE"
+    },
+    {
+      "when":[
+        { "type":"moods", "moods": [ "MOOD_MANA_MEDIUM" ] }
+      ],
+      "then": "CASTIN"
+    }
+  ],
+  "behaviors": {
+    "DEFAULT": { "animations": [ "Raccoon_Idle1" ] },
+    "IDLE": { "animations": [ "Raccoon_Idle1" ] },
+    "SAD": { "animations": [ "Raccoon_Still" ] },
+    "CASTIN": { "animations": [ "Raccoon_Castin" ] },
+    "NANA_RAGE": { "animations": [ "Raccoon_NanaRage1" ] },
+    "WALK": { "animations": [ "Raccoon_Walk1" ] },
+    "DEAD": { "animations": [ "Raccoon_Dead1" ] }
+  },
+  "animations":{
+    "Raccoon_NanaRage1":{
+      "sprite": "Raccoon",
+      "speed": 2.0,
+      "dir": 1,
+      "frames": [0, 1, 2, 3]
+    },
+    "Raccoon_Still":{
+      "sprite": "Raccoon",
+      "speed": 50.0,
+      "dir": 1,
+      "frames": [0]
+    },
+    "Raccoon_Idle1":{
+      "sprite": "Raccoon",
+      "speed": 50.0,
+      "dir": 1,
+      "frames": [0, 3]
+    },
+    "Raccoon_Castin":{
+      "sprite": "Raccoon",
+      "speed": 10.0,
+      "dir": 1,
+      "frames": [0, 1, 2, 3]
+    },
+    "Raccoon_Walk1":{
+      "sprite": "Raccoon",
+      "speed": 20.0,
+      "dir": 1,
+      "frames": [4, 5]
+    },
+    "Raccoon_Dead1":{
+      "sprite": "Raccoon",
+      "speed": 20.0,
+      "dir": 1,
+      "frames": [6, 7, 8]
+    }
+  },
+  "sprites":{
+    "Raccoon":{
+      "type": "Sprite_Animated",
+      "imageUrl": "raccoon.png",
+      "spriteInfo":{
+        "scale": 0.8,
+        "faceDirection": true,
+        "grid": [ 3, 3 ],
+        "cells": [ 400, 500 ]
+      }
+    }
+  }
+}
