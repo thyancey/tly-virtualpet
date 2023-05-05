@@ -8,8 +8,8 @@
   "personality":{
     "thinkRange": [ 500, 2000 ],
     "doRange": [ 1000, 5000 ],
-    "jumpChance": 0.05,
-    "jumpForce": 1,
+    "jumpChance": 0.02,
+    "jumpForce": 0.8,
     "maxVx": 3,
     "xForce": 1,
     "yForce": 1
@@ -145,7 +145,7 @@
   ],
   "behaviors": {
     "DEFAULT": { "animations": [ "Idle_Little" ] },
-    "DEAD": { "animations": [ "Dead_Little" ] },
+    "DEAD": { "animations": [ "Dead" ] },
     "IDLE_BIG": { "animations": [ "Idle_Big" ] },
     "WALK_BIG": { "animations": [ "Walk_Big" ] },
     "JUMP_BIG": { "animations": [ "Jump_Big" ] },
@@ -179,104 +179,135 @@
       "cooldown": 100
     }
   ],
-  "sprites":{
-    "p_bario_default":{
-      "data": "default.json",
-      "image": "default.png",
-      "scale": 5.0,
-      "frameDims": [ 20, 35 ],
-      "frameSqueeze": { "x": 2, "y": -1, "w": -4, "h": -1 },
-      "faceDirection": true,
-      "orientation": 1,
-      "defaults":{
-        "animation":{
-          "frameRate": 10,
-          "repeat": -1
-        },
-        "frameObj":{
-          "prefix": "anim",
-          "zeroPad": 4
-        }
-      }
-    }
-  },
   "animations":{
-    "Walk_Big":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [14, 15, 16]
-      }
-    },
-    "Jump_Big":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [18]
-      }
-    },
-    "Idle_Big":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [12]
-      }
-    },
-    "Duck_Big":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [13]
-      }
-    },
-    "Walk_Fire":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [26, 27, 28]
-      }
-    },
-    "Jump_Fire":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [30]
-      }
-    },
-    "Idle_Fire":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [24]
-      }
-    },
-    "Duck_Fire":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [25]
-      }
-    },
-    "Walk_Little":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [2, 3, 4]
-      }
-    },
-    "Jump_Little":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [6]
-      }
+    "Dead":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [ 11 ]
     },
     "Idle_Little":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [1]
-      }
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
     },
     "Duck_Little":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [1]
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Walk_Little":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [2,3,4]
+    },
+    "Jump_Little":{
+      "sprite": "Little",
+      "speed": 10,
+      "dir": 1,
+      "frames": [6]
+    },
+    "Idle_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [0]
+    },
+    "Duck_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Walk_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [2,3,4]
+    },
+    "Jump_Big":{
+      "sprite": "Big",
+      "speed": 10,
+      "dir": 1,
+      "frames": [6]
+    },
+    "Idle_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [0]
+    },
+    "Duck_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [1]
+    },
+    "Walk_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [2,3,4]
+    },
+    "Jump_Fire":{
+      "sprite": "Fire",
+      "speed": 10,
+      "dir": 1,
+      "frames": [6]
+    }
+  },
+  "items":[
+    {
+      "id": "mushroom",
+      "count": 3,
+      "statEvent": "E_POWER_UP",
+      "cooldown": 100,
+      "spriteInfo":{
+        "type": "Sprite_Animated",
+        "imageUrl": "item-shroom.png",
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 1, 1 ],
+        "cells": [ 20, 35 ]
+      }
+    }
+  ],
+  "sprites":{
+    "Big":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bario-big.png",
+      "spriteInfo":{
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 11, 1 ],
+        "cells": [ 20, 35 ]
       }
     },
-    "Dead_Little":{
-      "sprite": "p_bario_default",
-      "frameObj":{
-        "frames": [11]
+    "Fire":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bario-fire.png",
+      "spriteInfo":{
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 11, 1 ],
+        "cells": [ 20, 35 ]
+      }
+    },
+    "Little":{
+      "type": "Sprite_Animated",
+      "imageUrl": "bario-little.png",
+      "spriteInfo":{
+        "scale": 4,
+        "faceDirection": true,
+        "orientation": 1,
+        "grid": [ 12, 1 ],
+        "cells": [ 20, 35 ]
       }
     }
   }
